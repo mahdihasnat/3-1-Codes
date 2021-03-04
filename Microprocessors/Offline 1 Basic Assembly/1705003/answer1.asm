@@ -1,0 +1,133 @@
+.MODEL SMALL
+
+
+.STACK 100H
+
+
+.DATA
+CR EQU 0DH
+LF EQU 0AH
+X DB ?
+Y DB ?
+Z DB ?
+
+MSG1 DB CR,LF,'X-2*Y= $'
+MSG2 DB CR,LF,'25-(X+Y)= $'
+MSG3 DB CR,LF,'2X-3Y= $'
+MSG4 DB CR,LF,'Y-X+1= $'
+
+MSGX DB CR,LF,'ENTER VALUE OF X: $'
+MSGY DB CR,LF,'ENTER VALUE OF Y: $'
+
+.CODE
+
+MAIN PROC
+	;DATA SEGMENT INITIALIZATION
+    MOV AX, @DATA
+    MOV DS, AX
+    
+    ;PROMPT FOR INPUT X
+    MOV AH,09H
+    LEA DX,MSGX
+    INT 21H
+    
+    ;TAKE INPUT OF X
+    MOV AH,01H
+    INT 21H
+    SUB AL,'0'
+    MOV X,AL
+    
+    ;PROMPT FOR INPUT Y
+    MOV AH,09H
+    LEA DX,MSGY
+    INT 21H
+    
+    ;TAKE INPUT OF Y
+    MOV AH,01H
+    INT 21H
+    SUB AL,'0'
+    MOV Y,AL
+
+    
+    ;Z=X-2Y
+    MOV AL , X
+    SUB AL,Y
+    SUB AL,Y
+    MOV Z,AL
+    
+    ;PROMPT FOR 1ST CALCULATION
+    MOV AH,09H ; STRING OUTPUT, DX = &MSG
+    LEA DX,MSG1
+    INT 21H
+    
+    ;PRINT VALUE OF Z, CONSTRAINT: (0<=Z<=9)
+    MOV AH,02H
+    MOV DL,Z
+    ADD DL,'0'
+    INT 21H
+    
+    
+    ;Z=255-(X+Y)
+    MOV AL, X
+    ADD AL,Y
+    NEG AL
+    ADD AL,25
+    MOV Z,AL
+    
+    ;PROMPT FOR 2ND CALCULATION
+    MOV AH,09H ; STRING OUTPUT, DX = &MSG
+    LEA DX,MSG2
+    INT 21H
+    
+    ;PRINT VALUE OF Z, CONSTRAINT: (0<=Z<=9)
+    MOV AH,02H
+    MOV DL,Z
+    ADD DL,'0'
+    INT 21H
+    
+    ;Z=2X-3Y
+    MOV AL,X
+    ADD AL,X
+    SUB AL,Y
+    SUB AL,Y
+    SUB AL,Y
+    MOV Z,AL
+    
+    ;PROMPT FOR 3RD CALCULATION
+    MOV AH,09H ; STRING OUTPUT, DX = &MSG
+    LEA DX,MSG3
+    INT 21H
+    
+    ;PRINT VALUE OF Z, CONSTRAINT: (0<=Z<=9)
+    MOV AH,02H
+    MOV DL,Z
+    ADD DL,'0'
+    INT 21H
+    
+    
+    ;Z=Y-X+1
+    MOV AL,Y
+    INC AL
+    SUB AL,X
+    MOV Z,AL
+    
+    ;PROMPT FOR 4TH CALCULATION
+    MOV AH,09H ; STRING OUTPUT, DX = &MSG
+    LEA DX,MSG4
+    INT 21H
+    
+    ;PRINT VALUE OF Z, CONSTRAINT: (0<=Z<=9)
+    MOV AH,02H
+    MOV DL,Z
+    ADD DL,'0'
+    INT 21H
+    
+    
+    
+    ;Return 0
+    MOV AH, 4CH
+    INT 21H
+    
+        
+MAIN ENDP
+    END MAIN
