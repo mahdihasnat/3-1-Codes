@@ -52,5 +52,6 @@ int main()
         }
         cout<<endl;
     }
-
+    delete st;
+    
 }

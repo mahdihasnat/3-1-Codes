@@ -54,8 +54,9 @@ public:
         {
             if (previous_symbolinfo->getName() == symbolinfo->getName())
             {
-                cout << (*symbolinfo) << " already exists in current ScopeTable" << endl;
+                cout << (*previous_symbolinfo) << " already exists in current ScopeTable" << endl;
                 //cout << (*symbolinfo) << " found in ScopTable " << getId() << " at position " << buncket_index << ", " << index << "" << endl;
+                delete symbolinfo;
                 return false;
             }
 
