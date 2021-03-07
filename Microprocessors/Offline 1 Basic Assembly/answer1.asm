@@ -67,7 +67,7 @@ MAIN PROC
     INT 21H
     
     
-    ;Z=255-(X+Y)
+    ;Z=25-(X+Y)
     MOV AL, X
     ADD AL,Y
     NEG AL
