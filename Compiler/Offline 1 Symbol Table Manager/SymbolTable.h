@@ -3,16 +3,17 @@
 #define DBG(x) cout << (__LINE__) << " : " << (#x) << " -> " << (x) << "\n";
 #include "ScopeTable.h"
 
+template<typename valueType>
 class SymbolTable
 {
 private:
-    ScopeTable *currentScopeTable;
+    ScopeTable<valueType> *currentScopeTable;
     int nextNewChild;
 
 public:
     SymbolTable()
     {
-        currentScopeTable = new ScopeTable();
+        currentScopeTable = new ScopeTable<valueType>();
         nextNewChild = 1;
     }
     ~SymbolTable()
@@ -23,8 +24,8 @@ public:
 
     void enterScope()
     {
-        ScopeTable *parentScopeTable = currentScopeTable;
-        currentScopeTable = new ScopeTable(parentScopeTable, nextNewChild);
+        ScopeTable<valueType> *parentScopeTable = currentScopeTable;
+        currentScopeTable = new ScopeTable<valueType>(parentScopeTable, nextNewChild);
         nextNewChild = 1;
         cout << "New ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
     }
@@ -34,10 +35,14 @@ public:
         if (currentScopeTable)
         {
             nextNewChild = currentScopeTable->getCurrentId() + 1;
-            ScopeTable *parentScopeTable = currentScopeTable->getParentScopeTable();
+
+            ScopeTable<valueType> *parentScopeTable = currentScopeTable->getParentScopeTable();
+            
+
             cout << "ScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
-            currentScopeTable->setParentScopeTable(nullptr);
+            currentScopeTable->setParentScopeTable(nullptr);/// !! IMPORTANT otherwise entire symboltable will be lost
             delete currentScopeTable;
+            
             currentScopeTable = parentScopeTable;
         }
         else
@@ -46,34 +51,34 @@ public:
         }
     }
 
-    SymbolInfo * lookUp(string name)
+    SymbolInfoChain<valueType> * lookUp(string key)
     {
-        ScopeTable * current = getCurrentScopeTable();
+        ScopeTable<valueType> * current = getCurrentScopeTable();
         while (current)
         {
-            SymbolInfo * now = current->find(name);
+            SymbolInfoChain<valueType> * now = current->find(key);
             if(now)
                 return now;
             current = current->getParentScopeTable();
         }
-        cout<<name<<" not found in SymbolTable"<<endl;
+        cout<<key<<" not found in SymbolTable"<<endl;
         return nullptr;
         
     }
-    bool insert(string name ,string type)
+    bool insert(string key ,valueType type)
     {
         if(currentScopeTable)
-            return currentScopeTable->insert(name , type);
+            return currentScopeTable->insert(key , type);
         else 
         {
             cout<<"Current Scope is empty!"<<endl;
             return false;
         }
     }
-    bool erase(string name)
+    bool erase(string key)
     {
         if(currentScopeTable)
-            return currentScopeTable->erase(name );
+            return currentScopeTable->erase(key );
         else 
         {
             cout<<"Current Scope is empty!"<<endl;
@@ -81,14 +86,14 @@ public:
         }
     }
 
-    ScopeTable *getCurrentScopeTable() const
+    ScopeTable<valueType> *getCurrentScopeTable() const
     {
         return currentScopeTable;
     }
 
     friend ostream &operator<<(ostream &os, const SymbolTable &st)
     {
-        ScopeTable *current = st.getCurrentScopeTable();
+        ScopeTable<valueType> *current = st.getCurrentScopeTable();
         while (current)
         {
             os << (*current) << endl;

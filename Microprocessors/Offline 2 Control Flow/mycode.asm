@@ -1,0 +1,43 @@
+.MODEL SMALL
+
+
+.STACK 100H
+
+
+.DATA
+CR EQU 0DH
+LF EQU 0AH
+X DB ?
+Y DB ?
+Z DB ?
+
+MSG1 DB CR,LF,'X-2*Y= $'
+MSG2 DB CR,LF,'25-(X+Y)= $'
+MSG3 DB CR,LF,'2X-3Y= $'
+MSG4 DB CR,LF,'Y-X+1= $'
+
+MSGX DB CR,LF,'ENTER VALUE OF X: $'
+MSGY DB CR,LF,'ENTER VALUE OF Y: $'
+
+.CODE
+
+MAIN PROC
+	;DATA SEGMENT INITIALIZATION
+    MOV AX, @DATA
+    MOV DS, AX
+    
+    MOV AH , 02H
+    MOV AX , 255
+    MOV DL , 0
+    
+    PRINT_LOOP:
+        INT 21
+    
+    
+    ;Return 0
+    MOV AH, 4CH
+    INT 21H
+    
+        
+MAIN ENDP
+    END MAIN

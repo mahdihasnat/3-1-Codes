@@ -38,13 +38,25 @@ public class Bank {
         return true;
     }
 
-    public boolean createAccount(String name, String type, int initialDeposit) throws Exception {
+    public boolean createAccount(String name, String type, int initialDeposit) {
         Account ac;
-        if (type.equalsIgnoreCase("student"))
-            ac = new StudentAccount(name, initialDeposit);
-        else if (type.equalsIgnoreCase("fixed"))
-            ac = new FixedAccount(name, initialDeposit);
-        else ac = new SavingsAccount(name, initialDeposit);
+        try {
+
+            if (type.equalsIgnoreCase("student"))
+                ac = new StudentAccount(name, initialDeposit);
+            else if (type.equalsIgnoreCase("fixed")) {
+                ac = new FixedAccount(name, initialDeposit);
+            } else if (type.equalsIgnoreCase("savings"))
+                ac = new SavingsAccount(name, initialDeposit);
+            else {
+                System.out.println("Invalid AccountType");
+                return false;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
         if (addAccount(ac)) {
             currentUser = ac;
             return true;
@@ -144,13 +156,13 @@ public class Bank {
     public void ApproveLoan() {
         if (currentUser != null && currentUser instanceof Employee) {
             Employee emp = (Employee) currentUser;
-            ArrayList<LoanRequest> failed_transaction = new ArrayList<>();
+            ArrayList<LoanRequest> failed_loan_requests = new ArrayList<>();
             for (LoanRequest lr : loan_requests) {
                 if (!emp.ApproveLoan(this, lr)) {
-                    failed_transaction.add(lr);
+                    failed_loan_requests.add(lr);
                 }
             }
-            loan_requests = failed_transaction;
+            loan_requests = failed_loan_requests;
         } else {
             System.out.println("Current User is not an employee #" + currentUser);
         }

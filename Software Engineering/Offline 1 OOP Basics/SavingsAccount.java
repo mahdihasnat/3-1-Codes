@@ -1,4 +1,3 @@
-
 public class SavingsAccount extends Account {
 
     private static float interest_rate_per_cent;
@@ -7,22 +6,22 @@ public class SavingsAccount extends Account {
         interest_rate_per_cent = 10.0F;
     }
 
+    public SavingsAccount(String name, Integer deposit) {
+        super(name, deposit);
+    }
+
+    @Override
+    protected float getInterest_rate_per_cent() {
+        return interest_rate_per_cent;
+    }
+
     public static void setInterest_rate_per_cent(float interest_rate_per_cent) {
         SavingsAccount.interest_rate_per_cent = interest_rate_per_cent;
     }
 
     @Override
-    public float getInterest_rate_per_cent() {
-        return interest_rate_per_cent;
-    }
-
-    @Override
     public int getMaximumAllowableLoan() {
         return 10000;
-    }
-
-    public SavingsAccount(String name, Integer deposit) {
-        super(name, deposit);
     }
 
     @Override

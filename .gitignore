@@ -5,3 +5,5 @@ out/
 *.iml
 *.json
 .vscode/
+**/1705003/**
+.catalyst/

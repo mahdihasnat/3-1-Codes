@@ -1,13 +1,19 @@
+I a a
 Inserted in ScopeTable# 1 at position 6, 0
 
+S
 New ScopeTable with id 1.1 created
 
+I h h
 Inserted in ScopeTable# 1.1 at position 6, 0
 
+S
 New ScopeTable with id 1.1.1 created
 
+I o o
 Inserted in ScopeTable# 1.1.1 at position 6, 0
 
+P A
 ScopeTable # 1.1.1
 0 --> 
 1 --> 
@@ -37,22 +43,31 @@ ScopeTable # 1
 
 
 
+L o
 < o : o > found in ScopeTable# 1.1.1 at 6 , 0
 
+L a
 < a : a > found in ScopeTable# 1 at 6 , 0
 
+E
 ScopeTable with id 1.1.1 removed
 
+S
 New ScopeTable with id 1.1.2 created
 
+I foo FUNCTION
 Inserted in ScopeTable# 1.1.2 at position 2, 0
 
+E
 ScopeTable with id 1.1.2 removed
 
+S
 New ScopeTable with id 1.1.3 created
 
+I i VAR
 Inserted in ScopeTable# 1.1.3 at position 0, 0
 
+P A
 ScopeTable # 1.1.3
 0 -->  < i : VAR >
 1 --> 
@@ -82,18 +97,25 @@ ScopeTable # 1
 
 
 
+L foo
 foo not found in SymbolTable
 
+L j
 j not found in SymbolTable
 
+E
 ScopeTable with id 1.1.3 removed
 
+E
 ScopeTable with id 1.1 removed
 
+S
 New ScopeTable with id 1.2 created
 
+I 5 NUMBER
 Inserted in ScopeTable# 1.2 at position 4, 0
 
+P A
 ScopeTable # 1.2
 0 --> 
 1 --> 
@@ -114,10 +136,13 @@ ScopeTable # 1
 
 
 
-SymbolInfo not found in current ScopeTable
+D j
+SymbolInfo not found in current ScopeTable #1.2
 
-SymbolInfo not found in current ScopeTable
+D i
+SymbolInfo not found in current ScopeTable #1.2
 
+P A
 ScopeTable # 1.2
 0 --> 
 1 --> 
@@ -138,16 +163,22 @@ ScopeTable # 1
 
 
 
+S
 New ScopeTable with id 1.2.1 created
 
+E
 ScopeTable with id 1.2.1 removed
 
+S
 New ScopeTable with id 1.2.2 created
 
+I <= RELOP
 Inserted in ScopeTable# 1.2.2 at position 2, 0
 
+I == RELOP
 Inserted in ScopeTable# 1.2.2 at position 3, 0
 
+P A
 ScopeTable # 1.2.2
 0 --> 
 1 --> 
@@ -177,13 +208,17 @@ ScopeTable # 1
 
 
 
+I <= RELOP
 < <= : RELOP > already exists in current ScopeTable
 
+I foo FUNCTION
 Inserted in ScopeTable# 1.2.2 at position 2, 1
 
+D ==
 Found in ScopeTable# 1.2.2 at position 3, 0
 Deleted Entry 3, 0 from current ScopeTable
 
+P A
 ScopeTable # 1.2.2
 0 --> 
 1 --> 
@@ -213,12 +248,16 @@ ScopeTable # 1
 
 
 
+E
 ScopeTable with id 1.2.2 removed
 
+I t t
 Inserted in ScopeTable# 1.2 at position 4, 1
 
+I k k
 Inserted in ScopeTable# 1.2 at position 2, 0
 
+P C
 ScopeTable # 1.2
 0 --> 
 1 --> 
@@ -229,6 +268,7 @@ ScopeTable # 1.2
 6 --> 
 
 
+P A
 ScopeTable # 1.2
 0 --> 
 1 --> 

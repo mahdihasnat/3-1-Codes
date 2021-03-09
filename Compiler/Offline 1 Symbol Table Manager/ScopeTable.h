@@ -10,30 +10,27 @@ using namespace std;
         REMINDER
         cascaded delete is used , everything this object points also get deleted 
 */
+template < typename valueType >
 class ScopeTable
 {
     
 private:
     static int total_bucket;
 
-    SymbolInfo **bucket;
-    ScopeTable *parentScopeTable;
+    SymbolInfoChain<valueType> **bucket;
+    ScopeTable<valueType> *parentScopeTable;
     string id;
 
 public:
-    ScopeTable(ScopeTable *parentScopeTable = 0, int current_id = 1) : parentScopeTable(parentScopeTable)
+    ScopeTable(ScopeTable<valueType> *parentScopeTable = 0, int current_id = 1) : parentScopeTable(parentScopeTable)
     {
-        bucket = new SymbolInfo *[total_bucket];
+        bucket = new SymbolInfoChain<valueType> *[total_bucket];
         for (int i = 0; i < total_bucket; i++)
             bucket[i] = nullptr;
         if (parentScopeTable)
             id = parentScopeTable->getId() + '.';
         id += to_string(current_id);
     }
-    /*
-        REMINDER
-        cascaded delete is used , everything this object points also get deleted 
-    */
     ~ScopeTable()
     {
         for (int i = 0; i < total_bucket; i++)
@@ -44,10 +41,10 @@ public:
             delete parentScopeTable;
     }
 
-    bool insert(SymbolInfo *symbolinfo)
+    bool insert(SymbolInfoChain<valueType> *symbolinfo)
     {
         int buncket_index = symbolinfo->hashCode() % total_bucket;
-        SymbolInfo *previous_symbolinfo = bucket[buncket_index];
+        SymbolInfoChain<valueType> *previous_symbolinfo = bucket[buncket_index];
         int index = 0;
 
         while (previous_symbolinfo)
@@ -79,19 +76,19 @@ public:
         cout << "Inserted in ScopeTable# " << getId() << " at position " << buncket_index << ", " << index << endl;
         return true;
     }
-    bool insert(string name, string type)
+    bool insert(string key, valueType value)
     {
-        return insert(new SymbolInfo(name, type));
+        return insert(new SymbolInfoChain<valueType>(key, value));
     }
 
-    SymbolInfo *find(string name)
+    SymbolInfoChain<valueType> *find(string key)
     {
-        int bucket_index = SymbolInfo(name, "").hashCode() % total_bucket;
-        SymbolInfo *currentSymbolInfo = bucket[bucket_index];
+        int bucket_index = SymbolInfoChain<valueType>(key, valueType()).hashCode() % total_bucket;
+        SymbolInfoChain<valueType> *currentSymbolInfo = bucket[bucket_index];
         int index = 0;
         while (currentSymbolInfo)
         {
-            if (currentSymbolInfo->getName() == name)
+            if (currentSymbolInfo->getName() == key)
             {
                 cout << (*currentSymbolInfo) << " found in ScopeTable# " << getId() << " at " << bucket_index << " , " << index << endl;
                 return currentSymbolInfo;
@@ -101,26 +98,27 @@ public:
         }
         return nullptr;
     }
-    bool erase(string name)
+    bool erase(string key)
     {
-        int bucket_index = SymbolInfo(name, "").hashCode() % total_bucket;
-        SymbolInfo *currentSymbolInfo = bucket[bucket_index];
-        SymbolInfo *previousSymbolInfo = nullptr;
+        int bucket_index = SymbolInfoChain<valueType>(key, valueType()).hashCode() % total_bucket;
+        SymbolInfoChain<valueType> *currentSymbolInfo = bucket[bucket_index];
+        SymbolInfoChain<valueType> *previousSymbolInfo = nullptr;
         int index = 0;
         while (currentSymbolInfo)
         {
-            if (currentSymbolInfo->getName() == name)
+            if (currentSymbolInfo->getName() == key)
             {
                 cout << "Found in ScopeTable# " << getId() << " at position " << bucket_index << ", " << index << endl;
 
-                SymbolInfo *nextSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
-                currentSymbolInfo->setNextSymbolInfo(nullptr);
-
+                SymbolInfoChain<valueType> *nextSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
+                
+                
                 if (previousSymbolInfo)
                     previousSymbolInfo->setNextSymbolInfo(nextSymbolInfo);
                 else
                     bucket[bucket_index] = nextSymbolInfo;
 
+                currentSymbolInfo->setNextSymbolInfo(nullptr); /// !! IMPORTANT : otherwise chain will deleted
                 delete currentSymbolInfo;
 
                 cout << "Deleted Entry " << bucket_index << ", " << index << " from current ScopeTable" << endl;
@@ -131,7 +129,7 @@ public:
             previousSymbolInfo = currentSymbolInfo;
             currentSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
         }
-        cout << "SymbolInfo not found in current ScopeTable" << endl;
+        cout << "SymbolInfo not found in current ScopeTable #"<<getId() << endl;
         return 0;
     }
 
@@ -141,7 +139,7 @@ public:
         for (int i = 0; i < ScopeTable::total_bucket; i++)
         {
             os << i << " --> ";
-            SymbolInfo *currentSymbolInfo = st.bucket[i];
+            SymbolInfoChain<valueType> *currentSymbolInfo = st.bucket[i];
             while (currentSymbolInfo)
             {
                 os << " " << (*currentSymbolInfo);
@@ -168,12 +166,12 @@ public:
         return currentId;
     }
 
-    void setParentScopeTable(ScopeTable *parentScopeTable)
+    void setParentScopeTable(ScopeTable<valueType> *parentScopeTable)
     {
         this->parentScopeTable = parentScopeTable;
     }
 
-    ScopeTable *getParentScopeTable()
+    ScopeTable<valueType> *getParentScopeTable()
     {
         return parentScopeTable;
     }
@@ -189,6 +187,7 @@ public:
     }
 };
 
-int ScopeTable::total_bucket = 1;
+template<typename valueType>
+int ScopeTable<valueType>::total_bucket = 1;
 
 #endif

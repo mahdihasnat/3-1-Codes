@@ -12,22 +12,33 @@ int main()
     int n;
     cin>>n;
 
-    ScopeTable::setTotalBucket(n);
+    
+    
 
     char cmd;
 
-    SymbolTable * st = new SymbolTable();
+    using valueType = string ;
+
+    ScopeTable<valueType>::setTotalBucket(n);
+    SymbolTable<valueType> * st = new SymbolTable<valueType>();
 
     while(cin>>cmd)
     {
         if(cmd == 'S')
+        {
+            cout<<cmd<<endl;
             st->enterScope();
+        }
         else if(cmd == 'E')
+        {
+            cout<<cmd<<endl;
             st->exitScope();
+        }
         else if(cmd == 'P')
         {
             char c;
             cin>>c;
+            cout<<cmd<<" "<<c<<endl;
             if(c=='C')
                 cout<<(*st->getCurrentScopeTable())<<endl;
             else cout<<(*st)<<endl;
@@ -36,22 +47,29 @@ int main()
         {
             string name ;
             cin>>name;
+            cout<<cmd<<" "<<name<<endl;
             st->lookUp(name);
         }
         else if (cmd == 'I')
         {
-            string name , type;
+            string name ;
+            valueType type;
             cin>>name>>type;
+
+            cout<<cmd<<" "<<name<<" "<<type<<endl;
             st->insert(name, type);
         }
         else if(cmd == 'D')
         {
             string name;
             cin>>name;
+
+            cout<<cmd<<" "<<name<<endl;
             st->erase(name);
         }
         cout<<endl;
     }
     delete st;
+    
     
 }

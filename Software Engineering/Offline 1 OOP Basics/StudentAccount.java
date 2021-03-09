@@ -6,22 +6,22 @@ public class StudentAccount extends Account {
         interest_rate_per_cent = 5.0F;
     }
 
+    public StudentAccount(String name, int deposit) {
+        super(name, deposit);
+    }
+
+    @Override
+    protected float getInterest_rate_per_cent() {
+        return interest_rate_per_cent;
+    }
+
     public static void setInterest_rate_per_cent(float interest_rate_per_cent) {
         StudentAccount.interest_rate_per_cent = interest_rate_per_cent;
     }
 
     @Override
-    public float getInterest_rate_per_cent() {
-        return interest_rate_per_cent;
-    }
-
-    @Override
     public int getMaximumAllowableLoan() {
         return 1000;
-    }
-
-    public StudentAccount(String name, int deposit) {
-        super(name, deposit);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class StudentAccount extends Account {
     }
 
     @Override
-    public int getYearlyServiceCharge() {
+    protected int getYearlyServiceCharge() {
         return 0;
     }
 }

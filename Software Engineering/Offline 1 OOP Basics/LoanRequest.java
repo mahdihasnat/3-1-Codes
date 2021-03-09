@@ -10,7 +10,7 @@ public class LoanRequest {
     public boolean approve(Bank bank) {
         if (amount <= bank.getInternalFund()) {
             bank.decrementInternalFund(amount);
-            account.incrementLoan(amount);
+            account.incrementLoanAmount(amount);
             account.incrementBalance(amount);
             System.out.println(amount + "$ loan for " + account + " Approved.");
             return true;

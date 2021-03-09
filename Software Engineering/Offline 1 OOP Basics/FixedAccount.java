@@ -1,11 +1,17 @@
-
 public class FixedAccount extends Account {
-    private int allowable_withdrawal_amount = 0;
-
     private static float interest_rate_per_cent;
 
     static {
         interest_rate_per_cent = 15;
+    }
+
+    private int allowable_withdrawal_amount;
+
+    public FixedAccount(String name, int initial_deposit) throws Exception {
+        super(name, initial_deposit);
+        if (initial_deposit < 100000)
+            throw new Exception("Error creating account. Initial deposit is less than  100,000$.");
+        allowable_withdrawal_amount = 0;
     }
 
     @Override
@@ -15,12 +21,6 @@ public class FixedAccount extends Account {
 
     public static void setInterest_rate_per_cent(float interest_rate_per_cent) {
         FixedAccount.interest_rate_per_cent = interest_rate_per_cent;
-    }
-
-    public FixedAccount(String name, int initial_deposit) throws Exception {
-        super(name, initial_deposit);
-        if (initial_deposit < 100000)
-            throw new Exception("Error creating account. Initial deposit is less than  100,000$.");
     }
 
     @Override
@@ -40,10 +40,13 @@ public class FixedAccount extends Account {
         }
         if (getAllowable_withdrawal_amount() < amount) {
             System.out.println("Invalid transaction;One year didn't reach to withdraw money ,withdraw allowable amount" + allowable_withdrawal_amount + "$");
+            return false;
+        }
+        if(super.withdraw(amount)) {
+            decrementAllowable_withdrawal_amount(amount);
             return true;
         }
-        decrementAllowable_withdrawal_amount(amount);
-        return super.withdraw(amount);
+        return false;
     }
 
     @Override
@@ -63,15 +66,15 @@ public class FixedAccount extends Account {
         return 100000;
     }
 
-    public void decrementAllowable_withdrawal_amount(int amount) {
+    private void decrementAllowable_withdrawal_amount(int amount) {
         allowable_withdrawal_amount -= amount;
     }
 
-    public int getAllowable_withdrawal_amount() {
+    private int getAllowable_withdrawal_amount() {
         return allowable_withdrawal_amount;
     }
 
-    public void setAllowable_withdrawal_amount(int allowable_withdrawal_amount) {
+    private void setAllowable_withdrawal_amount(int allowable_withdrawal_amount) {
         this.allowable_withdrawal_amount = allowable_withdrawal_amount;
     }
 }

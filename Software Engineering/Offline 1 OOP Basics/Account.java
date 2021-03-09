@@ -1,11 +1,12 @@
 public abstract class Account extends User {
 
     private int balance;
-    private int loan = 0;
+    private int loan;
 
     public Account(String name, int balance) {
         super(name);
         this.balance = balance;
+        loan = 0;
     }
 
     public boolean deposit(int amount) {
@@ -33,10 +34,10 @@ public abstract class Account extends User {
     }
 
     public void query() {
-        System.out.println("Current balance for " + getName() + " is " + getBalance() + "$ , loan = " + getLoan() + "$");
+        System.out.println("Current balance for " + getName() + " is " + getBalance() + "$ , loan = " + getLoanAmount() + "$");
     }
 
-    public float getInterest_rate_per_cent() {
+    protected float getInterest_rate_per_cent() {
         return 0.0F;
     }
 
@@ -48,7 +49,7 @@ public abstract class Account extends User {
         decrementBalance(getYearlyServiceCharge());
     }
 
-    public int getYearlyServiceCharge() {
+    protected int getYearlyServiceCharge() {
         return 500;
     }
 
@@ -69,11 +70,11 @@ public abstract class Account extends User {
         this.balance -= amount;
     }
 
-    public int getLoan() {
+    public int getLoanAmount() {
         return loan;
     }
 
-    public void incrementLoan(int amount) {
+    protected void incrementLoanAmount(int amount) {
         this.loan += amount;
     }
 
