@@ -10,7 +10,7 @@ using namespace std;
         REMINDER
         cascaded delete is used , everything this object points also get deleted 
     */
-template < typename valueType >
+template <typename valueType>
 class SymbolInfoChain
 {
 

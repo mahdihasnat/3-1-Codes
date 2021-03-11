@@ -10,10 +10,10 @@ using namespace std;
         REMINDER
         cascaded delete is used , everything this object points also get deleted 
 */
-template < typename valueType >
+template <typename valueType>
 class ScopeTable
 {
-    
+
 private:
     static int total_bucket;
 
@@ -111,8 +111,7 @@ public:
                 cout << "Found in ScopeTable# " << getId() << " at position " << bucket_index << ", " << index << endl;
 
                 SymbolInfoChain<valueType> *nextSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
-                
-                
+
                 if (previousSymbolInfo)
                     previousSymbolInfo->setNextSymbolInfo(nextSymbolInfo);
                 else
@@ -129,11 +128,11 @@ public:
             previousSymbolInfo = currentSymbolInfo;
             currentSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
         }
-        cout << "SymbolInfo not found in current ScopeTable #"<<getId() << endl;
+        cout << "SymbolInfo not found in current ScopeTable #" << getId() << endl;
         return 0;
     }
 
-    friend ostream &operator<<(ostream &os, const ScopeTable &st)
+    friend ostream &operator<<(ostream &os, ScopeTable &st)
     {
         os << "ScopeTable # " << st.getId() << endl;
         for (int i = 0; i < ScopeTable::total_bucket; i++)
@@ -187,7 +186,7 @@ public:
     }
 };
 
-template<typename valueType>
+template <typename valueType>
 int ScopeTable<valueType>::total_bucket = 1;
 
 #endif

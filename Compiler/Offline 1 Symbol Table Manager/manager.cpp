@@ -6,70 +6,68 @@ using namespace std;
 
 int main()
 {
-    freopen("input.txt" , "r" , stdin);
-    freopen("output.txt" , "w" , stdout);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
 
     int n;
-    cin>>n;
-
-    
-    
+    cin >> n;
 
     char cmd;
 
-    using valueType = string ;
+    using valueType = string;
 
     ScopeTable<valueType>::setTotalBucket(n);
-    SymbolTable<valueType> * st = new SymbolTable<valueType>();
+    SymbolTable<valueType> *st = new SymbolTable<valueType>();
 
-    while(cin>>cmd)
+    while (cin >> cmd)
     {
-        if(cmd == 'S')
+        if (cmd == 'S')
         {
-            cout<<cmd<<endl;
+            cout << cmd << endl;
             st->enterScope();
         }
-        else if(cmd == 'E')
+        else if (cmd == 'E')
         {
-            cout<<cmd<<endl;
+            cout << cmd << endl;
             st->exitScope();
         }
-        else if(cmd == 'P')
+        else if (cmd == 'P')
         {
             char c;
-            cin>>c;
-            cout<<cmd<<" "<<c<<endl;
-            if(c=='C')
-                cout<<(*st->getCurrentScopeTable())<<endl;
-            else cout<<(*st)<<endl;
+            cin >> c;
+            cout << cmd << " " << c << endl;
+            if (c == 'C')
+            {
+                st->printCurrentScopeTable();
+            }
+            else
+                cout << (*st) << endl;
         }
-        else if(cmd == 'L')
+        else if (cmd == 'L')
         {
-            string name ;
-            cin>>name;
-            cout<<cmd<<" "<<name<<endl;
+            string name;
+            cin >> name;
+            cout << cmd << " " << name << endl;
             st->lookUp(name);
         }
         else if (cmd == 'I')
         {
-            string name ;
+            string name;
             valueType type;
-            cin>>name>>type;
+            cin >> name >> type;
 
-            cout<<cmd<<" "<<name<<" "<<type<<endl;
+            cout << cmd << " " << name << " " << type << endl;
             st->insert(name, type);
         }
-        else if(cmd == 'D')
+        else if (cmd == 'D')
         {
             string name;
-            cin>>name;
+            cin >> name;
 
-            cout<<cmd<<" "<<name<<endl;
+            cout << cmd << " " << name << endl;
             st->erase(name);
         }
-        cout<<endl;
+        cout << endl;
     }
     delete st;
-    
-    
 }
