@@ -127,6 +127,7 @@ public:
 
             previousSymbolInfo = currentSymbolInfo;
             currentSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
+            index ++;
         }
         cout << "SymbolInfo not found in current ScopeTable #" << getId() << endl;
         return 0;
