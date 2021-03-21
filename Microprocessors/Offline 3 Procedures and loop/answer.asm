@@ -17,7 +17,6 @@ CHAR DW ?
 TEN DW 10
 OPERAND1 DW ?
 OPERAND2 DW ?
-ANSWER DW ?
 
 OVERFLOW_MSG DB CR , LF , 'Overflow occurred $'
 WRONG_OPERATOR_MSG DB CR, LF , 'Wrong operator$'

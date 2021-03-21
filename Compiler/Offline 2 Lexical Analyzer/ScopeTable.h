@@ -51,8 +51,8 @@ public:
         {
             if (previous_symbolinfo->getName() == symbolinfo->getName())
             {
-                cout << (*previous_symbolinfo) << " already exists in current ScopeTable" << endl;
-                //cout << (*symbolinfo) << " found in ScopTable " << getId() << " at position " << buncket_index << ", " << index << "" << endl;
+                cerr << (*previous_symbolinfo) << " already exists in current ScopeTable" << endl;
+                //cerr << (*symbolinfo) << " found in ScopTable " << getId() << " at position " << buncket_index << ", " << index << "" << endl;
                 delete symbolinfo;
                 return false;
             }
@@ -73,7 +73,7 @@ public:
         else
             previous_symbolinfo->setNextSymbolInfo(symbolinfo);
 
-        cout << "Inserted in ScopeTable# " << getId() << " at position " << buncket_index << ", " << index << endl;
+        cerr << "Inserted in ScopeTable# " << getId() << " at position " << buncket_index << ", " << index << endl;
         return true;
     }
     bool insert(string key, valueType value)
@@ -90,7 +90,7 @@ public:
         {
             if (currentSymbolInfo->getName() == key)
             {
-                cout << (*currentSymbolInfo) << " found in ScopeTable# " << getId() << " at " << bucket_index << " , " << index << endl;
+                cerr << (*currentSymbolInfo) << " found in ScopeTable# " << getId() << " at " << bucket_index << " , " << index << endl;
                 return currentSymbolInfo;
             }
             index++;
@@ -108,7 +108,7 @@ public:
         {
             if (currentSymbolInfo->getName() == key)
             {
-                cout << "Found in ScopeTable# " << getId() << " at position " << bucket_index << ", " << index << endl;
+                cerr << "Found in ScopeTable# " << getId() << " at position " << bucket_index << ", " << index << endl;
 
                 SymbolInfoChain<valueType> *nextSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
 
@@ -120,7 +120,7 @@ public:
                 currentSymbolInfo->setNextSymbolInfo(nullptr); /// !! IMPORTANT : otherwise chain will deleted
                 delete currentSymbolInfo;
 
-                cout << "Deleted Entry " << bucket_index << ", " << index << " from current ScopeTable" << endl;
+                cerr << "Deleted Entry " << bucket_index << ", " << index << " from current ScopeTable" << endl;
 
                 return 1;
             }
@@ -129,7 +129,7 @@ public:
             currentSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
             index++;
         }
-        cout << "SymbolInfo not found in current ScopeTable #" << getId() << endl;
+        cerr << "SymbolInfo not found in current ScopeTable #" << getId() << endl;
         return 0;
     }
 

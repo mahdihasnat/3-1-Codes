@@ -1,6 +1,6 @@
 #ifndef ADDED_SYMBOLTABLE
 #define ADDED_SYMBOLTABLE
-#define DBG(x) cout << (__LINE__) << " : " << (#x) << " -> " << (x) << "\n";
+
 #include "ScopeTable.h"
 
 template <typename valueType>
@@ -27,7 +27,7 @@ public:
         ScopeTable<valueType> *parentScopeTable = currentScopeTable;
         currentScopeTable = new ScopeTable<valueType>(parentScopeTable, nextNewChild);
         nextNewChild = 1;
-        cout << "New ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
+        cerr << "New ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
     }
     void exitScope()
     {
@@ -38,7 +38,7 @@ public:
 
             ScopeTable<valueType> *parentScopeTable = currentScopeTable->getParentScopeTable();
 
-            cout << "ScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
+            cerr << "ScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
             currentScopeTable->setParentScopeTable(nullptr); /// !! IMPORTANT otherwise entire symboltable will be lost
             delete currentScopeTable;
 
@@ -46,7 +46,7 @@ public:
         }
         else
         {
-            cout << "Current ScopeTable is Empty!" << endl;
+            cerr << "Current ScopeTable is Empty!" << endl;
         }
     }
 
@@ -60,7 +60,7 @@ public:
                 return now;
             current = current->getParentScopeTable();
         }
-        cout << key << " not found in SymbolTable" << endl;
+        cerr << key << " not found in SymbolTable" << endl;
         return nullptr;
     }
     bool insert(string key, valueType type)
@@ -69,7 +69,7 @@ public:
             return currentScopeTable->insert(key, type);
         else
         {
-            cout << "Current Scope is empty!" << endl;
+            cerr << "Current Scope is empty!" << endl;
             return false;
         }
     }
@@ -79,7 +79,7 @@ public:
             return currentScopeTable->erase(key);
         else
         {
-            cout << "Current Scope is empty!" << endl;
+            cerr << "Current Scope is empty!" << endl;
             return false;
         }
     }
@@ -93,17 +93,17 @@ public:
     {
 
         if (currentScopeTable)
-            cout << (*currentScopeTable) << endl;
+            cerr << (*currentScopeTable) << endl;
         else
-            cout << "Current ScopeTable is empty!" << endl;
+            cerr << "Current ScopeTable is empty!" << endl;
     }
 
-    void printNonEmptyBucket(ostream & os)
+    void printNonEmptyBuckets(ostream & os)
     {
         ScopeTable<valueType> *current = getCurrentScopeTable();
         while (current)
         {
-            os << (*current) << endl;
+            current->printNonEmptyBuckets(os);
             current = current->getParentScopeTable();
         }
     }

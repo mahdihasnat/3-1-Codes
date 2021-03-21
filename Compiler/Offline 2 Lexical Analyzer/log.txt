@@ -1,0 +1,61 @@
+Line no 1: Token <STRING> Lexeme "sda\"f" found
+Inserted in ScopeTable# 1 at position 6, 0
+ScopeTable # 1
+6 -->  < "sda\"f" : STRING >
+Line no 1: Token <STRING> Lexeme " sdfa " found
+Inserted in ScopeTable# 1 at position 0, 0
+ScopeTable # 1
+0 -->  < " sdfa " : STRING >
+6 -->  < "sda\"f" : STRING >
+Line no 1: Token <STRING> Lexeme "" found
+Inserted in ScopeTable# 1 at position 5, 0
+ScopeTable # 1
+0 -->  < " sdfa " : STRING >
+5 -->  < "" : STRING >
+6 -->  < "sda\"f" : STRING >
+Line no 2: Token <ID> Lexeme s found
+Inserted in ScopeTable# 1 at position 3, 0
+ScopeTable # 1
+0 -->  < " sdfa " : STRING >
+3 -->  < s : ID >
+5 -->  < "" : STRING >
+6 -->  < "sda\"f" : STRING >
+Line no 2: Token <ID> Lexeme d found
+Inserted in ScopeTable# 1 at position 2, 0
+ScopeTable # 1
+0 -->  < " sdfa " : STRING >
+2 -->  < d : ID >
+3 -->  < s : ID >
+5 -->  < "" : STRING >
+6 -->  < "sda\"f" : STRING >
+Line no 2: Token <ID> Lexeme f found
+Inserted in ScopeTable# 1 at position 4, 0
+ScopeTable # 1
+0 -->  < " sdfa " : STRING >
+2 -->  < d : ID >
+3 -->  < s : ID >
+4 -->  < f : ID >
+5 -->  < "" : STRING >
+6 -->  < "sda\"f" : STRING >
+Line no 2: Token <ID> Lexeme a found
+Inserted in ScopeTable# 1 at position 6, 1
+ScopeTable # 1
+0 -->  < " sdfa " : STRING >
+2 -->  < d : ID >
+3 -->  < s : ID >
+4 -->  < f : ID >
+5 -->  < "" : STRING >
+6 -->  < "sda\"f" : STRING > < a : ID >
+Line no 4: Token <STRING> Lexeme "  sdafa sdf\
+FASDFASD\" sdfa \
+sdadga" found
+Inserted in ScopeTable# 1 at position 0, 1
+ScopeTable # 1
+0 -->  < " sdfa " : STRING > < "  sdafa sdf\
+FASDFASD\" sdfa \
+sdadga" : STRING >
+2 -->  < d : ID >
+3 -->  < s : ID >
+4 -->  < f : ID >
+5 -->  < "" : STRING >
+6 -->  < "sda\"f" : STRING > < a : ID >
