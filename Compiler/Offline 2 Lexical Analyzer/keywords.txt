@@ -5,4 +5,13 @@ int	INT	char	CHAR
 float	FLOAT	double	DOUBLE
 void	VOID	return	RETURN
 switch	SWITCH	case	CASE
-
+= ASSIGNOP
+! NOT
+( LPAREN
+) RPAREN
+[ LTHIRD
+] RTHIRD
+, COMMA
+; SEMICOLON
+{ LCURL
+} RCURL

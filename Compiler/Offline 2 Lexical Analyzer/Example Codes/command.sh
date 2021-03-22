@@ -1,3 +1,3 @@
-flex -o state.c wordcount.l
+flex -o state.c state.l
 g++ state.c -lfl -o state.out
-./state.out wordcount.txt
+./state.out state.txt

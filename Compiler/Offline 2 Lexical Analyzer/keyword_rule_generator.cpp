@@ -10,7 +10,11 @@ int main()
 		if(cin>>pattern)
 		{
 			cin>>token;
-			cout<<"\""<<pattern<<"\"\t{\n\t\tcout<<\"<"<<token<<">\";\n";
+			cout<<"\""<<pattern<<"\"\t{\n\t\tprocesssToken(\""<<token<<"\",";
+			if(token.size() != pattern.size())
+				cout<<"string(yytext));\n";
+			else 
+				cout<<"\"\");\n";
 			cout<<"\t\tcerr<<\"Line no \"<<yylineno<<\": Token <"<<token<<"> Lexeme \"<<yytext<<\" found\\n\";\n\t}\n";
 		}
 		else break;

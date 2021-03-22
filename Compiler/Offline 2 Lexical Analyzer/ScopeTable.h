@@ -140,7 +140,7 @@ public:
         {
             if (bucket[i])
             {
-                os << i << " --> ";
+                os << i << " -->";
                 SymbolInfoChain<valueType> *currentSymbolInfo = bucket[i];
                 while (currentSymbolInfo)
                 {

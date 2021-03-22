@@ -56,7 +56,7 @@ public:
 
     friend ostream &operator<<(ostream &os, const SymbolInfoChain &sym)
     {
-        os << string("< ") << sym.getName() << " : " << sym.getType() << " >";
+        os << string("< ") << sym.getName() << " : " << sym.getType() << ">";
         return os;
     }
 };
