@@ -15,9 +15,12 @@ TEN DW 10
 N EQU 2
 M EQU 2
 
-ARRAY1 DW N DUP ( M DUP (0) )
-ARRAY2 DW N DUP ( M DUP (0) )
-ARRAY3 DW N DUP ( M DUP (0) )
+ARRAY1 DW 2 DUP (0)
+        DW 2 DUP (0)
+ARRAY2 DW 2 DUP ( 0)
+        DW 2 DUP ( 0)
+ARRAY3 DW 2 DUP ( 0)
+        DW 2 DUP ( 0)
 
 .CODE
 
@@ -144,60 +147,17 @@ PUT_DECIMAL_WORD PROC
     RET
 PUT_DECIMAL_WORD ENDP
 
-GET_ARRAY_WORD PROC
-    ; array location stored in SI
-    
-    PUSH AX
-    PUSH BX
-    PUSH CX 
-    PUSH DX
-    PUSHF
-    
-    ;for i= 0; i< n; i++
-    ;    for j= 0 ; j< n; j++
-    ;        scan array[i][j]
-
-    MOV CX , N
-    FOR_I:
-        PUSH CX
-
-            MOV CX , M
-            FOR_J:
-
-                
-                    MOV AH , 01H ; AH <- 01 ,MODE TO TAKE CHARACTER AS ASCII WHEN INT 21H IS CALLED
-                    INT 21H ; CALLING INTURRAPT TO TAKE INPUT , ASCII VALUE WILL BE AT #AL
-                    SUB AL ,'0'
-                    MOV AH,0
-                    MOV WORD PTR[SI] , AX
-                    ADD SI,2
-            
-                LOOP FOR_J
-
-
-        POP CX 
-        LOOP FOR_I
-    
-
-    POPF
-    POP DX
-    POP CX
-    POP BX
-    POP AX
-
-    RET
-GET_ARRAY_WORD ENDP
-
 PUT_ARRAY_WORD PROC
     ; array location stored in SI
     
+    PUSH SI
     PUSH AX
     PUSH BX
     PUSH CX 
     PUSH DX
     PUSHF
 
-    ;CALL PUT_NEWLINE
+    CALL PUT_NEWLINE
     ;FOR(I = 0; I< N; I++)
     ;    FOR(J=0;J<M;J++
 
@@ -215,7 +175,7 @@ PUT_ARRAY_WORD PROC
                 ADD SI,2
                 LOOP FOR_REV_J_PUT
 
-        ;CALL PUT_NEWLINE
+        CALL PUT_NEWLINE
 
         POP CX
         LOOP FOR_REV_I_PUT
@@ -226,9 +186,57 @@ PUT_ARRAY_WORD PROC
     POP CX
     POP BX
     POP AX
-
+    POP SI
+    
     RET
 PUT_ARRAY_WORD ENDP
+
+GET_ARRAY_WORD PROC
+    ; array location stored in SI
+    
+    PUSH SI
+    PUSH AX
+    PUSH BX
+    PUSH CX 
+    PUSH DX
+    PUSHF
+    
+    ;for i= 0; i< n; i++
+    ;    for j= 0 ; j< n; j++
+    ;        scan array[i][j]
+
+    MOV CX , N
+    FOR_REV_I_GET:
+        PUSH CX
+
+            MOV CX , M
+            FOR_REV_J_GET:
+
+                    ; SCAN  ARRAY[N-I][M-J]
+                    MOV AH , 01H ; AH <- 01 ,MODE TO TAKE CHARACTER AS ASCII WHEN INT 21H IS CALLED
+                    INT 21H ; CALLING INTURRAPT TO TAKE INPUT , ASCII VALUE WILL BE AT #AL
+                    SUB AL ,'0'
+                    MOV AH,0
+                    MOV WORD PTR[SI] , AX
+                    ADD SI,2
+                    CALL PUT_SPACE
+            
+                LOOP FOR_REV_J_GET
+            
+        CALL PUT_NEWLINE
+
+        POP CX 
+        LOOP FOR_REV_I_GET
+    
+
+    POPF
+    POP DX
+    POP CX
+    POP BX
+    POP AX
+    POP SI
+    RET
+GET_ARRAY_WORD ENDP
 
 CALCULATE_SUM PROC
     
@@ -257,6 +265,7 @@ CALCULATE_SUM PROC
             FOR_REV_J_CALC:
                 
                     ;A3[N-I][M-J] = A1[N-I][M-J] + A2[N-I][M-J]
+                    ;BX = (N-I)*M+(M-J)
                     MOV AX , ARRAY1[BX]
                     ADD AX , ARRAY2[BX]
                     MOV ARRAY3[BX] ,AX
@@ -282,7 +291,7 @@ MAIN PROC
     MOV AX, @DATA
     MOV DS, AX
      
-    CALL PUT_NEWLINE
+    
 
     LEA SI , ARRAY1 
     CALL GET_ARRAY_WORD
