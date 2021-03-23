@@ -1,0 +1,442 @@
+.MODEL SMALL
+
+
+.STACK 100H
+
+
+.DATA
+CR EQU 0DH
+LF EQU 0AH
+
+
+POSITIVE EQU 00H
+NEGATIVE EQU 01H
+MINUS_CHAR EQU  002DH
+
+SIGN DB ?
+
+CHAR DW ?
+TEN DW 10
+
+FIB_SAVED DW 110 DUP(0)
+
+.CODE
+
+
+GET_NUMBER_WORD PROC
+
+    ; RETURN SIGNED NUMBER FROM INPUT IN BX
+
+
+    PUSH AX
+    PUSH CX
+    PUSH DX
+    PUSHF
+
+    ;    WHILE  CIN>>CHAR
+    ;        IF CHAR == '\n' BREAK
+    ;        ELSE IF CHAR IN ['0','9']  ANSWER *= 10 , ANSWER += CHAR-'0'
+    ;        ELSE IF ANSWER = 0 AND CHAR  EQUAL (+ , -) SIGN = CHAR
+
+    MOV SIGN , POSITIVE ; SET SIGN AS POSITIVE
+
+    MOV BX , 0
+
+    OUTER_WHILE:
+
+        MOV AH , 01H ; AH <- 01 ,MODE TO TAKE CHARACTER AS ASCII WHEN INT 21H IS CALLED
+        INT 21H ; CALLING INTURRAPT TO TAKE INPUT , ASCII VALUE WILL BE AT #AL
+
+		MOV AH , 0 ; RESULT IS IN AL , so ax now contains 00al
+        MOV CHAR , AX ;
+
+            CMP CHAR , CR
+            JE EXIT_OUTER_WHILE ; if char is new line then exit while loop  , go to end of procedure
+
+            CMP CHAR , '0'
+            JL CHECKED_DIGIT ; char < '0' not a number
+
+            CMP CHAR ,'9'
+            JG CHECKED_DIGIT ; char > '9' not a number
+
+                                ; '0'<= char <= '9'
+                SUB CHAR , '0'  ; GET DIGIT FROM CHAR
+                MOV AX , BX     ; TRANSFER ANSWER FROM BX TO AX
+                MUL TEN			; ANSWER *= 10
+                ADD AX , CHAR   ; ANSWER += CHAR-'0'
+                MOV BX ,AX      ; STORE ANSWER TO BX
+
+            CHECKED_DIGIT:
+
+                            ;CHECK FOR - SIGN AT STARTING OF NUMBER
+            CMP CHAR , MINUS_CHAR    ;
+            JNE ENDIF
+
+            CMP BX , 0
+            JNE ENDIF
+
+            MOV SIGN , NEGATIVE ; MAKE NUMBER NEGATIVE
+
+        ENDIF:
+
+        JMP OUTER_WHILE
+
+
+    EXIT_OUTER_WHILE:
+
+
+    ;    IF SIGN IS NEGATIVE
+    ;        ANSWER *= -1
+    CMP SIGN , NEGATIVE
+    JNE EXIT_GETNUMBER ;IF SIGN != NEGATIVE
+
+                    ; SIGN == NEGATIVE
+        NEG BX
+
+
+    EXIT_GETNUMBER:
+
+
+    POPF
+    POP DX
+    POP CX
+    POP AX
+
+    RET
+GET_NUMBER_WORD ENDP
+
+PUT_NEWLINE PROC
+
+    PUSH AX
+    PUSH BX
+    PUSH CX 
+    PUSH DX
+    PUSHF
+
+        MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
+        MOV DL, CR
+        INT 21H
+        MOV DL, LF
+        INT 21H
+
+    POPF
+    POP DX
+    POP CX
+    POP BX
+    POP AX
+
+    RET
+PUT_NEWLINE ENDP
+
+PUT_COMMA_SPACE PROC
+	PUSH AX
+    PUSH BX
+    PUSH CX 
+    PUSH DX
+    PUSHF
+
+        MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
+        MOV DL, ','
+        INT 21H
+        MOV DL, ' '
+        INT 21H
+
+    POPF
+    POP DX
+    POP CX
+    POP BX
+    POP AX
+	RET 
+PUT_COMMA_SPACE ENDP
+
+
+PUT_DECIMAL_WORD PROC
+    ; PRINT NUMBER STORED IN AX
+    PUSH AX
+    PUSH BX
+    PUSH CX 
+    PUSH DX
+    PUSHF
+
+    ;CALL PUT_NEWLINE
+
+
+    ;    IF NUMBER < 0
+    ;        PRINT - SIGN
+
+
+    CMP AX , 0
+    JGE CHECKED_SIGN ; IF AX>=0 THEN NO PRINTING
+
+        PUSH AX
+        PUSH DX
+
+            MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
+            MOV DL, MINUS_CHAR
+            INT 21H
+
+        POP DX
+        POP AX
+
+        NEG AX
+
+
+    CHECKED_SIGN:
+
+
+
+    ;    DO
+    ;        NUMBER /= 10
+    ;        CNT ++
+    ;        PUSH REMINDER
+    ;    WHILE NUMBER!=0
+
+    MOV CX , 0 ; CX = COUNTER
+
+    MORE_TO_PRINT:
+        ;CWD  ; CONVERT WORD AX TO DOUBLE WORD DX:AX
+        MOV DX , 0 ; SINCE NUMBER IS POSITIVE NOW SO WE CAN SET DX = 0 , IT WILL HELP FOR CASE AX = -(2^15)
+        DIV TEN ;QUOTIENT IN AX , REMINDER IN DX
+
+        PUSH DX ; PUSH  DX = REMINDER
+        INC CX ; CNT++
+
+        CMP AX , 0000H
+        JNE MORE_TO_PRINT ;AX != 0
+
+    ;   WHILE( CNT --)
+    ;        PRINT( STACK.TOP())
+    ;        STACK.POP()
+
+    JCXZ EXIT_PUT_DECIMAL_WORD ;IF CX IS ZERO THEN NOTING TO PRINT , THIS CASE WONT ARISE THOUGH
+
+    PRINT_DIGITS:
+
+
+            MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
+            POP DX
+            ADD DL, '0'
+            INT 21H
+
+
+        LOOP PRINT_DIGITS
+
+    EXIT_PUT_DECIMAL_WORD:
+
+    POPF
+    POP DX
+    POP CX
+    POP BX
+    POP AX
+
+    RET
+PUT_DECIMAL_WORD ENDP
+
+
+FIBONACCI PROC
+	; PUSH WORD NUMBER AS PARAMETER THEN CALL FIBONACCI 
+	; AX CONTAINS RESULT
+	; N>=1
+	PUSH BP
+	PUSH BX
+	PUSH CX
+	PUSH DX
+	PUSHF
+
+		; EXTRACT N = BX FROM STACK 
+		MOV BP , SP
+		MOV BX , WORD PTR[BP+12]
+
+	
+	
+
+		;IF N <= 2 :
+		;	RETURN N-1
+		;ELSE RETURN FIB(N-1)+FIB(N-2)
+
+		CMP BX ,2 
+		
+		JG OTHER_CASE
+
+		BASE_CASE:
+			MOV AX  , BX
+			DEC AX
+			JMP EXIT_FIBONACCI
+
+		OTHER_CASE:
+
+			DEC BX  ; BX = N-1
+			
+			PUSH BX  
+			CALL FIBONACCI ; AX = FIB(N-1)
+			PUSH AX ;STORE FIB(N-1) TO TOP STACK 
+
+			DEC BX ; BX = N-2
+
+			PUSH BX 
+			CALL FIBONACCI ; AX = FIB(N-2)
+			
+			; NOW AX = FIB(N-2) , TOP OF STACK = FIB(N-1)
+
+			POP BX  ; BX = FIB(N-1) ,N IS LOST NOW 
+			ADD AX , BX ; AX = FIB(N-2) + FIB(N-1)
+
+			JMP EXIT_FIBONACCI
+
+		EXIT_FIBONACCI:
+
+
+	POPF
+	POP DX
+	POP CX
+	POP BX
+	POP BP
+
+	RET 2 ; POP 1 PARAMETER = 2 BYTE ALSO 
+FIBONACCI ENDP
+
+FIBONACCI_FAST PROC
+	; PUSH WORD NUMBER AS PARAMETER THEN CALL FIBONACCI 
+	; AX CONTAINS RESULT
+	; N>=1
+
+	PUSH BP
+	PUSH BX
+	PUSH CX
+	PUSH DX
+	PUSHF
+
+		; EXTRACT N = BX FROM STACK 
+		MOV BP , SP
+		MOV BX , WORD PTR[BP+12]
+
+		;IF FIB_SAVED[N] = 0 
+		;	RETURN FIB_SAVED[N] = FIB(N)
+		;ELSE RETURN ARRAY[N]
+
+		; NOTE
+		; ARRAY[BX|BP][SI|DI] -> BASED INDEX
+    	; OR ARRAY[BX|BP] -> BASED [IF BX IS USED DS CONTAINS SEGMENT ] [IF BP IS USED SS CONTAINS SEGMENT]
+
+		; BX = N 
+		; FIB_SAVED[BX] = FIB_SAVED[N]
+		PUSH BX
+
+			ADD BX , BX 
+			MOV AX , WORD PTR  FIB_SAVED[BX] ; AX = FIB_SAVED[N] ; WORD VARIABLE INDEX = 2 * INDEX 
+
+		POP BX 
+
+		CMP AX, 0
+
+		JNE CALCULATED_FIB ; IF  NOT ZEOR THEN ALREADY CALCULATED
+		
+		; CALCULATE FIB(N = BX ) AND STORE TO AX
+
+		PUSH BX 
+
+			; NOW BX = N , CALCULATE FIB_FAST(N)
+
+			; IF BX <= 2
+			;	AX = BX -1
+			;ELSE 
+			;	AX = FIB_FAST(BX-1) + FIB_FAST(BX-2)
+
+			CMP BX , 2
+			JG OTHER_CASE_FAST
+
+			BASE_CASE_FAST:
+
+				MOV AX , BX 
+				DEC AX 
+				JMP COMPLETED_ALL_CASE_FAST
+			OTHER_CASE_FAST:
+
+				DEC BX ; BX = N-1
+					PUSH BX 
+					CALL FIBONACCI_FAST ; AX = FIB_FAST(N-1)
+
+				PUSH AX  ; TOP OF STACK = FIB_FAST(N-1)
+
+				DEC BX ; BX = N-2
+
+					PUSH BX 
+					CALL FIBONACCI_FAST ; AX = FIB_FAST(N-2)
+
+				POP BX ; AX = FIB_FAST(N-2) , BX = FIB_FAST(N-1)
+
+				ADD AX , BX 
+
+			COMPLETED_ALL_CASE_FAST:
+
+
+		POP BX 
+		
+		CALCULATED_FIB:
+		
+		;AX CONTAINS FIB(BX = N)
+		
+		; FIB_SAVE[N] = AX 
+		PUSH BX 
+			ADD BX , BX 
+			MOV WORD PTR FIB_SAVED[BX] , AX ; WORD VARIABLE INDEX = 2 * INDEX 
+		POP BX 
+
+	
+	POPF
+	POP DX
+	POP CX
+	POP BX
+	POP BP
+	
+	RET 2; POP 1 PARAMETER = 2 BYTE ALSO 
+FIBONACCI_FAST ENDP
+
+
+MAIN PROC
+	;DATA SEGMENT INITIALIZATION
+    MOV AX, @DATA
+    MOV DS, AX
+
+	CALL GET_NUMBER_WORD ; BX = INPUT_NUMBER()
+	
+	CALL PUT_NEWLINE
+
+
+	;	BX = N 
+	;	FOR AX = 1; AX <= BX ; AX ++
+	; 	PRINT FIB AX 
+
+
+	MOV AX ,1 
+	FOR_I:
+		
+		PUSH AX
+		PUSH BX
+
+			PUSH AX  ; AX  = ITERATOR
+			CALL FIBONACCI_FAST  ; AX = FIB(TOP OF STACK)
+
+			CALL PUT_COMMA_SPACE
+
+			CALL PUT_DECIMAL_WORD ; PRINT(AX) , AX = FIB(ITERATOR)
+
+		POP BX
+		POP AX 
+
+		INC AX 
+		CMP AX , BX 
+		JLE FOR_I
+
+
+
+
+
+
+    ;Return 0
+    MOV AH, 4CH
+    INT 21H
+
+
+MAIN ENDP
+    END MAIN
