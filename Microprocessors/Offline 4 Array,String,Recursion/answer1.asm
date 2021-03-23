@@ -197,28 +197,28 @@ PUT_ARRAY_WORD PROC
     PUSH DX
     PUSHF
 
-    CALL PUT_NEWLINE
+    ;CALL PUT_NEWLINE
     ;FOR(I = 0; I< N; I++)
     ;    FOR(J=0;J<M;J++
 
     MOV CX , N
 
-    FOR_REV_I:
+    FOR_REV_I_PUT:
         PUSH CX
 
             MOV CX , M 
-            FOR_REV_J:
+            FOR_REV_J_PUT:
                 
-                MOV AX , [SI]
+                MOV AX ,word ptr [SI]
                 CALL PUT_DECIMAL_WORD
                 CALL PUT_SPACE
                 ADD SI,2
-                LOOP FOR_REV_J
+                LOOP FOR_REV_J_PUT
 
-        CALL PUT_NEWLINE
+        ;CALL PUT_NEWLINE
 
         POP CX
-        LOOP FOR_REV_I
+        LOOP FOR_REV_I_PUT
 
 
     POPF
