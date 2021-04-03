@@ -73,7 +73,7 @@ public:
         else
             previous_symbolinfo->setNextSymbolInfo(symbolinfo);
 
-        cerr << "Inserted in ScopeTable# " << getId() << " at position " << buncket_index << ", " << index << endl;
+        //cerr << "Inserted in ScopeTable# " << getId() << " at position " << buncket_index << ", " << index << endl;
         return true;
     }
     bool insert(string key, valueType value)
@@ -135,16 +135,16 @@ public:
 
     void printNonEmptyBuckets(ostream &os)
     {
-        os << "ScopeTable # " << getId() << endl;
+        os << "\nScopeTable # " << getId() << endl;
         for (int i = 0; i < ScopeTable::total_bucket; i++)
         {
             if (bucket[i])
             {
-                os << i << " -->";
+                os << " "<<i << " --> ";
                 SymbolInfoChain<valueType> *currentSymbolInfo = bucket[i];
                 while (currentSymbolInfo)
                 {
-                    os << " " << (*currentSymbolInfo);
+                    os << (*currentSymbolInfo) << " " ;
                     currentSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
                 }
                 os << endl;

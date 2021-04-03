@@ -11,9 +11,6 @@ using namespace std;
 
 SymbolTable<string> * symboltable;
 
-string BLOCK_COMMENT_BUFFER;
-string STRING_BUFFER;
-
 void printTokenAscii(char * s)
 {
 	while(*s)
@@ -84,10 +81,11 @@ string get_row_string(string s)
 	return ret;
 }
 
-int get_lineno(string text = yytext)
+int get_lineno()
 {
+	string symbol = yytext;
 	int ret =  yylineno;
-	for(char c:text)
+	for(char c:symbol)
 		ret-=c=='\n';
 	return ret;
 }
@@ -115,12 +113,7 @@ void insertSymbol(string key , string value)
 }
 
 %}
-
-
 	// to comment in this section : TAB\\ or TAB/*
-
-%x BLOCK_COMMENT_STATE
-%x STRING_STATE
 
 NEWLINE \r?\n
 CONTINUOUS_LINE \\{NEWLINE}
@@ -130,25 +123,20 @@ WHITE_SPACES {WHITE_SPACE}+
 LINE_COMMENT \/\/([^\r\n]|{CONTINUOUS_LINE})*
 	// line comment = // anything except new line  + continous line\
 						= anychar except \r + continous line
-
-BLOCK_COMMENT_START "/*"
-BLOCK_COMMENT_END "*/"
+BLOCK_COMMENT "/*"([^*]|("*"+[^\/]))*"*/"
+	//block comment = /* ( anything except */  \
+						=  anything except * at begining +\
+						 anything with * at begining \
+						 followed by anythinh except / )  */
 
 DIGIT [0-9]
 CONST_INT [0-9]+
-EXPONENT ((E|e)[+-]?{DIGIT}+)
-CONST_FLOAT ((({DIGIT}+\.{DIGIT}*)|({DIGIT}*\.{DIGIT}+)){EXPONENT}?)|({DIGIT}+{EXPONENT})
+EXPONENT (E[+-]?{DIGIT}+)
+CONST_FLOAT ({DIGIT}*\.{DIGIT}*{EXPONENT}?)|({DIGIT}+{EXPONENT})
 	//float  = 3.14159, 3.14159E-10, .314159 and 314159E10
 	// two case 
-	//1.with decimal(either int part or float part  has digit) - exponent optional
+	//1.with decimal - exponent optional
 	//2.without decimal - exponent must , base must
-
-MULTIPLE_DECIMAL_ERROR [0-9]*\.[0-9]*(\.[0-9]*)+({EXPONENT}\.{DIGIT}*)*
-
-NUMBERIC_IDENTIFIER_ERROR ({CONST_FLOAT}|{CONST_INT}){IDENTIFIER}
-
-NUMBER_FORMAT_ERROR {CONST_FLOAT}(\.{DIGIT}*)*
-
 
 SINGLE_CHAR_EXCEPT_SINGLE_QUOTE {CONTINUOUS_LINE}*([^'\n\\\r]|\\.){CONTINUOUS_LINE}*
 	//1.any single char except ( escape , single quote , \n \r )
@@ -163,8 +151,13 @@ ALPHANUMERIC_CHAR [a-zA-Z0-9]
 ALPHABET_CHAR [a-zA-Z]
 IDENTIFIER [a-zA-Z_]({ALPHANUMERIC_CHAR}|_)*
 
-STRING_START \"
-STRING_END \"
+STRING \"([^"\\\n\r]|(\\[^\n\r])|{CONTINUOUS_LINE})*\"
+	// can't contain \r\n anywhere except continuous line
+	// can't  end with \" 
+	// can't contain single "
+	// can contain continuous line
+	// if escape char then any char must follow
+	// so inside string  = ( not escape + not " + not \n + not \r) or (escape + anychar) or continuous line
 
 ADDOP [+\-]
 	// + , - ADDOP
@@ -177,15 +170,23 @@ RELOP ([<>]=?)|([=!]=)
 LOGICOP "&&"|"||"
 	//&&, || LOGICOP
 
+MULTIPLE_DECIMAL_ERROR [0-9]*\.[0-9]*(\.[0-9]*)+
 
-MULTI_CHAR_ERROR '{SINGLE_CHAR_EXCEPT_SINGLE_QUOTE}{2,}'
+NUMBERIC_IDENTIFIER_ERROR ({CONST_FLOAT}|{CONST_INT}){IDENTIFIER}
+
+NUMBER_FORMAT_ERROR {CONST_FLOAT}(E[+-]?[0-9]+)+{CONST_FLOAT}
+
+MULTI_CHAR_ERROR '{2,}'
 	// single ' followed by anything except single ' followed by single '
 
-UNTERMINATED_CHAR_ERROR '{SINGLE_CHAR_EXCEPT_SINGLE_QUOTE}*
+UNTERMINATED_CHAR_ERROR '([^' \n\r]|\\')*
 	// single ' followed by enything except single ' or space newline
-EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
-
-
+EMPTY_CHAR_ERROR ''
+UNTERMINATED_STRING_ERROR  \"([^"\\\n\r]|(\\[^\n\r])|{CONTINUOUS_LINE})*
+	// just same regx except last " part
+UNTERMINATED_COMMENT_ERROR	"/*"([^*]|("*"[^//]))*
+	// same regx  as block comment without last */
+	// line comment cannot be unterminated
 %%
 
 {NEWLINE}	{
@@ -209,69 +210,9 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					
 					cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
 				}
-{BLOCK_COMMENT_START}	{
-							BEGIN BLOCK_COMMENT_STATE;
-							BLOCK_COMMENT_BUFFER+=yytext;
-					}
-<BLOCK_COMMENT_STATE>{
-	{BLOCK_COMMENT_END}	{
-		BLOCK_COMMENT_BUFFER+=yytext;
-
-		//yytext = BLOCK_COMMENT_BUFFER;
-		cerr<<"\nLine no "<< get_lineno(BLOCK_COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<BLOCK_COMMENT_BUFFER<<" found\n";
-
-		BLOCK_COMMENT_BUFFER.clear();
-		BEGIN INITIAL;
-	}
-	. BLOCK_COMMENT_BUFFER+=yytext;
-	{WHITE_SPACES} BLOCK_COMMENT_BUFFER+=yytext;
-	<<EOF>> {
-				//yytext = BLOCK_COMMENT_BUFFER.c_str();
-				processError( get_lineno(BLOCK_COMMENT_BUFFER)  ,BLOCK_COMMENT_BUFFER , "Unterminated Comment");
-
-				BLOCK_COMMENT_BUFFER.clear();
-				BEGIN INITIAL;
-			}
-}
-
-{STRING_START} {
-	BEGIN STRING_STATE;
-	STRING_BUFFER+=yytext;
-}
-<STRING_STATE>{
-	{STRING_END}	{
-			STRING_BUFFER+=yytext;
-
-			
-			string row_symbol = get_row_string(STRING_BUFFER);
-			
-			processsToken("STRING" , STRING_BUFFER);
-
-			cerr<<"\nLine no "<< get_lineno(STRING_BUFFER) <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
-			cerr<<" --> <STRING, "<<row_symbol<<">\n";
-
-			STRING_BUFFER.clear();
-			BEGIN INITIAL;
-		}
-	{CONTINUOUS_LINE} STRING_BUFFER+=yytext;
-	\\.	STRING_BUFFER+=yytext;
-	. STRING_BUFFER+=yytext;
-
-	<<EOF>> {
-				processError( get_lineno(STRING_BUFFER)  ,STRING_BUFFER , "Unterminated String");
-				STRING_BUFFER.clear();
-				BEGIN INITIAL;
-			}
-	\n {
-				STRING_BUFFER+=yytext;
-				processError( get_lineno(STRING_BUFFER)  ,STRING_BUFFER , "Unterminated String");
-				STRING_BUFFER.clear();
-				BEGIN INITIAL;
-			}
-	
-}
-	
-
+{BLOCK_COMMENT}	{
+					cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";;
+				}
 
 {CONST_INT}	{
 		string symbol = string(yytext);
@@ -441,6 +382,18 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					// 	symboltable->printNonEmpotyBuckets(cerr);
 				}
 
+{STRING}	{ 
+					//cerr<<yytext<<"\n";
+					string symbol = string(yytext);
+					//cout<<"<STRING, "<<symbol<<">";
+					string row_symbol = get_row_string(symbol);
+					
+					processsToken("STRING" , row_symbol);
+
+					cerr<<"\nLine no "<< get_lineno() <<": Token <STRING> Lexeme "<<symbol<<" found";
+					cerr<<" --> <STRING, "<<row_symbol<<">\n";
+
+				}
 
 {MULTIPLE_DECIMAL_ERROR}	{
 								processError( get_lineno()  , yytext , "Too many decimal points");
@@ -459,7 +412,13 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 						}	
 {EMPTY_CHAR_ERROR}	{
 						processError( get_lineno()  , yytext , "Empty character constant error");
-					}
+					}	
+{UNTERMINATED_STRING_ERROR}	{
+								processError( get_lineno()  , yytext , "Unterminated String");
+							}
+{UNTERMINATED_COMMENT_ERROR}	{
+			processError( get_lineno()  ,yytext , "Unterminated Comment");
+}
 .	{
 		processError( get_lineno()  , yytext , "Unrecognized character" );
 	}
