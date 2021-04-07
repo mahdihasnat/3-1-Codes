@@ -610,7 +610,7 @@ using namespace std;
 
 SymbolTable<string> * symboltable;
 
-string BLOCK_COMMENT_BUFFER;
+string COMMENT_BUFFER;
 string STRING_BUFFER;
 
 void printTokenAscii(char * s)
@@ -704,7 +704,7 @@ int error_count = 0;
 void processError(int line_number, string text, string reason)
 {
 	error_count++;
-	cerr<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
+  	cerr<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
 }
 
 void insertSymbol(string key , string value)
@@ -1057,7 +1057,7 @@ YY_RULE_SETUP
 #line 209 "1705003.l"
 {
 					
-					cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
+				  	cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
 				}
 	YY_BREAK
 case 4:
@@ -1065,7 +1065,7 @@ YY_RULE_SETUP
 #line 213 "1705003.l"
 {
 							BEGIN BLOCK_COMMENT_STATE;
-							BLOCK_COMMENT_BUFFER+=yytext;
+							COMMENT_BUFFER+=yytext;
 					}
 	YY_BREAK
 
@@ -1073,33 +1073,33 @@ case 5:
 YY_RULE_SETUP
 #line 218 "1705003.l"
 {
-		BLOCK_COMMENT_BUFFER+=yytext;
+		COMMENT_BUFFER+=yytext;
 
-		//yytext = BLOCK_COMMENT_BUFFER;
-		cerr<<"\nLine no "<< get_lineno(BLOCK_COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<BLOCK_COMMENT_BUFFER<<" found\n";
+		//yytext = COMMENT_BUFFER;
+	  	cerr<<"\nLine no "<< get_lineno(COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
 
-		BLOCK_COMMENT_BUFFER.clear();
+		COMMENT_BUFFER.clear();
 		BEGIN INITIAL;
 	}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 227 "1705003.l"
-BLOCK_COMMENT_BUFFER+=yytext;
+COMMENT_BUFFER+=yytext;
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
 #line 228 "1705003.l"
-BLOCK_COMMENT_BUFFER+=yytext;
+COMMENT_BUFFER+=yytext;
 	YY_BREAK
 case YY_STATE_EOF(BLOCK_COMMENT_STATE):
 #line 229 "1705003.l"
 {
-				//yytext = BLOCK_COMMENT_BUFFER.c_str();
-				processError( get_lineno(BLOCK_COMMENT_BUFFER)  ,BLOCK_COMMENT_BUFFER , "Unterminated Comment");
+				//yytext = COMMENT_BUFFER.c_str();
+				processError( get_lineno(COMMENT_BUFFER)  ,COMMENT_BUFFER , "Unterminated Comment");
 
-				BLOCK_COMMENT_BUFFER.clear();
+				COMMENT_BUFFER.clear();
 				BEGIN INITIAL;
 			}
 	YY_BREAK
@@ -2552,7 +2552,7 @@ void yyfree (void * ptr )
 int main(int argc,char *argv[]){
 	
 	if(argc<3){
-		printf("Please provide input file name , log_file_name , [output_file_name] and try again\n");
+		printf("Please provide input file name , log_file_name , [output_file_name optional] and try again\n");
 		return 0;
 	}
 	
@@ -2581,6 +2581,7 @@ int main(int argc,char *argv[]){
 
 	delete  symboltable;
 
+	yylex_destroy();
 	return 0;
 }
 

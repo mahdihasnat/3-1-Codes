@@ -1,0 +1,197 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.20)  5 APR 2021 21:34
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**"c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/a2_16.tex"
+(c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/a2_16.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18> (c:/texlive/2020/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(c:/texlive/2020/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count179
+\c@section=\count180
+\c@subsection=\count181
+\c@subsubsection=\count182
+\c@paragraph=\count183
+\c@subparagraph=\count184
+\c@figure=\count185
+\c@table=\count186
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+) (c:/texlive/2020/texmf-dist/tex/latex/romannum/romannum.sty
+Package: romannum 2009/09/03 v1.0b roman numerals
+ (c:/texlive/2020/texmf-dist/tex/latex/stdclsdv/stdclsdv.sty
+Package: stdclsdv 2009/09/04 v1.1a Sectional divisions
+)) (c:/texlive/2020/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
+\c@tracingmulticols=\count187
+\mult@box=\box47
+\multicol@leftmargin=\dimen139
+\c@unbalance=\count188
+\c@collectmore=\count189
+\doublecol@number=\count190
+\multicoltolerance=\count191
+\multicolpretolerance=\count192
+\full@width=\dimen140
+\page@free=\dimen141
+\premulticols=\dimen142
+\postmulticols=\dimen143
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box48
+\last@line=\box49
+\maxbalancingoverflow=\dimen144
+\mult@rightbox=\box50
+\mult@grightbox=\box51
+\mult@gfirstbox=\box52
+\mult@firstbox=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\@tempa=\box57
+\@tempa=\box58
+\@tempa=\box59
+\@tempa=\box60
+\@tempa=\box61
+\@tempa=\box62
+\@tempa=\box63
+\@tempa=\box64
+\@tempa=\box65
+\@tempa=\box66
+\@tempa=\box67
+\@tempa=\box68
+\@tempa=\box69
+\@tempa=\box70
+\@tempa=\box71
+\@tempa=\box72
+\@tempa=\box73
+\@tempa=\box74
+\@tempa=\box75
+\@tempa=\box76
+\@tempa=\box77
+\@tempa=\box78
+\@tempa=\box79
+\@tempa=\box80
+\@tempa=\box81
+\@tempa=\box82
+\@tempa=\box83
+\@tempa=\box84
+\@tempa=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\@tempa=\box89
+\@tempa=\box90
+\c@minrows=\count193
+\c@columnbadness=\count194
+\c@finalcolumnbadness=\count195
+\last@try=\dimen145
+\multicolovershoot=\dimen146
+\multicolundershoot=\dimen147
+\mult@nat@firstbox=\box91
+\colbreak@box=\box92
+\mc@col@check@num=\count196
+) (c:/texlive/2020/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip51
+\multirow@cntb=\count197
+\multirow@dima=\skip52
+\bigstrutjot=\dimen148
+) (c:/texlive/2020/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
+\inpenc@prehook=\toks15
+\inpenc@posthook=\toks16
+) (c:/texlive/2020/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
+ (c:/texlive/2020/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+ (c:/texlive/2020/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+)) (c:/texlive/2020/texmf-dist/tex/latex/tools/enumerate.sty
+Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
+\@enLab=\toks17
+) (c:/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count198
+\l__pdf_internal_box=\box93
+)
+
+LaTeX Warning: Unused global option(s):
+    [18pt].
+
+(c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/a2_16.aux)
+\openout1 = `a2_16.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+ (c:/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count199
+\scratchdimen=\dimen149
+\scratchbox=\box94
+\nofMPsegments=\count266
+\nofMParguments=\count267
+\everyMPshowfont=\toks18
+\MPscratchCnt=\count268
+\MPscratchDim=\dimen150
+\MPnumerator=\count269
+\makeMPintoPDFobject=\count270
+\everyMPtoPDFconversion=\toks19
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 15.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 15.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 15.
+ (c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/a2_16.toc)
+\tf@toc=\write3
+\openout3 = `a2_16.toc'.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 19.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 19.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 26.
+ (c:/texlive/2020/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 26.
+ [1
+
+{c:/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] (c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/a2_16.aux) ) 
+Here is how much of TeX's memory you used:
+ 1286 strings out of 479014
+ 20391 string characters out of 5863086
+ 311183 words of memory out of 5000000
+ 18792 multiletter control sequences out of 15000+600000
+ 408059 words of font info for 42 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 53i,11n,60p,254b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/texlive/2020/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/a2_16.pdf" (2 pages, 98884 bytes).
+PDF statistics:
+ 48 PDF objects out of 1000 (max. 8388607)
+ 34 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

@@ -1,0 +1,82 @@
+% comment
+\documentclass[18pt,a4paper]{article}
+
+\usepackage{romannum}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{enumerate}
+\author{Your Roll}
+\title{CSE 300 Online 1}
+\date{July 6, 2019}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\pagenumbering{arabic}
+\section{Introduction}
+This is the first online practice on \LaTeX.\\
+We will do some styling in section \ref{section:styling}.
+\section{\label{section:styling} Styling}
+This is {\color{red}\textbf{bold}}. 
+This is {\color{green}\textit{italic}} \& so on.
+
+\section*{Use of special characters}
+You can use special characters by preceding with \textbackslash.
+Another package can be used named as verbatim. 
+Example: \textasciitilde!\$\#\textbackslash@*\textasciicircum
+
+\section{List}
+There are 3 kinds of list.
+\begin{enumerate}[i]
+	\item Un-ordered
+	\item Ordered
+	\item Description
+\end{enumerate}
+% \newpage
+Let's see an example of lists:
+\begin{description}
+	\item[CSE 311] Data Communication \Romannum{1}
+	\begin{itemize}
+		\item Fourier\\
+		ADC
+	\end{itemize}
+	\item[CSE 305] Computer Architecture
+	\begin{enumerate}
+		\item MIPS
+		
+		\begin{enumerate}
+			
+			\item \textit{commands}
+			\item \textit{pipeline}
+			
+		\end{enumerate}
+		
+		\item Shared memory
+	\end{enumerate}
+	\item[CSE 309] Compiler
+\end{description}
+\section{Table}
+For understanding the use of multi-row and multi-column command see the
+table \ref{test}
+\begin{table*}[h!]
+	
+	\begin{tabular}{|c|ccc|}
+		
+		\hline 
+		\multirow{2}{*}{Doller} & \multicolumn{1}{|c|}{Rupee} & \multicolumn{1}{|c|}{Taka} & Euro \\
+		\cline{2-4}
+								&\multicolumn{2}{|c}{ \multirow{3}{*}{Dhaka} } 	& \multicolumn{1}{|c|}{DU} \\
+								\cline{4-4}
+		City					&\multicolumn{2}{|c}{}							& BUET \\
+		\cline{1-1}
+		\cline{4-4}
+		Food					&\multicolumn{2}{|c}{}							&\multicolumn{1}{|c|}{Mosque}\\
+		\hline
+		
+	\end{tabular}
+	\caption{A table for online test}
+	\label{test}
+\end{table*}
+\end{document}

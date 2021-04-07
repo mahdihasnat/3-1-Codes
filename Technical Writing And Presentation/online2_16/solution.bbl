@@ -1,0 +1,233 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{hinton2012deep}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{10}{}{%
+        {{hash=9a8750ccdb2a4cf14d2655face1ce016}{%
+           family={Hinton},
+           familyi={H\bibinitperiod},
+           given={Geoffrey},
+           giveni={G\bibinitperiod}}}%
+        {{hash=2f5fbdc5c3cf91f62a64663cd72397b3}{%
+           family={Deng},
+           familyi={D\bibinitperiod},
+           given={Li},
+           giveni={L\bibinitperiod}}}%
+        {{hash=93509a9a7ccede33feb1e702b5a8bb9f}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Dong},
+           giveni={D\bibinitperiod}}}%
+        {{hash=ba040554cec389bc8b5dc4b20d44218c}{%
+           family={Dahl},
+           familyi={D\bibinitperiod},
+           given={George},
+           giveni={G\bibinitperiod}}}%
+        {{hash=0d87a656f9bdc99e921c45f73da515b8}{%
+           family={Mohamed},
+           familyi={M\bibinitperiod},
+           given={Abdel-rahman},
+           giveni={A\bibinithyphendelim r\bibinitperiod}}}%
+        {{hash=5a9f30e0c0441d2aea255916ff375e8c}{%
+           family={Jaitly},
+           familyi={J\bibinitperiod},
+           given={Navdeep},
+           giveni={N\bibinitperiod}}}%
+        {{hash=99e8963f52f6bfb1af553a6a8823718a}{%
+           family={Senior},
+           familyi={S\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=8051922e7bd286f884bfbd1023ef62f5}{%
+           family={Vanhoucke},
+           familyi={V\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod}}}%
+        {{hash=842040ccc784c0e00e9b177a7271883a}{%
+           family={Nguyen},
+           familyi={N\bibinitperiod},
+           given={Patrick},
+           giveni={P\bibinitperiod}}}%
+        {{hash=8f101126b3acf3a5a0f51d86f0fe89b8}{%
+           family={Kingsbury},
+           familyi={K\bibinitperiod},
+           given={Brian},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{394c7f90c50c43b0c3394f0b9f423e53}
+      \strng{fullhash}{8c22cb5e79c5eceedf1a03c27955fdd8}
+      \strng{bibnamehash}{394c7f90c50c43b0c3394f0b9f423e53}
+      \strng{authorbibnamehash}{394c7f90c50c43b0c3394f0b9f423e53}
+      \strng{authornamehash}{394c7f90c50c43b0c3394f0b9f423e53}
+      \strng{authorfullhash}{8c22cb5e79c5eceedf1a03c27955fdd8}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Signal processing magazine}
+      \field{title}{Deep neural networks for acoustic modeling in speech recognition}
+      \field{volume}{29}
+      \field{year}{2012}
+    \endentry
+    \entry{hochreiter1997long}{article}{}
+      \name{author}{2}{}{%
+        {{hash=41b31e29fb2bdbf9f5c9c1b0d5b3e815}{%
+           family={Hochreiter},
+           familyi={H\bibinitperiod},
+           given={Sepp},
+           giveni={S\bibinitperiod}}}%
+        {{hash=288bdbcfe1b91ad7484d7a24f74f99ed}{%
+           family={Schmidhuber},
+           familyi={S\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{fullhash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{bibnamehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authorbibnamehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authornamehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authorfullhash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neural computation}
+      \field{number}{8}
+      \field{title}{Long short-term memory}
+      \field{volume}{9}
+      \field{year}{1997}
+      \field{pages}{1735\bibrangedash 1780}
+      \range{pages}{46}
+    \endentry
+    \entry{lecun1995convolutional}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{2}{}{%
+        {{hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
+           family={LeCun},
+           familyi={L\bibinitperiod},
+           given={Yann},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=40a8e4774982146adc2688546f54efb2}{%
+           family={Bengio},
+           familyi={B\bibinitperiod},
+           given={Yoshua},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{ad0aba80f3615f4ef773a1edd8675db2}
+      \strng{fullhash}{ad0aba80f3615f4ef773a1edd8675db2}
+      \strng{bibnamehash}{ad0aba80f3615f4ef773a1edd8675db2}
+      \strng{authorbibnamehash}{ad0aba80f3615f4ef773a1edd8675db2}
+      \strng{authornamehash}{ad0aba80f3615f4ef773a1edd8675db2}
+      \strng{authorfullhash}{ad0aba80f3615f4ef773a1edd8675db2}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The handbook of brain theory and neural networks}
+      \field{number}{10}
+      \field{title}{Convolutional networks for images, speech, and time series}
+      \field{volume}{3361}
+      \field{year}{1995}
+      \field{pages}{1995}
+      \range{pages}{1}
+    \endentry
+    \entry{luong2015effective}{article}{}
+      \name{author}{3}{}{%
+        {{hash=5fc2dc715fc35ea0dd825a5d84ac0e60}{%
+           family={Luong},
+           familyi={L\bibinitperiod},
+           given={Minh-Thang},
+           giveni={M\bibinithyphendelim T\bibinitperiod}}}%
+        {{hash=c7225c8adf8195ef056d44ae3f589af2}{%
+           family={Pham},
+           familyi={P\bibinitperiod},
+           given={Hieu},
+           giveni={H\bibinitperiod}}}%
+        {{hash=2214edb8305f7ccd7cdc310b3a8ae1b4}{%
+           family={Manning},
+           familyi={M\bibinitperiod},
+           given={Christopher\bibnamedelima D},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{04efcca29e42bdde7dee2684159e2f4b}
+      \strng{fullhash}{04efcca29e42bdde7dee2684159e2f4b}
+      \strng{bibnamehash}{04efcca29e42bdde7dee2684159e2f4b}
+      \strng{authorbibnamehash}{04efcca29e42bdde7dee2684159e2f4b}
+      \strng{authornamehash}{04efcca29e42bdde7dee2684159e2f4b}
+      \strng{authorfullhash}{04efcca29e42bdde7dee2684159e2f4b}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1508.04025}
+      \field{title}{Effective approaches to attention-based neural machine translation}
+      \field{year}{2015}
+    \endentry
+    \entry{redmon2016you}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=99bced2e56a5253f3fe98a5f04e6d9b2}{%
+           family={Redmon},
+           familyi={R\bibinitperiod},
+           given={Joseph},
+           giveni={J\bibinitperiod}}}%
+        {{hash=05ca9f19da9ecbd2def4e5514f8043c8}{%
+           family={Divvala},
+           familyi={D\bibinitperiod},
+           given={Santosh},
+           giveni={S\bibinitperiod}}}%
+        {{hash=bd5dadbe57bedc5957c19a3154c4d424}{%
+           family={Girshick},
+           familyi={G\bibinitperiod},
+           given={Ross},
+           giveni={R\bibinitperiod}}}%
+        {{hash=396c6ddedb6f986906fc3e4994d19974}{%
+           family={Farhadi},
+           familyi={F\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{e1203a0044715040adeb8c5079ee645a}
+      \strng{fullhash}{b5530443e433a4da53dbe3cf155225b4}
+      \strng{bibnamehash}{e1203a0044715040adeb8c5079ee645a}
+      \strng{authorbibnamehash}{e1203a0044715040adeb8c5079ee645a}
+      \strng{authornamehash}{e1203a0044715040adeb8c5079ee645a}
+      \strng{authorfullhash}{b5530443e433a4da53dbe3cf155225b4}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the IEEE conference on computer vision and pattern recognition}
+      \field{title}{You only look once: Unified, real-time object detection}
+      \field{year}{2016}
+      \field{pages}{779\bibrangedash 788}
+      \range{pages}{10}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

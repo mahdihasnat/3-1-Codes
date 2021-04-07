@@ -1,0 +1,56 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{adams1995hitchhiker}{book}{}
+      \name{author}{1}{}{%
+        {{hash=7c1370122ab5dc312db278e9c8db697d}{%
+           family={Adams},
+           familyi={A\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {San Val}%
+      }
+      \strng{namehash}{7c1370122ab5dc312db278e9c8db697d}
+      \strng{fullhash}{7c1370122ab5dc312db278e9c8db697d}
+      \strng{bibnamehash}{7c1370122ab5dc312db278e9c8db697d}
+      \strng{authorbibnamehash}{7c1370122ab5dc312db278e9c8db697d}
+      \strng{authornamehash}{7c1370122ab5dc312db278e9c8db697d}
+      \strng{authorfullhash}{7c1370122ab5dc312db278e9c8db697d}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9781417642595}
+      \field{title}{The Hitchhiker's Guide to the Galaxy}
+      \field{year}{1995}
+      \verb{urlraw}
+      \verb http://books.google.com/books?id=W-xMPgAACAAJ
+      \endverb
+      \verb{url}
+      \verb http://books.google.com/books?id=W-xMPgAACAAJ
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

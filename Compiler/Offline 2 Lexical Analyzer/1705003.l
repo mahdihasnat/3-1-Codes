@@ -11,7 +11,7 @@ using namespace std;
 
 SymbolTable<string> * symboltable;
 
-string BLOCK_COMMENT_BUFFER;
+string COMMENT_BUFFER;
 string STRING_BUFFER;
 
 void printTokenAscii(char * s)
@@ -105,7 +105,7 @@ int error_count = 0;
 void processError(int line_number, string text, string reason)
 {
 	error_count++;
-	cerr<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
+  	cerr<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
 }
 
 void insertSymbol(string key , string value)
@@ -211,25 +211,25 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 				}
 {BLOCK_COMMENT_START}	{
 							BEGIN BLOCK_COMMENT_STATE;
-							BLOCK_COMMENT_BUFFER+=yytext;
+							COMMENT_BUFFER+=yytext;
 					}
 <BLOCK_COMMENT_STATE>{
 	{BLOCK_COMMENT_END}	{
-		BLOCK_COMMENT_BUFFER+=yytext;
+		COMMENT_BUFFER+=yytext;
 
-		//yytext = BLOCK_COMMENT_BUFFER;
-		cerr<<"\nLine no "<< get_lineno(BLOCK_COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<BLOCK_COMMENT_BUFFER<<" found\n";
+		//yytext = COMMENT_BUFFER;
+	  	cerr<<"\nLine no "<< get_lineno(COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
 
-		BLOCK_COMMENT_BUFFER.clear();
+		COMMENT_BUFFER.clear();
 		BEGIN INITIAL;
 	}
-	. BLOCK_COMMENT_BUFFER+=yytext;
-	{WHITE_SPACES} BLOCK_COMMENT_BUFFER+=yytext;
+	. COMMENT_BUFFER+=yytext;
+	{WHITE_SPACES} COMMENT_BUFFER+=yytext;
 	<<EOF>> {
-				//yytext = BLOCK_COMMENT_BUFFER.c_str();
-				processError( get_lineno(BLOCK_COMMENT_BUFFER)  ,BLOCK_COMMENT_BUFFER , "Unterminated Comment");
+				//yytext = COMMENT_BUFFER.c_str();
+				processError( get_lineno(COMMENT_BUFFER)  ,COMMENT_BUFFER , "Unterminated Comment");
 
-				BLOCK_COMMENT_BUFFER.clear();
+				COMMENT_BUFFER.clear();
 				BEGIN INITIAL;
 			}
 }
@@ -468,7 +468,7 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 int main(int argc,char *argv[]){
 	
 	if(argc<3){
-		printf("Please provide input file name , log_file_name , [output_file_name] and try again\n");
+		printf("Please provide input file name , log_file_name , [output_file_name optional] and try again\n");
 		return 0;
 	}
 	
@@ -497,5 +497,6 @@ int main(int argc,char *argv[]){
 
 	delete  symboltable;
 
+	yylex_destroy();
 	return 0;
 }
