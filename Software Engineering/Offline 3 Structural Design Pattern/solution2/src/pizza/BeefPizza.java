@@ -1,6 +1,6 @@
 package src.pizza;
 
-public class BeefPizza implements Pizza {
+public class BeefPizza extends Pizza {
     @Override
     public int getPrice() {
         return 250;
@@ -8,6 +8,6 @@ public class BeefPizza implements Pizza {
 
     @Override
     public String toString() {
-        return "BeefPizza{}";
+        return "BeefPizza";
     }
 }

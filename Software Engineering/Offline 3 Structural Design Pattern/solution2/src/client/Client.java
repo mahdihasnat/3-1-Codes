@@ -1,6 +1,12 @@
 package src.client;
 
-import src.pizza.*;
+import src.appetizer.FrenchFries;
+import src.appetizer.OnionRings;
+import src.drink.Coffee;
+import src.drink.Coke;
+import src.food.Food;
+import src.pizza.BeefPizza;
+import src.pizza.VeggiePizza;
 
 public class Client {
     public static void main(String[] args) {
@@ -12,7 +18,8 @@ public class Client {
         5. A Beef Pizza only
          */
 
-        Pizza pizza = new BeefPizza();
+
+        Food pizza = new BeefPizza();
         pizza = new FrenchFries(pizza);
         System.out.println(pizza + " $" + pizza.getPrice());
 
@@ -33,6 +40,9 @@ public class Client {
 
         pizza = new BeefPizza();
         System.out.println(pizza + " $" + pizza.getPrice());
+
+
+
 
     }
 }

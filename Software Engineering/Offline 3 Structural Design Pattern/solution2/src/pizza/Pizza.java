@@ -1,5 +1,7 @@
 package src.pizza;
 
-public interface Pizza {
-    int getPrice();
+import src.food.Food;
+
+public abstract class Pizza  implements Food {
+
 }
