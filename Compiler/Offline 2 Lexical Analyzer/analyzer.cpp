@@ -1057,7 +1057,7 @@ YY_RULE_SETUP
 #line 209 "1705003.l"
 {
 					
-				  	cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
+					cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
 				}
 	YY_BREAK
 case 4:
