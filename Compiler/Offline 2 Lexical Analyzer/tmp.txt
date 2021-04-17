@@ -1,0 +1,234 @@
+"if"	{
+		processsToken("IF","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <IF> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return IF;
+	}
+"else"	{
+		processsToken("ELSE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <ELSE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return ELSE;
+	}
+"for"	{
+		processsToken("FOR","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <FOR> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return FOR;
+	}
+"while"	{
+		processsToken("WHILE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <WHILE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return WHILE;
+	}
+"do"	{
+		processsToken("DO","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <DO> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return DO;
+	}
+"break"	{
+		processsToken("BREAK","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <BREAK> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return BREAK;
+	}
+"int"	{
+		processsToken("INT","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <INT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return INT;
+	}
+"char"	{
+		processsToken("CHAR","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <CHAR> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return CHAR;
+	}
+"float"	{
+		processsToken("FLOAT","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <FLOAT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return FLOAT;
+	}
+"double"	{
+		processsToken("DOUBLE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <DOUBLE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return DOUBLE;
+	}
+"void"	{
+		processsToken("VOID","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <VOID> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return VOID;
+	}
+"return"	{
+		processsToken("RETURN","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <RETURN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RETURN;
+	}
+"switch"	{
+		processsToken("SWITCH","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <SWITCH> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return SWITCH;
+	}
+"case"	{
+		processsToken("CASE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <CASE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return CASE;
+	}
+"default"	{
+		processsToken("DEFAULT","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <DEFAULT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return DEFAULT;
+	}
+"continue"	{
+		processsToken("CONTINUE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <CONTINUE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return CONTINUE;
+	}
+"="	{
+		processsToken("ASSIGNOP",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <ASSIGNOP> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return ASSIGNOP;
+	}
+"!"	{
+		processsToken("NOT",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <NOT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return NOT;
+	}
+"("	{
+		processsToken("LPAREN",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <LPAREN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return LPAREN;
+	}
+")"	{
+		processsToken("RPAREN",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <RPAREN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RPAREN;
+	}
+"["	{
+		processsToken("LTHIRD",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <LTHIRD> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return LTHIRD;
+	}
+"]"	{
+		processsToken("RTHIRD",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <RTHIRD> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RTHIRD;
+	}
+","	{
+		processsToken("COMMA",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <COMMA> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return COMMA;
+	}
+";"	{
+		processsToken("SEMICOLON",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <SEMICOLON> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return SEMICOLON;
+	}
+"{"	{
+		processsToken("LCURL",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <LCURL> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return LCURL;
+	}
+"}"	{
+		processsToken("RCURL",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"Line no "<<yylineno<<": Token <RCURL> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RCURL;
+	}

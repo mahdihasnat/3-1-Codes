@@ -1,30 +1,63 @@
 %{
-#include<iostream>
-#include<cstdlib>
-#include<cstring>
-#include<cmath>
-#include "symbol.h"
-#define YYSTYPE SymbolInfo*
 
+#include<bits/stdc++.h>
 using namespace std;
 
+#include "SymbolInfo.h"
+#include "SymbolTable.h"
+
+#define YACC_OUTPUT_ENABLED 1
+
+/// declared in scanner.l 
+extern int yylineno;
+extern char * yytext;
 int yyparse(void);
 int yylex(void);
+void yylex_destroy();
+
+int get_lineno(string text = yytext);
 extern FILE *yyin;
 
-SymbolTable *table;
 
+/// declared in perser.y
+SymbolTable<string> *symboltable;
+ofstream logstream ;
+ofstream errorstream;
+int error_count = 0;
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
-	//write your code
+	cout<<s<<"\n";
+	errorstream<<s<<"\n";
 }
+
 
 
 %}
 
-%token IF ELSE FOR WHILE
+%union {
+		SymbolInfoChain<string> * SymbolInfoStringPointer;
+		string * StringPointer;
+	}
 
+
+%token IF ELSE FOR WHILE DO 
+%token SWITCH CASE DEFAULT CONTINUE BREAK
+%token PRINTLN
+%token RETURN
+%token ASSIGNOP LOGICOP RELOP ADDOP MULOP NOT
+%token INCOP DECOP
+%token INT FLOAT VOID CHAR DOUBLE
+%token <StringPointer> CONST_FLOAT
+%token <StringPointer> CONST_INT
+%token CONST_CHAR
+%token LPAREN LCURL LTHIRD
+%token RPAREN RCURL RTHIRD
+%token SEMICOLON COMMA
+%token <SymbolInfoStringPointer> ID
+
+%token <StringPointer> STRING
+ //%destructor { if($$) delete $$ ; } <StringPointer>
 
 %%
 
@@ -100,7 +133,7 @@ variable : ID
 	 | ID LTHIRD expression RTHIRD 
 	 ;
 	 
- expression : logic_expression	
+expression : logic_expression	
 	   | variable ASSIGNOP logic_expression 	
 	   ;
 			
@@ -129,7 +162,15 @@ factor	: variable
 	| ID LPAREN argument_list RPAREN
 	| LPAREN expression RPAREN
 	| CONST_INT 
+	{	
+		logstream<<"\nAt line no: "<<get_lineno()<<" factor : CONST_INT\n";
+		logstream<<"\n"<< $1 <<endl;
+	}
 	| CONST_FLOAT
+	{
+		logstream<<"\nAt line no: "<<get_lineno()<<" factor : CONST_FLOAT\n";
+		logstream<<"\n"<< $1 <<endl;
+	}
 	| variable INCOP 
 	| variable DECOP
 	;
@@ -147,27 +188,42 @@ arguments : arguments COMMA logic_expression
 int main(int argc,char *argv[])
 {
 
-	if((fp=fopen(argv[1],"r"))==NULL)
+	if(argc < 4 )
+	{
+		printf("Provide input.txt log.txt error.txt");
+		exit(1);
+	}
+
+	FILE * fp , * fp2 , * fp3 ;
+
+	fp=fopen(argv[1],"r");
+	if( fp == NULL)
 	{
 		printf("Cannot Open Input File.\n");
 		exit(1);
 	}
 
-	fp2= fopen(argv[2],"w");
-	fclose(fp2);
+	
 	fp3= fopen(argv[3],"w");
 	fclose(fp3);
 	
-	fp2= fopen(argv[2],"a");
-	fp3= fopen(argv[3],"a");
 	
+
+	logstream.open(argv[2] , ios::out);
+	errorstream.open(argv[3] , ios::out);
+	
+	
+
+	ScopeTable<string>::setTotalBucket(7);
+	symboltable = new SymbolTable<string>();
 
 	yyin=fp;
 	yyparse();
 	
+	yylex_destroy();
 
-	fclose(fp2);
-	fclose(fp3);
+	fclose(fp);
+	
 	
 	return 0;
 }

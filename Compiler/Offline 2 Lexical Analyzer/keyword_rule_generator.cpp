@@ -15,7 +15,13 @@ int main()
 				cout<<"string(yytext));\n";
 			else 
 				cout<<"\"\");\n";
-			cout<<"\t\tcerr<<\"Line no \"<<yylineno<<\": Token <"<<token<<"> Lexeme \"<<yytext<<\" found\\n\";\n\t}\n";
+			cout<<"\n";
+			cout<<"\t\t#ifdef LEXICAL_OUTPUT_ENABLED\n";
+			cout<<"\t\t\tlogstream<<\"Line no \"<<yylineno<<\": Token <"<<token<<"> Lexeme \"<<yytext<<\" found\\n\";\n";
+			cout<<"\t\t#endif\n";
+			cout<<"\n";
+			cout<<"\t\treturn "<<token<<";\n";
+			cout<<"\t}\n";
 		}
 		else break;
 	}

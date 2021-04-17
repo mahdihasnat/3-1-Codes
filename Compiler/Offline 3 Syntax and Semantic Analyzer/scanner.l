@@ -9,13 +9,19 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+
+
+//#define LEXICAL_OUTPUT_ENABLED
+
+/// declared in parser.y
+
+extern ofstream logstream;
+extern ofstream errorstream;
 extern YYSTYPE yylval;
 extern SymbolTable<string> *symboltable;
 
+extern int error_count;
 void yyerror(char *);
-
-int error_count=0;
-
 
 string COMMENT_BUFFER;
 string STRING_BUFFER;
@@ -101,22 +107,32 @@ int get_lineno(string text = yytext)
 
 void processsToken(string token , string attr)
 {
-	cout<<"<"<<token;
-	if(attr!="")
-		cout<<", "<<attr;
-	cout<<"> ";
+	#ifdef LEXICAL_OUTPUT_ENABLED
+		cout<<"<"<<token;
+		if(attr!="")
+			cout<<", "<<attr;
+		cout<<"> ";
+	#endif
 }
 
 void processError(int line_number, string text, string reason)
 {
 	error_count++;
-  	cerr<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
+  	errorstream<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
+  	logstream<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
 }
 
 void insertSymbol(string key , string value)
 {
+	if(symboltable){
 	if(symboltable->insert(key , value))
-		symboltable->printNonEmptyBuckets(cerr);
+		symboltable->printNonEmptyBuckets(logstream);
+	}
+	else 
+	{
+		errorstream<<"file : "<< __FILE__<<" line: "<<__LINE__<<" Symboltable not found";
+		assert(0);
+	}
 }
 
 
@@ -195,25 +211,17 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 %%
 
 {NEWLINE}	{
-				//cout<<"New Line paise";
-				//printTokenAscii(yytext);
-				//cout<<" \n";
-				//NL;
+				
 			}
 {WHITE_SPACES}	{
-					//cout<<"white spaces\n";
+					
 				}
 	
-	/*{CONTINUOUS_LINE}	{
-				cout<<"CONTINUOUS_LINE paise";
-				//printTokenAscii(yytext);
-				//cout<<" \n";
-				NL;
-			}
-	*/
 {LINE_COMMENT}	{
-					
-					cerr<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
+				
+					#ifdef LEXICAL_OUTPUT_ENABLED
+						logstream<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
+					#endif
 				}
 {BLOCK_COMMENT_START}	{
 							BEGIN BLOCK_COMMENT_STATE;
@@ -224,7 +232,9 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 		COMMENT_BUFFER+=yytext;
 
 		//yytext = COMMENT_BUFFER;
-	  	cerr<<"\nLine no "<< get_lineno(COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
+		#ifdef LEXICAL_OUTPUT_ENABLED
+	  		logstream<<"\nLine no "<< get_lineno(COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
+		#endif
 
 		COMMENT_BUFFER.clear();
 		BEGIN INITIAL;
@@ -251,6 +261,8 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 			
 			string row_symbol = get_row_string(STRING_BUFFER);
 			
+			
+			yylval.StringPointer =  new string(STRING_BUFFER);
 			processsToken("STRING" , STRING_BUFFER);
 
 			cerr<<"\nLine no "<< get_lineno(STRING_BUFFER) <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
@@ -258,6 +270,9 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 
 			STRING_BUFFER.clear();
 			BEGIN INITIAL;
+
+			
+			return STRING;
 		}
 	{CONTINUOUS_LINE} STRING_BUFFER+=yytext;
 	\\.	STRING_BUFFER+=yytext;
@@ -282,14 +297,26 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 {CONST_INT}	{
 		string symbol = string(yytext);
 		processsToken("CONST_INT" , symbol);
-		cerr<<"\nLine no "<< get_lineno() <<": Token <CONST_INT> Lexeme "<<symbol<<" found\n";
-		insertSymbol(symbol ,"CONST_INT" );
+		
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<< get_lineno() <<": Token <CONST_INT> Lexeme "<<symbol<<" found\n";
+		#endif
+
+		yylval.StringPointer = new string(symbol);
+
+		return CONST_INT;
 	}
 {CONST_FLOAT}	{
 		string symbol = string(yytext);
 		processsToken("CONST_FLOAT" ,symbol );
-		cerr<<"\nLine no "<< get_lineno() <<": Token <CONST_FLOAT> Lexeme "<<symbol<<" found\n";
-		insertSymbol(symbol ,"CONST_FLOAT" );
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<< get_lineno() <<": Token <CONST_FLOAT> Lexeme "<<symbol<<" found\n";
+		#endif
+
+		yylval.StringPointer = new string(symbol);
+
+		return CONST_FLOAT;
 	}
 {CONST_CHAR}	{
 					string symbol = string(yytext);
@@ -307,133 +334,301 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					processsToken("CONST_CHAR" , ascii_symbol);
 					cerr<<"\nLine no "<< get_lineno() <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
 					insertSymbol(symbol ,"CONST_CHAR" );
-				}
 
-"if"    {
-                processsToken("IF","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <IF> Lexeme "<<yytext<<" found\n";  
-        }
-"else"  {
-                processsToken("ELSE","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <ELSE> Lexeme "<<yytext<<" found\n";
-        }
-"for"   {
-                processsToken("FOR","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <FOR> Lexeme "<<yytext<<" found\n";
-        }
-"while" {
-                processsToken("WHILE","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <WHILE> Lexeme "<<yytext<<" found\n";
-        }
-"do"    {
-                processsToken("DO","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <DO> Lexeme "<<yytext<<" found\n";
-        }
-"break" {
-                processsToken("BREAK","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <BREAK> Lexeme "<<yytext<<" found\n";
-        }
-"int"   {
-                processsToken("INT","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <INT> Lexeme "<<yytext<<" found\n";
-        }
-"char"  {
-                processsToken("CHAR","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <CHAR> Lexeme "<<yytext<<" found\n";
-        }
-"float" {
-                processsToken("FLOAT","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <FLOAT> Lexeme "<<yytext<<" found\n";
-        }
-"double"        {
-                processsToken("DOUBLE","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <DOUBLE> Lexeme "<<yytext<<" found\n";
-        }
-"void"  {
-                processsToken("VOID","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <VOID> Lexeme "<<yytext<<" found\n";
-        }
-"return"        {
-                processsToken("RETURN","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <RETURN> Lexeme "<<yytext<<" found\n";
-        }
-"switch"        {
-                processsToken("SWITCH","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <SWITCH> Lexeme "<<yytext<<" found\n";
-        }
-"case"  {
-                processsToken("CASE","");
-                cerr<<"\nLine no "<< get_lineno() <<": Token <CASE> Lexeme "<<yytext<<" found\n";
-        }
-"default"       {
-                processsToken("DEFAULT","");
-                cerr<<"Line no "<<yylineno<<": Token <DEFAULT> Lexeme "<<yytext<<" found\n";
-        }
-"continue"      {
-                processsToken("CONTINUE","");
-                cerr<<"Line no "<<yylineno<<": Token <CONTINUE> Lexeme "<<yytext<<" found\n";
-        }
-"="     {
-                processsToken("ASSIGNOP",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <ASSIGNOP> Lexeme "<<yytext<<" found\n";
-        }
-"!"     {
-                processsToken("NOT",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <NOT> Lexeme "<<yytext<<" found\n";
-        }
-"("     {
-                processsToken("LPAREN",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <LPAREN> Lexeme "<<yytext<<" found\n";
-        }
-")"     {
-                processsToken("RPAREN",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <RPAREN> Lexeme "<<yytext<<" found\n";
-        }
-"{"     {
-                processsToken("LCURL",string(yytext));
-				symboltable->enterScope();
-                cerr<<"\nLine no "<< get_lineno() <<": Token <LCURL> Lexeme "<<yytext<<" found\n";
-        }
-"}"     {
-                processsToken("RCURL",string(yytext));
-				symboltable->exitScope();
-                cerr<<"\nLine no "<< get_lineno() <<": Token <RCURL> Lexeme "<<yytext<<" found\n";
-        }
-"["     {
-                processsToken("LTHIRD",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <LTHIRD> Lexeme "<<yytext<<" found\n";
-        }
-"]"     {
-                processsToken("RTHIRD",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <RTHIRD> Lexeme "<<yytext<<" found\n";
-        }
-","     {
-                processsToken("COMMA",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <COMMA> Lexeme "<<yytext<<" found\n";
-        }
-";"     {
-                processsToken("SEMICOLON",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <SEMICOLON> Lexeme "<<yytext<<" found\n";
-        }
+					return CONST_CHAR;
+				}
+"if"	{
+		processsToken("IF","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <IF> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return IF;
+	}
+"else"	{
+		processsToken("ELSE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <ELSE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return ELSE;
+	}
+"for"	{
+		processsToken("FOR","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <FOR> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return FOR;
+	}
+"while"	{
+		processsToken("WHILE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <WHILE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return WHILE;
+	}
+"do"	{
+		processsToken("DO","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <DO> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return DO;
+	}
+"break"	{
+		processsToken("BREAK","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <BREAK> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return BREAK;
+	}
+"int"	{
+		processsToken("INT","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <INT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return INT;
+	}
+"char"	{
+		processsToken("CHAR","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <CHAR> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return CHAR;
+	}
+"float"	{
+		processsToken("FLOAT","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <FLOAT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return FLOAT;
+	}
+"double"	{
+		processsToken("DOUBLE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <DOUBLE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return DOUBLE;
+	}
+"void"	{
+		processsToken("VOID","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <VOID> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return VOID;
+	}
+"return"	{
+		processsToken("RETURN","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <RETURN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RETURN;
+	}
+"switch"	{
+		processsToken("SWITCH","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <SWITCH> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return SWITCH;
+	}
+"case"	{
+		processsToken("CASE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <CASE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return CASE;
+	}
+"default"	{
+		processsToken("DEFAULT","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <DEFAULT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return DEFAULT;
+	}
+"continue"	{
+		processsToken("CONTINUE","");
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <CONTINUE> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return CONTINUE;
+	}
+"="	{
+		processsToken("ASSIGNOP",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <ASSIGNOP> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return ASSIGNOP;
+	}
+"!"	{
+		processsToken("NOT",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <NOT> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return NOT;
+	}
+"("	{
+		processsToken("LPAREN",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <LPAREN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return LPAREN;
+	}
+")"	{
+		processsToken("RPAREN",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <RPAREN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RPAREN;
+	}
+"["	{
+		processsToken("LTHIRD",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <LTHIRD> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return LTHIRD;
+	}
+"]"	{
+		processsToken("RTHIRD",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <RTHIRD> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return RTHIRD;
+	}
+","	{
+		processsToken("COMMA",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <COMMA> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return COMMA;
+	}
+";"	{
+		processsToken("SEMICOLON",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <SEMICOLON> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return SEMICOLON;
+	}
+"{"	{
+		processsToken("LCURL",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <LCURL> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		symboltable->enterScope();
+
+		return LCURL;
+	}
+"}"	{
+		processsToken("RCURL",string(yytext));
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <RCURL> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		symboltable->exitScope();
+
+		return RCURL;
+	}
+
 {LOGICOP}	{
 				processsToken("LOGICOP",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <LOGICOP> Lexeme "<<yytext<<" found\n";
+				#ifdef LEXICAL_OUTPUT_ENABLED
+                	logstream<<"\nLine no "<< get_lineno() <<": Token <LOGICOP> Lexeme "<<yytext<<" found\n";
+				#endif
+
+				yylval.StringPointer = new string(yytext);
+
+				return LOGICOP;
         }
 {ADDOP}		{
 				processsToken("ADDOP",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <ADDOP> Lexeme "<<yytext<<" found\n";
+
+				#ifdef LEXICAL_OUTPUT_ENABLED
+                	logstream<<"\nLine no "<< get_lineno() <<": Token <ADDOP> Lexeme "<<yytext<<" found\n";
+				#endif
+				yylval.StringPointer = new string(yytext);
+
+				return ADDOP;
 			}
 {MULOP}		{
 				processsToken("MULOP",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <MULOP> Lexeme "<<yytext<<" found\n";
+				
+				#ifdef LEXICAL_OUTPUT_ENABLED
+                	logstream<<"\nLine no "<< get_lineno() <<": Token <MULOP> Lexeme "<<yytext<<" found\n";
+				#endif
+
+				yylval.StringPointer = new string(yytext);
+
+				return MULOP;
 			}
 {INCOP}		{
 				processsToken("INCOP",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <INCOP> Lexeme "<<yytext<<" found\n";
+                
+				#ifdef LEXICAL_OUTPUT_ENABLED
+                	logstream<<"\nLine no "<< get_lineno() <<": Token <INCOP> Lexeme "<<yytext<<" found\n";
+				#endif
+
+				yylval.StringPointer = new string(yytext);
+
+				return INCOP;
 			}
 {RELOP}		{
+
 				processsToken("RELOP",string(yytext));
-                cerr<<"\nLine no "<< get_lineno() <<": Token <RELOP> Lexeme "<<yytext<<" found\n";
+                
+				#ifdef LEXICAL_OUTPUT_ENABLED
+                	logstream<<"\nLine no "<< get_lineno() <<": Token <RELOP> Lexeme "<<yytext<<" found\n";
+				#endif
+
+				yylval.StringPointer = new string(yytext);
+
+				return RELOP;
 			}
 
 
@@ -441,10 +636,16 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					string symbol = string(yytext);
 					processsToken("ID" , symbol);
 
-					cerr<<"\nLine no "<< get_lineno() <<": Token <ID> Lexeme "<<symbol<<" found\n";
-					insertSymbol(symbol , "ID");
+					#ifdef LEXICAL_OUTPUT_ENABLED
+						cerr<<"\nLine no "<< get_lineno() <<": Token <ID> Lexeme "<<symbol<<" found\n";
+					#endif
+					// insertSymbol(symbol , "ID");
 					// if(symboltable->insert(symbl,"ID"))
 					// 	symboltable->printNonEmpotyBuckets(cerr);
+
+					yylval.StringPointer = new string(symbol);
+
+					return ID;
 				}
 
 
