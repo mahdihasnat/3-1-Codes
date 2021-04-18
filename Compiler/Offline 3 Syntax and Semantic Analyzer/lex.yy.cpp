@@ -598,7 +598,7 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "scanner.l"
-#line 4 "scanner.l"
+#line 5 "scanner.l"
 
 
 #include "SymbolTable.h"
@@ -608,6 +608,8 @@ char *yytext;
 using namespace std;
 
 
+/// define LEXICAL_OUTPUT_ENABLED 
+/// to print lexical diagnostics to logsream 
 
 //#define LEXICAL_OUTPUT_ENABLED
 
@@ -695,14 +697,6 @@ string get_row_string(string s)
 	return ret;
 }
 
-int get_lineno(string text = yytext)
-{
-	int ret =  yylineno;
-	for(char c:text)
-		ret-=c=='\n';
-	return ret;
-}
-
 void processsToken(string token , string attr)
 {
 	#ifdef LEXICAL_OUTPUT_ENABLED
@@ -720,22 +714,10 @@ void processError(int line_number, string text, string reason)
   	logstream<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
 }
 
-void insertSymbol(string key , string value)
-{
-	if(symboltable){
-	if(symboltable->insert(key , value))
-		symboltable->printNonEmptyBuckets(logstream);
-	}
-	else 
-	{
-		errorstream<<"file : "<< __FILE__<<" line: "<<__LINE__<<" Symboltable not found";
-		assert(0);
-	}
-}
 
 
-#line 738 "lex.yy.cpp"
-#line 144 "scanner.l"
+#line 720 "lex.yy.cpp"
+#line 127 "scanner.l"
 	// to comment in this section : TAB\\ or TAB/*
 
 
@@ -757,7 +739,7 @@ void insertSymbol(string key , string value)
 	//&&, || LOGICOP
 	// single ' followed by anything except single ' followed by single '
 	// single ' followed by enything except single ' or space newline
-#line 761 "lex.yy.cpp"
+#line 743 "lex.yy.cpp"
 
 #define INITIAL 0
 #define BLOCK_COMMENT_STATE 1
@@ -976,10 +958,10 @@ YY_DECL
 		}
 
 	{
-#line 212 "scanner.l"
+#line 195 "scanner.l"
 
 
-#line 983 "lex.yy.cpp"
+#line 965 "lex.yy.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1049,7 +1031,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 214 "scanner.l"
+#line 197 "scanner.l"
 {
 				
 			}
@@ -1057,7 +1039,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 217 "scanner.l"
+#line 200 "scanner.l"
 {
 					
 				}
@@ -1065,17 +1047,17 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 221 "scanner.l"
+#line 204 "scanner.l"
 {
 				
 					#ifdef LEXICAL_OUTPUT_ENABLED
-						logstream<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
+						logstream<<"\nLine no "<< yylineno <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
 					#endif
 				}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 227 "scanner.l"
+#line 210 "scanner.l"
 {
 							BEGIN BLOCK_COMMENT_STATE;
 							COMMENT_BUFFER+=yytext;
@@ -1084,13 +1066,14 @@ YY_RULE_SETUP
 
 case 5:
 YY_RULE_SETUP
-#line 232 "scanner.l"
+#line 215 "scanner.l"
 {
 		COMMENT_BUFFER+=yytext;
 
 		//yytext = COMMENT_BUFFER;
+		
 		#ifdef LEXICAL_OUTPUT_ENABLED
-	  		logstream<<"\nLine no "<< get_lineno(COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
+	  		logstream<<"\nLine no "<<  yylineno <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
 		#endif
 
 		COMMENT_BUFFER.clear();
@@ -1099,20 +1082,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 243 "scanner.l"
+#line 227 "scanner.l"
 COMMENT_BUFFER+=yytext;
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 244 "scanner.l"
+#line 228 "scanner.l"
 COMMENT_BUFFER+=yytext;
 	YY_BREAK
 case YY_STATE_EOF(BLOCK_COMMENT_STATE):
-#line 245 "scanner.l"
+#line 229 "scanner.l"
 {
-				//yytext = COMMENT_BUFFER.c_str();
-				processError( get_lineno(COMMENT_BUFFER)  ,COMMENT_BUFFER , "Unterminated Comment");
+				
+				processError(  yylineno  ,COMMENT_BUFFER , "Unterminated Comment");
 
 				COMMENT_BUFFER.clear();
 				BEGIN INITIAL;
@@ -1121,7 +1104,7 @@ case YY_STATE_EOF(BLOCK_COMMENT_STATE):
 
 case 8:
 YY_RULE_SETUP
-#line 254 "scanner.l"
+#line 238 "scanner.l"
 {
 	BEGIN STRING_STATE;
 	STRING_BUFFER+=yytext;
@@ -1130,7 +1113,7 @@ YY_RULE_SETUP
 
 case 9:
 YY_RULE_SETUP
-#line 259 "scanner.l"
+#line 243 "scanner.l"
 {
 			STRING_BUFFER+=yytext;
 
@@ -1138,10 +1121,12 @@ YY_RULE_SETUP
 			string row_symbol = get_row_string(STRING_BUFFER);
 			
 			
-			yylval.StringPointer =  new string(STRING_BUFFER);
+			
 			processsToken("STRING" , STRING_BUFFER);
 
-			cerr<<"\nLine no "<< get_lineno(STRING_BUFFER) <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
+			
+
+			cerr<<"\nLine no "<<  yylineno <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
 			cerr<<" --> <STRING, "<<row_symbol<<">\n";
 
 			STRING_BUFFER.clear();
@@ -1154,23 +1139,25 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 278 "scanner.l"
+#line 264 "scanner.l"
 STRING_BUFFER+=yytext;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 279 "scanner.l"
+#line 265 "scanner.l"
 STRING_BUFFER+=yytext;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 280 "scanner.l"
+#line 266 "scanner.l"
 STRING_BUFFER+=yytext;
 	YY_BREAK
 case YY_STATE_EOF(STRING_STATE):
-#line 282 "scanner.l"
+#line 268 "scanner.l"
 {
-				processError( get_lineno(STRING_BUFFER)  ,STRING_BUFFER , "Unterminated String");
+				
+				processError(  yylineno  ,STRING_BUFFER , "Unterminated String");
+
 				STRING_BUFFER.clear();
 				BEGIN INITIAL;
 			}
@@ -1178,10 +1165,12 @@ case YY_STATE_EOF(STRING_STATE):
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 287 "scanner.l"
+#line 275 "scanner.l"
 {
 				STRING_BUFFER+=yytext;
-				processError( get_lineno(STRING_BUFFER)  ,STRING_BUFFER , "Unterminated String");
+
+				processError(  yylineno  ,STRING_BUFFER , "Unterminated String");
+				
 				STRING_BUFFER.clear();
 				BEGIN INITIAL;
 			}
@@ -1189,32 +1178,32 @@ YY_RULE_SETUP
 
 case 14:
 YY_RULE_SETUP
-#line 298 "scanner.l"
+#line 288 "scanner.l"
 {
 		string symbol = string(yytext);
 		processsToken("CONST_INT" , symbol);
 		
 		#ifdef LEXICAL_OUTPUT_ENABLED
-			logstream<<"\nLine no "<< get_lineno() <<": Token <CONST_INT> Lexeme "<<symbol<<" found\n";
+			logstream<<"\nLine no "<< yylineno <<": Token <CONST_INT> Lexeme "<<symbol<<" found\n";
 		#endif
 
-		yylval.StringPointer = new string(symbol);
+
 
 		return CONST_INT;
 	}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 310 "scanner.l"
+#line 300 "scanner.l"
 {
 		string symbol = string(yytext);
 		processsToken("CONST_FLOAT" ,symbol );
 
 		#ifdef LEXICAL_OUTPUT_ENABLED
-			logstream<<"\nLine no "<< get_lineno() <<": Token <CONST_FLOAT> Lexeme "<<symbol<<" found\n";
+			logstream<<"\nLine no "<< yylineno <<": Token <CONST_FLOAT> Lexeme "<<symbol<<" found\n";
 		#endif
 
-		yylval.StringPointer = new string(symbol);
+
 
 		return CONST_FLOAT;
 	}
@@ -1222,7 +1211,7 @@ YY_RULE_SETUP
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 322 "scanner.l"
+#line 312 "scanner.l"
 {
 					string symbol = string(yytext);
 					string ascii_symbol = symbol;
@@ -1237,15 +1226,16 @@ YY_RULE_SETUP
 					ascii_symbol = get_row_char(ascii_symbol);
 
 					processsToken("CONST_CHAR" , ascii_symbol);
-					cerr<<"\nLine no "<< get_lineno() <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
-					insertSymbol(symbol ,"CONST_CHAR" );
+					cerr<<"\nLine no "<< yylineno <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
+					
+					
 
 					return CONST_CHAR;
 				}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 341 "scanner.l"
+#line 332 "scanner.l"
 {
 		processsToken("IF","");
 
@@ -1258,7 +1248,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 350 "scanner.l"
+#line 341 "scanner.l"
 {
 		processsToken("ELSE","");
 
@@ -1271,7 +1261,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 359 "scanner.l"
+#line 350 "scanner.l"
 {
 		processsToken("FOR","");
 
@@ -1284,7 +1274,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 368 "scanner.l"
+#line 359 "scanner.l"
 {
 		processsToken("WHILE","");
 
@@ -1297,7 +1287,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 377 "scanner.l"
+#line 368 "scanner.l"
 {
 		processsToken("DO","");
 
@@ -1310,7 +1300,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 386 "scanner.l"
+#line 377 "scanner.l"
 {
 		processsToken("BREAK","");
 
@@ -1323,7 +1313,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 395 "scanner.l"
+#line 386 "scanner.l"
 {
 		processsToken("INT","");
 
@@ -1336,7 +1326,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 404 "scanner.l"
+#line 395 "scanner.l"
 {
 		processsToken("CHAR","");
 
@@ -1349,7 +1339,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 413 "scanner.l"
+#line 404 "scanner.l"
 {
 		processsToken("FLOAT","");
 
@@ -1362,7 +1352,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 422 "scanner.l"
+#line 413 "scanner.l"
 {
 		processsToken("DOUBLE","");
 
@@ -1375,7 +1365,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 431 "scanner.l"
+#line 422 "scanner.l"
 {
 		processsToken("VOID","");
 
@@ -1388,7 +1378,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 440 "scanner.l"
+#line 431 "scanner.l"
 {
 		processsToken("RETURN","");
 
@@ -1401,7 +1391,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 449 "scanner.l"
+#line 440 "scanner.l"
 {
 		processsToken("SWITCH","");
 
@@ -1414,7 +1404,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 458 "scanner.l"
+#line 449 "scanner.l"
 {
 		processsToken("CASE","");
 
@@ -1427,7 +1417,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 467 "scanner.l"
+#line 458 "scanner.l"
 {
 		processsToken("DEFAULT","");
 
@@ -1440,7 +1430,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 476 "scanner.l"
+#line 467 "scanner.l"
 {
 		processsToken("CONTINUE","");
 
@@ -1453,7 +1443,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 485 "scanner.l"
+#line 476 "scanner.l"
 {
 		processsToken("ASSIGNOP",string(yytext));
 
@@ -1466,7 +1456,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 494 "scanner.l"
+#line 485 "scanner.l"
 {
 		processsToken("NOT",string(yytext));
 
@@ -1479,7 +1469,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 503 "scanner.l"
+#line 494 "scanner.l"
 {
 		processsToken("LPAREN",string(yytext));
 
@@ -1492,7 +1482,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 512 "scanner.l"
+#line 503 "scanner.l"
 {
 		processsToken("RPAREN",string(yytext));
 
@@ -1505,7 +1495,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 521 "scanner.l"
+#line 512 "scanner.l"
 {
 		processsToken("LTHIRD",string(yytext));
 
@@ -1518,7 +1508,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 530 "scanner.l"
+#line 521 "scanner.l"
 {
 		processsToken("RTHIRD",string(yytext));
 
@@ -1531,7 +1521,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 539 "scanner.l"
+#line 530 "scanner.l"
 {
 		processsToken("COMMA",string(yytext));
 
@@ -1544,7 +1534,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 548 "scanner.l"
+#line 539 "scanner.l"
 {
 		processsToken("SEMICOLON",string(yytext));
 
@@ -1557,7 +1547,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 557 "scanner.l"
+#line 548 "scanner.l"
 {
 		processsToken("LCURL",string(yytext));
 
@@ -1572,7 +1562,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 568 "scanner.l"
+#line 559 "scanner.l"
 {
 		processsToken("RCURL",string(yytext));
 
@@ -1587,155 +1577,153 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 580 "scanner.l"
+#line 571 "scanner.l"
 {
 				processsToken("LOGICOP",string(yytext));
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <LOGICOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <LOGICOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+				
 
 				return LOGICOP;
         }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 590 "scanner.l"
+#line 581 "scanner.l"
 {
 				processsToken("ADDOP",string(yytext));
 
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <ADDOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <ADDOP> Lexeme "<<yytext<<" found\n";
 				#endif
-				yylval.StringPointer = new string(yytext);
+				
 
 				return ADDOP;
 			}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 600 "scanner.l"
+#line 591 "scanner.l"
 {
 				processsToken("MULOP",string(yytext));
 				
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <MULOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <MULOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+
 
 				return MULOP;
 			}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 611 "scanner.l"
+#line 602 "scanner.l"
 {
 				processsToken("INCOP",string(yytext));
                 
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <INCOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <INCOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+
 
 				return INCOP;
 			}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 622 "scanner.l"
+#line 613 "scanner.l"
 {
 
 				processsToken("RELOP",string(yytext));
                 
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <RELOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <RELOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+
 
 				return RELOP;
 			}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 636 "scanner.l"
+#line 627 "scanner.l"
 { 
 					string symbol = string(yytext);
 					processsToken("ID" , symbol);
 
 					#ifdef LEXICAL_OUTPUT_ENABLED
-						cerr<<"\nLine no "<< get_lineno() <<": Token <ID> Lexeme "<<symbol<<" found\n";
+						cerr<<"\nLine no "<< yylineno <<": Token <ID> Lexeme "<<symbol<<" found\n";
 					#endif
-					// insertSymbol(symbol , "ID");
-					// if(symboltable->insert(symbl,"ID"))
-					// 	symboltable->printNonEmpotyBuckets(cerr);
+					
 
-					yylval.StringPointer = new string(symbol);
+
 
 					return ID;
 				}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 653 "scanner.l"
+#line 642 "scanner.l"
 {
-								processError( get_lineno()  , yytext , "Too many decimal points");
+								processError( yylineno  , yytext , "Too many decimal points");
 							}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 656 "scanner.l"
+#line 645 "scanner.l"
 {
-									processError( get_lineno()  , yytext , "Invalid prefix on ID or invalid suffix on Number");
+									processError( yylineno  , yytext , "Invalid prefix on ID or invalid suffix on Number");
 								}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 659 "scanner.l"
+#line 648 "scanner.l"
 {
-							processError( get_lineno()  , yytext , "Ill formed number");
+							processError( yylineno  , yytext , "Ill formed number");
 						}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 662 "scanner.l"
+#line 651 "scanner.l"
 {
-						processError( get_lineno()  , yytext , "Multi character constant error");
+						processError( yylineno  , yytext , "Multi character constant error");
 					}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 665 "scanner.l"
+#line 654 "scanner.l"
 {
-							processError( get_lineno()  , yytext , "Unterminated character");
+							processError( yylineno  , yytext , "Unterminated character");
 						}	
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 668 "scanner.l"
+#line 657 "scanner.l"
 {
-						processError( get_lineno()  , yytext , "Empty character constant error");
+						processError( yylineno  , yytext , "Empty character constant error");
 					}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 671 "scanner.l"
+#line 660 "scanner.l"
 {
-		processError( get_lineno()  , yytext , "Unrecognized character" );
+		processError( yylineno  , yytext , "Unrecognized character" );
 	}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 674 "scanner.l"
+#line 663 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1739 "lex.yy.cpp"
+#line 1727 "lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2752,7 +2740,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 674 "scanner.l"
+#line 663 "scanner.l"
 
 
 

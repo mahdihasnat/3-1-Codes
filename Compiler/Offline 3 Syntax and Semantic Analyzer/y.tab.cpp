@@ -83,8 +83,6 @@ extern char * yytext;
 int yyparse(void);
 int yylex(void);
 void yylex_destroy();
-
-int get_lineno(string text = yytext);
 extern FILE *yyin;
 
 
@@ -100,10 +98,23 @@ void yyerror(const char *s)
 	errorstream<<s<<"\n";
 }
 
+void insertSymbol(string key , string value)
+{
+	if(symboltable){
+	if(symboltable->insert(key , value))
+		symboltable->printNonEmptyBuckets(logstream);
+	}
+	else 
+	{
+		errorstream<<"file : "<< __FILE__<<" line: "<<__LINE__<<" Symboltable not found";
+		assert(0);
+	}
+}
 
 
 
-#line 107 "y.tab.cpp"
+
+#line 118 "y.tab.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -188,7 +199,8 @@ extern int yydebug;
     SEMICOLON = 292,
     COMMA = 293,
     ID = 294,
-    STRING = 295
+    STRING = 295,
+    SINGLE_IF = 296
   };
 #endif
 /* Tokens.  */
@@ -230,18 +242,19 @@ extern int yydebug;
 #define COMMA 293
 #define ID 294
 #define STRING 295
+#define SINGLE_IF 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "parser.y"
+#line 49 "parser.y"
 
 		SymbolInfoChain<string> * SymbolInfoStringPointer;
 		string * StringPointer;
 	
 
-#line 245 "y.tab.cpp"
+#line 258 "y.tab.cpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -563,7 +576,7 @@ union yyalloc
 #define YYLAST   189
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  41
+#define YYNTOKENS  42
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  24
 /* YYNRULES -- Number of rules.  */
@@ -572,7 +585,7 @@ union yyalloc
 #define YYNSTATES  118
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   295
+#define YYMAXUTOK   296
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -613,20 +626,20 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40
+      35,    36,    37,    38,    39,    40,    41
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    65,    65,    71,    75,    81,    85,    89,    95,    99,
-     105,   109,   115,   119,   123,   127,   133,   137,   143,   149,
-     153,   157,   163,   167,   171,   175,   181,   185,   191,   195,
-     199,   203,   207,   211,   215,   219,   223,   229,   233,   239,
-     243,   249,   253,   259,   263,   269,   273,   279,   283,   289,
-     293,   299,   303,   307,   313,   317,   321,   325,   329,   333,
-     337,   343,   348,   354,   358
+       0,    78,    78,    84,    88,    94,    98,   102,   108,   112,
+     118,   122,   128,   132,   136,   140,   146,   150,   156,   162,
+     166,   170,   176,   180,   184,   188,   194,   198,   204,   208,
+     212,   216,   220,   224,   228,   232,   236,   242,   246,   252,
+     256,   262,   266,   272,   276,   282,   286,   292,   296,   302,
+     306,   312,   316,   320,   326,   330,   334,   338,   342,   346,
+     350,   356,   361,   366,   370
 };
 #endif
 
@@ -640,13 +653,13 @@ static const char *const yytname[] =
   "ASSIGNOP", "LOGICOP", "RELOP", "ADDOP", "MULOP", "NOT", "INCOP",
   "DECOP", "INT", "FLOAT", "VOID", "CHAR", "DOUBLE", "CONST_FLOAT",
   "CONST_INT", "CONST_CHAR", "LPAREN", "LCURL", "LTHIRD", "RPAREN",
-  "RCURL", "RTHIRD", "SEMICOLON", "COMMA", "ID", "STRING", "$accept",
-  "start", "program", "unit", "func_declaration", "func_definition",
-  "parameter_list", "compound_statement", "var_declaration",
-  "type_specifier", "declaration_list", "statements", "statement",
-  "expression_statement", "variable", "expression", "logic_expression",
-  "rel_expression", "simple_expression", "term", "unary_expression",
-  "factor", "argument_list", "arguments", YY_NULLPTR
+  "RCURL", "RTHIRD", "SEMICOLON", "COMMA", "ID", "STRING", "SINGLE_IF",
+  "$accept", "start", "program", "unit", "func_declaration",
+  "func_definition", "parameter_list", "compound_statement",
+  "var_declaration", "type_specifier", "declaration_list", "statements",
+  "statement", "expression_statement", "variable", "expression",
+  "logic_expression", "rel_expression", "simple_expression", "term",
+  "unary_expression", "factor", "argument_list", "arguments", YY_NULLPTR
 };
 #endif
 
@@ -659,7 +672,7 @@ static const yytype_int16 yytoknum[] =
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295
+     295,   296
 };
 # endif
 
@@ -779,30 +792,30 @@ static const yytype_int8 yycheck[] =
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    23,    24,    25,    42,    43,    44,    45,    46,    49,
-      50,     0,    44,    39,    51,    31,    33,    37,    38,    34,
-      47,    50,    29,    39,    32,    37,    48,    34,    38,    39,
+       0,    23,    24,    25,    43,    44,    45,    46,    47,    50,
+      51,     0,    45,    39,    52,    31,    33,    37,    38,    34,
+      48,    51,    29,    39,    32,    37,    49,    34,    38,    39,
       36,    33,     3,     5,     6,    13,    14,    18,    20,    28,
-      29,    31,    35,    37,    39,    48,    49,    50,    52,    53,
-      54,    55,    56,    57,    58,    59,    60,    61,    62,    37,
-      48,    50,    29,    31,    31,    31,    31,    56,    55,    61,
-      61,    56,    31,    33,    39,    35,    53,    15,    21,    22,
-      37,    16,    17,    18,    19,    39,    36,    56,    54,    56,
-      39,    37,    34,    57,    63,    64,    56,    57,    58,    59,
-      60,    61,    34,    54,    34,    34,    34,    38,    36,    53,
-      56,    53,    37,    57,     4,    34,    53,    53
+      29,    31,    35,    37,    39,    49,    50,    51,    53,    54,
+      55,    56,    57,    58,    59,    60,    61,    62,    63,    37,
+      49,    51,    29,    31,    31,    31,    31,    57,    56,    62,
+      62,    57,    31,    33,    39,    35,    54,    15,    21,    22,
+      37,    16,    17,    18,    19,    39,    36,    57,    55,    57,
+      39,    37,    34,    58,    64,    65,    57,    58,    59,    60,
+      61,    62,    34,    55,    34,    34,    34,    38,    36,    54,
+      57,    54,    37,    58,     4,    34,    54,    54
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    41,    42,    43,    43,    44,    44,    44,    45,    45,
-      46,    46,    47,    47,    47,    47,    48,    48,    49,    50,
-      50,    50,    51,    51,    51,    51,    52,    52,    53,    53,
-      53,    53,    53,    53,    53,    53,    53,    54,    54,    55,
-      55,    56,    56,    57,    57,    58,    58,    59,    59,    60,
-      60,    61,    61,    61,    62,    62,    62,    62,    62,    62,
-      62,    63,    63,    64,    64
+       0,    42,    43,    44,    44,    45,    45,    45,    46,    46,
+      47,    47,    48,    48,    48,    48,    49,    49,    50,    51,
+      51,    51,    52,    52,    52,    52,    53,    53,    54,    54,
+      54,    54,    54,    54,    54,    54,    54,    55,    55,    56,
+      56,    57,    57,    58,    58,    59,    59,    60,    60,    61,
+      61,    62,    62,    62,    63,    63,    63,    63,    63,    63,
+      63,    64,    64,    65,    65
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -1510,511 +1523,511 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 66 "parser.y"
+#line 79 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" start : program";
+		logstream<<"\nAt line no: "<<yylineno<<" start : program"<<endl;
 	}
-#line 1518 "y.tab.cpp"
+#line 1531 "y.tab.cpp"
     break;
 
   case 3:
-#line 72 "parser.y"
+#line 85 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" program : program unit";
+		logstream<<"\nAt line no: "<<yylineno<<" program : program unit"<<endl;
 	}
-#line 1526 "y.tab.cpp"
+#line 1539 "y.tab.cpp"
     break;
 
   case 4:
-#line 76 "parser.y"
+#line 89 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" program : unit";
+		logstream<<"\nAt line no: "<<yylineno<<" program : unit"<<endl;
 	}
-#line 1534 "y.tab.cpp"
+#line 1547 "y.tab.cpp"
     break;
 
   case 5:
-#line 82 "parser.y"
+#line 95 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" unit : var_declaration";
+		logstream<<"\nAt line no: "<<yylineno<<" unit : var_declaration"<<endl;
 	}
-#line 1542 "y.tab.cpp"
+#line 1555 "y.tab.cpp"
     break;
 
   case 6:
-#line 86 "parser.y"
+#line 99 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" unit : func_declaration";
+		logstream<<"\nAt line no: "<<yylineno<<" unit : func_declaration"<<endl;
 	}
-#line 1550 "y.tab.cpp"
+#line 1563 "y.tab.cpp"
     break;
 
   case 7:
-#line 90 "parser.y"
+#line 103 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" unit : func_definition";
+		logstream<<"\nAt line no: "<<yylineno<<" unit : func_definition"<<endl;
 	}
-#line 1558 "y.tab.cpp"
+#line 1571 "y.tab.cpp"
     break;
 
   case 8:
-#line 96 "parser.y"
+#line 109 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON"<<endl;
 	}
-#line 1566 "y.tab.cpp"
+#line 1579 "y.tab.cpp"
     break;
 
   case 9:
-#line 100 "parser.y"
+#line 113 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON"<<endl;
 	}
-#line 1574 "y.tab.cpp"
+#line 1587 "y.tab.cpp"
     break;
 
   case 10:
-#line 106 "parser.y"
+#line 119 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl;
 	}
-#line 1582 "y.tab.cpp"
+#line 1595 "y.tab.cpp"
     break;
 
   case 11:
-#line 110 "parser.y"
+#line 123 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" func_definition : type_specifier ID LPAREN RPAREN compound_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl;
 	}
-#line 1590 "y.tab.cpp"
+#line 1603 "y.tab.cpp"
     break;
 
   case 12:
-#line 116 "parser.y"
+#line 129 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : parameter_list COMMA type_specifier ID";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : parameter_list COMMA type_specifier ID"<<endl;
 	}
-#line 1598 "y.tab.cpp"
+#line 1611 "y.tab.cpp"
     break;
 
   case 13:
-#line 120 "parser.y"
+#line 133 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : parameter_list COMMA type_specifier";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : parameter_list COMMA type_specifier"<<endl;
 	}
-#line 1606 "y.tab.cpp"
+#line 1619 "y.tab.cpp"
     break;
 
   case 14:
-#line 124 "parser.y"
+#line 137 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : type_specifier ID";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : type_specifier ID"<<endl;
 	}
-#line 1614 "y.tab.cpp"
+#line 1627 "y.tab.cpp"
     break;
 
   case 15:
-#line 128 "parser.y"
+#line 141 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : type_specifier";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : type_specifier"<<endl;
 	}
-#line 1622 "y.tab.cpp"
+#line 1635 "y.tab.cpp"
     break;
 
   case 16:
-#line 134 "parser.y"
+#line 147 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" compound_statement : LCURL statements RCURL";
+		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL statements RCURL"<<endl;
 	}
-#line 1630 "y.tab.cpp"
+#line 1643 "y.tab.cpp"
     break;
 
   case 17:
-#line 138 "parser.y"
+#line 151 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" compound_statement : LCURL RCURL";
+		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL RCURL"<<endl;
 	}
-#line 1638 "y.tab.cpp"
+#line 1651 "y.tab.cpp"
     break;
 
   case 18:
-#line 144 "parser.y"
+#line 157 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" var_declaration : type_specifier declaration_list SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" var_declaration : type_specifier declaration_list SEMICOLON"<<endl;
 	}
-#line 1646 "y.tab.cpp"
+#line 1659 "y.tab.cpp"
     break;
 
   case 19:
-#line 150 "parser.y"
+#line 163 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" type_specifier : INT";
+		logstream<<"\nAt line no: "<<yylineno<<" type_specifier : INT"<<endl;
 	}
-#line 1654 "y.tab.cpp"
+#line 1667 "y.tab.cpp"
     break;
 
   case 20:
-#line 154 "parser.y"
+#line 167 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" type_specifier : FLOAT";
+		logstream<<"\nAt line no: "<<yylineno<<" type_specifier : FLOAT"<<endl;
 	}
-#line 1662 "y.tab.cpp"
+#line 1675 "y.tab.cpp"
     break;
 
   case 21:
-#line 158 "parser.y"
+#line 171 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" type_specifier : VOID";
+		logstream<<"\nAt line no: "<<yylineno<<" type_specifier : VOID"<<endl;
 	}
-#line 1670 "y.tab.cpp"
+#line 1683 "y.tab.cpp"
     break;
 
   case 22:
-#line 164 "parser.y"
+#line 177 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : declaration_list COMMA ID";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : declaration_list COMMA ID"<<endl;
 	}
-#line 1678 "y.tab.cpp"
+#line 1691 "y.tab.cpp"
     break;
 
   case 23:
-#line 168 "parser.y"
+#line 181 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD"<<endl;
 	}
-#line 1686 "y.tab.cpp"
+#line 1699 "y.tab.cpp"
     break;
 
   case 24:
-#line 172 "parser.y"
+#line 185 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : ID";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : ID"<<endl;
 	}
-#line 1694 "y.tab.cpp"
+#line 1707 "y.tab.cpp"
     break;
 
   case 25:
-#line 176 "parser.y"
+#line 189 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : ID LTHIRD CONST_INT RTHIRD";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : ID LTHIRD CONST_INT RTHIRD"<<endl;
 	}
-#line 1702 "y.tab.cpp"
+#line 1715 "y.tab.cpp"
     break;
 
   case 26:
-#line 182 "parser.y"
+#line 195 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statements : statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statements : statement"<<endl;
 	}
-#line 1710 "y.tab.cpp"
+#line 1723 "y.tab.cpp"
     break;
 
   case 27:
-#line 186 "parser.y"
+#line 199 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statements : statements statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statements : statements statement"<<endl;
 	}
-#line 1718 "y.tab.cpp"
+#line 1731 "y.tab.cpp"
     break;
 
   case 28:
-#line 192 "parser.y"
+#line 205 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : var_declaration";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : var_declaration"<<endl;
 	}
-#line 1726 "y.tab.cpp"
+#line 1739 "y.tab.cpp"
     break;
 
   case 29:
-#line 196 "parser.y"
+#line 209 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : expression_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : expression_statement"<<endl;
 	}
-#line 1734 "y.tab.cpp"
+#line 1747 "y.tab.cpp"
     break;
 
   case 30:
-#line 200 "parser.y"
+#line 213 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : compound_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : compound_statement"<<endl;
 	}
-#line 1742 "y.tab.cpp"
+#line 1755 "y.tab.cpp"
     break;
 
   case 31:
-#line 204 "parser.y"
+#line 217 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement";
+		logstream <<"\nAt line no: "<<yylineno<<" statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement"<<endl;
 	}
-#line 1750 "y.tab.cpp"
+#line 1763 "y.tab.cpp"
     break;
 
   case 32:
-#line 208 "parser.y"
+#line 221 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : IF LPAREN expression RPAREN statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : IF LPAREN expression RPAREN statement"<<endl;
 	}
-#line 1758 "y.tab.cpp"
+#line 1771 "y.tab.cpp"
     break;
 
   case 33:
-#line 212 "parser.y"
+#line 225 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : IF LPAREN expression RPAREN statement ELSE statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl;
 	}
-#line 1766 "y.tab.cpp"
+#line 1779 "y.tab.cpp"
     break;
 
   case 34:
-#line 216 "parser.y"
+#line 229 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : WHILE LPAREN expression RPAREN statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : WHILE LPAREN expression RPAREN statement"<<endl;
 	}
-#line 1774 "y.tab.cpp"
+#line 1787 "y.tab.cpp"
     break;
 
   case 35:
-#line 220 "parser.y"
+#line 233 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : PRINTLN LPAREN ID RPAREN SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : PRINTLN LPAREN ID RPAREN SEMICOLON"<<endl;
 	}
-#line 1782 "y.tab.cpp"
+#line 1795 "y.tab.cpp"
     break;
 
   case 36:
-#line 224 "parser.y"
+#line 237 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" statement : RETURN expression SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : RETURN expression SEMICOLON"<<endl;
 	}
-#line 1790 "y.tab.cpp"
+#line 1803 "y.tab.cpp"
     break;
 
   case 37:
-#line 230 "parser.y"
+#line 243 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" expression_statement : SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" expression_statement : SEMICOLON"<<endl;
 	}
-#line 1798 "y.tab.cpp"
+#line 1811 "y.tab.cpp"
     break;
 
   case 38:
-#line 234 "parser.y"
+#line 247 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" expression_statement : expression SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" expression_statement : expression SEMICOLON"<<endl;
 	}
-#line 1806 "y.tab.cpp"
+#line 1819 "y.tab.cpp"
     break;
 
   case 39:
-#line 240 "parser.y"
+#line 253 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" variable : ID";
+		logstream<<"\nAt line no: "<<yylineno<<" variable : ID"<<endl;
 	}
-#line 1814 "y.tab.cpp"
+#line 1827 "y.tab.cpp"
     break;
 
   case 40:
-#line 244 "parser.y"
+#line 257 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" variable : ID LTHIRD expression RTHIRD";
+		logstream<<"\nAt line no: "<<yylineno<<" variable : ID LTHIRD expression RTHIRD"<<endl;
 	}
-#line 1822 "y.tab.cpp"
+#line 1835 "y.tab.cpp"
     break;
 
   case 41:
-#line 250 "parser.y"
+#line 263 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" expression : logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" expression : logic_expression"<<endl;
 	}
-#line 1830 "y.tab.cpp"
+#line 1843 "y.tab.cpp"
     break;
 
   case 42:
-#line 254 "parser.y"
+#line 267 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" expression : variable ASSIGNOP logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" expression : variable ASSIGNOP logic_expression"<<endl;
 	}
-#line 1838 "y.tab.cpp"
+#line 1851 "y.tab.cpp"
     break;
 
   case 43:
-#line 260 "parser.y"
+#line 273 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" logic_expression : rel_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" logic_expression : rel_expression"<<endl;
 	}
-#line 1846 "y.tab.cpp"
+#line 1859 "y.tab.cpp"
     break;
 
   case 44:
-#line 264 "parser.y"
+#line 277 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" logic_expression : rel_expression LOGICOP rel_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" logic_expression : rel_expression LOGICOP rel_expression"<<endl;
 	}
-#line 1854 "y.tab.cpp"
+#line 1867 "y.tab.cpp"
     break;
 
   case 45:
-#line 270 "parser.y"
+#line 283 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" rel_expression : simple_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" rel_expression : simple_expression"<<endl;
 	}
-#line 1862 "y.tab.cpp"
+#line 1875 "y.tab.cpp"
     break;
 
   case 46:
-#line 274 "parser.y"
+#line 287 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" rel_expression : simple_expression RELOP simple_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" rel_expression : simple_expression RELOP simple_expression"<<endl;
 	}
-#line 1870 "y.tab.cpp"
+#line 1883 "y.tab.cpp"
     break;
 
   case 47:
-#line 280 "parser.y"
+#line 293 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" simple_expression : term";
+		logstream<<"\nAt line no: "<<yylineno<<" simple_expression : term"<<endl;
 	}
-#line 1878 "y.tab.cpp"
+#line 1891 "y.tab.cpp"
     break;
 
   case 48:
-#line 284 "parser.y"
+#line 297 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" simple_expression : simple_expression ADDOP term";
+		logstream<<"\nAt line no: "<<yylineno<<" simple_expression : simple_expression ADDOP term"<<endl;
 	}
-#line 1886 "y.tab.cpp"
+#line 1899 "y.tab.cpp"
     break;
 
   case 49:
-#line 290 "parser.y"
+#line 303 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" term : unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" term : unary_expression"<<endl;
 	}
-#line 1894 "y.tab.cpp"
+#line 1907 "y.tab.cpp"
     break;
 
   case 50:
-#line 294 "parser.y"
+#line 307 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" term : term MULOP unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" term : term MULOP unary_expression"<<endl;
 	}
-#line 1902 "y.tab.cpp"
+#line 1915 "y.tab.cpp"
     break;
 
   case 51:
-#line 300 "parser.y"
+#line 313 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" unary_expression : ADDOP unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : ADDOP unary_expression"<<endl;
 	}
-#line 1910 "y.tab.cpp"
+#line 1923 "y.tab.cpp"
     break;
 
   case 52:
-#line 304 "parser.y"
+#line 317 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" unary_expression : NOT unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : NOT unary_expression"<<endl;
 	}
-#line 1918 "y.tab.cpp"
+#line 1931 "y.tab.cpp"
     break;
 
   case 53:
-#line 308 "parser.y"
+#line 321 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" unary_expression : factor";
+		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : factor"<<endl;
 	}
-#line 1926 "y.tab.cpp"
+#line 1939 "y.tab.cpp"
     break;
 
   case 54:
-#line 314 "parser.y"
+#line 327 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : variable";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : variable"<<endl;
 	}
-#line 1934 "y.tab.cpp"
+#line 1947 "y.tab.cpp"
     break;
 
   case 55:
-#line 318 "parser.y"
+#line 331 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : ID LPAREN argument_list RPAREN";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : ID LPAREN argument_list RPAREN"<<endl;
 	}
-#line 1942 "y.tab.cpp"
+#line 1955 "y.tab.cpp"
     break;
 
   case 56:
-#line 322 "parser.y"
+#line 335 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : LPAREN expression RPAREN";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : LPAREN expression RPAREN"<<endl;
 	}
-#line 1950 "y.tab.cpp"
+#line 1963 "y.tab.cpp"
     break;
 
   case 57:
-#line 326 "parser.y"
+#line 339 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : CONST_INT";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : CONST_INT"<<endl;
 	}
-#line 1958 "y.tab.cpp"
+#line 1971 "y.tab.cpp"
     break;
 
   case 58:
-#line 330 "parser.y"
+#line 343 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : CONST_FLOAT";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : CONST_FLOAT"<<endl;
 	}
-#line 1966 "y.tab.cpp"
+#line 1979 "y.tab.cpp"
     break;
 
   case 59:
-#line 334 "parser.y"
+#line 347 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : variable INCOP";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : variable INCOP"<<endl;
 	}
-#line 1974 "y.tab.cpp"
+#line 1987 "y.tab.cpp"
     break;
 
   case 60:
-#line 338 "parser.y"
+#line 351 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" factor : variable DECOP";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : variable DECOP"<<endl;
 	}
-#line 1982 "y.tab.cpp"
+#line 1995 "y.tab.cpp"
     break;
 
   case 61:
-#line 344 "parser.y"
+#line 357 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" argument_list : arguments";
+		logstream<<"\nAt line no: "<<yylineno<<" argument_list : arguments"<<endl;
 	}
-#line 1990 "y.tab.cpp"
+#line 2003 "y.tab.cpp"
     break;
 
   case 62:
-#line 348 "parser.y"
+#line 361 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" argument_list : empty";
+		logstream<<"\nAt line no: "<<yylineno<<" argument_list :"<<endl;
 	}
-#line 1998 "y.tab.cpp"
+#line 2011 "y.tab.cpp"
     break;
 
   case 63:
-#line 355 "parser.y"
+#line 367 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" arguments : arguments COMMA logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" arguments : arguments COMMA logic_expression"<<endl;
 	}
-#line 2006 "y.tab.cpp"
+#line 2019 "y.tab.cpp"
     break;
 
   case 64:
-#line 359 "parser.y"
+#line 371 "parser.y"
         {
-		logstream<<"At line no: "<<get_lineno("")<<" arguments : logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" arguments : logic_expression"<<endl;
 	}
-#line 2014 "y.tab.cpp"
+#line 2027 "y.tab.cpp"
     break;
 
 
-#line 2018 "y.tab.cpp"
+#line 2031 "y.tab.cpp"
 
       default: break;
     }
@@ -2246,7 +2259,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 364 "parser.y"
+#line 376 "parser.y"
 
 int main(int argc,char *argv[])
 {
@@ -2284,6 +2297,8 @@ int main(int argc,char *argv[])
 	yyparse();
 	
 	yylex_destroy();
+
+	delete symboltable;
 
 	errorstream<<"\nTotal Errors: "<<error_count<<endl;
 

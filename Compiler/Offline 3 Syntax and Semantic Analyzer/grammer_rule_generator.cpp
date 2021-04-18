@@ -43,19 +43,22 @@ int main()
 
 			if(first_rule)
 				cout<<endl<<from<<" : ";
-			else if (rhts.size() ) cout<<"\t| ";
+			else if (rhts.size() or end_rule == false) cout<<"\t| ";
 
 			for(string s: rhts)
 				cout<<" "<<s;
-			if(rhts.size())
+			if(rhts.size() or end_rule == false)
 			{
+				if(rhts.size() == 5 and rhts.front() == "IF")
+					cout<<" %prec SINGLE_IF";
+
 				cout<<endl;
 				cout<<"\t{\n";
-				cout<<"\t\tlogstream<<\"At line no: \"<<get_lineno(\"\")<<\" "<<from<<" :";
+				cout<<"\t\tlogstream<<\"\\nAt line no: \"<<yylineno<<\" "<<from<<" :";
 				for(string s: rhts)
 					cout<<" "<<s;
-
-				cout<<"\";"<<endl;
+				
+				cout<<"\"<<endl;"<<endl;
 				cout<<"\t}";
 				cout<<endl;
 			}

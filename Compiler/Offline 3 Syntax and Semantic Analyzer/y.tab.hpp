@@ -86,7 +86,8 @@ extern int yydebug;
     SEMICOLON = 292,
     COMMA = 293,
     ID = 294,
-    STRING = 295
+    STRING = 295,
+    SINGLE_IF = 296
   };
 #endif
 /* Tokens.  */
@@ -128,18 +129,19 @@ extern int yydebug;
 #define COMMA 293
 #define ID 294
 #define STRING 295
+#define SINGLE_IF 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "parser.y"
+#line 49 "parser.y"
 
 		SymbolInfoChain<string> * SymbolInfoStringPointer;
 		string * StringPointer;
 	
 
-#line 143 "y.tab.hpp"
+#line 145 "y.tab.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

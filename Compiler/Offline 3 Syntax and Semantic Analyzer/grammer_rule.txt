@@ -1,299 +1,298 @@
 
 start :  program
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" start : program";
+		logstream<<"\nAt line no: "<<yylineno<<" start : program"<<endl;
 	}
 	;
 
 program :  program unit
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" program : program unit";
+		logstream<<"\nAt line no: "<<yylineno<<" program : program unit"<<endl;
 	}
 	|  unit
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" program : unit";
+		logstream<<"\nAt line no: "<<yylineno<<" program : unit"<<endl;
 	}
 	;
 
 unit :  var_declaration
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" unit : var_declaration";
+		logstream<<"\nAt line no: "<<yylineno<<" unit : var_declaration"<<endl;
 	}
 	|  func_declaration
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" unit : func_declaration";
+		logstream<<"\nAt line no: "<<yylineno<<" unit : func_declaration"<<endl;
 	}
 	|  func_definition
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" unit : func_definition";
+		logstream<<"\nAt line no: "<<yylineno<<" unit : func_definition"<<endl;
 	}
 	;
 
 func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON"<<endl;
 	}
 	|  type_specifier ID LPAREN RPAREN SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON"<<endl;
 	}
 	;
 
 func_definition :  type_specifier ID LPAREN parameter_list RPAREN compound_statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl;
 	}
 	|  type_specifier ID LPAREN RPAREN compound_statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" func_definition : type_specifier ID LPAREN RPAREN compound_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl;
 	}
 	;
 
 parameter_list :  parameter_list COMMA type_specifier ID
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : parameter_list COMMA type_specifier ID";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : parameter_list COMMA type_specifier ID"<<endl;
 	}
 	|  parameter_list COMMA type_specifier
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : parameter_list COMMA type_specifier";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : parameter_list COMMA type_specifier"<<endl;
 	}
 	|  type_specifier ID
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : type_specifier ID";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : type_specifier ID"<<endl;
 	}
 	|  type_specifier
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" parameter_list : type_specifier";
+		logstream<<"\nAt line no: "<<yylineno<<" parameter_list : type_specifier"<<endl;
 	}
 	;
 
 compound_statement :  LCURL statements RCURL
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" compound_statement : LCURL statements RCURL";
+		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL statements RCURL"<<endl;
 	}
 	|  LCURL RCURL
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" compound_statement : LCURL RCURL";
+		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL RCURL"<<endl;
 	}
 	;
 
 var_declaration :  type_specifier declaration_list SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" var_declaration : type_specifier declaration_list SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" var_declaration : type_specifier declaration_list SEMICOLON"<<endl;
 	}
 	;
 
 type_specifier :  INT
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" type_specifier : INT";
+		logstream<<"\nAt line no: "<<yylineno<<" type_specifier : INT"<<endl;
 	}
 	|  FLOAT
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" type_specifier : FLOAT";
+		logstream<<"\nAt line no: "<<yylineno<<" type_specifier : FLOAT"<<endl;
 	}
 	|  VOID
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" type_specifier : VOID";
+		logstream<<"\nAt line no: "<<yylineno<<" type_specifier : VOID"<<endl;
 	}
 	;
 
 declaration_list :  declaration_list COMMA ID
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : declaration_list COMMA ID";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : declaration_list COMMA ID"<<endl;
 	}
 	|  declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD"<<endl;
 	}
 	|  ID
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : ID";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : ID"<<endl;
 	}
 	|  ID LTHIRD CONST_INT RTHIRD
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" declaration_list : ID LTHIRD CONST_INT RTHIRD";
+		logstream<<"\nAt line no: "<<yylineno<<" declaration_list : ID LTHIRD CONST_INT RTHIRD"<<endl;
 	}
 	;
 
 statements :  statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statements : statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statements : statement"<<endl;
 	}
 	|  statements statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statements : statements statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statements : statements statement"<<endl;
 	}
 	;
 
 statement :  var_declaration
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : var_declaration";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : var_declaration"<<endl;
 	}
 	|  expression_statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : expression_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : expression_statement"<<endl;
 	}
 	|  compound_statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : compound_statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : compound_statement"<<endl;
 	}
 	|  FOR LPAREN expression_statement expression_statement expression RPAREN statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement"<<endl;
 	}
-	|  IF LPAREN expression RPAREN statement
+	|  IF LPAREN expression RPAREN statement %prec END_OF_IF
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : IF LPAREN expression RPAREN statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : IF LPAREN expression RPAREN statement"<<endl;
 	}
 	|  IF LPAREN expression RPAREN statement ELSE statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : IF LPAREN expression RPAREN statement ELSE statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl;
 	}
 	|  WHILE LPAREN expression RPAREN statement
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : WHILE LPAREN expression RPAREN statement";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : WHILE LPAREN expression RPAREN statement"<<endl;
 	}
 	|  PRINTLN LPAREN ID RPAREN SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : PRINTLN LPAREN ID RPAREN SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : PRINTLN LPAREN ID RPAREN SEMICOLON"<<endl;
 	}
 	|  RETURN expression SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" statement : RETURN expression SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" statement : RETURN expression SEMICOLON"<<endl;
 	}
 	;
 
 expression_statement :  SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" expression_statement : SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" expression_statement : SEMICOLON"<<endl;
 	}
 	|  expression SEMICOLON
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" expression_statement : expression SEMICOLON";
+		logstream<<"\nAt line no: "<<yylineno<<" expression_statement : expression SEMICOLON"<<endl;
 	}
 	;
 
 variable :  ID
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" variable : ID";
+		logstream<<"\nAt line no: "<<yylineno<<" variable : ID"<<endl;
 	}
 	|  ID LTHIRD expression RTHIRD
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" variable : ID LTHIRD expression RTHIRD";
+		logstream<<"\nAt line no: "<<yylineno<<" variable : ID LTHIRD expression RTHIRD"<<endl;
 	}
 	;
 
 expression :  logic_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" expression : logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" expression : logic_expression"<<endl;
 	}
 	|  variable ASSIGNOP logic_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" expression : variable ASSIGNOP logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" expression : variable ASSIGNOP logic_expression"<<endl;
 	}
 	;
 
 logic_expression :  rel_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" logic_expression : rel_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" logic_expression : rel_expression"<<endl;
 	}
 	|  rel_expression LOGICOP rel_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" logic_expression : rel_expression LOGICOP rel_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" logic_expression : rel_expression LOGICOP rel_expression"<<endl;
 	}
 	;
 
 rel_expression :  simple_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" rel_expression : simple_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" rel_expression : simple_expression"<<endl;
 	}
 	|  simple_expression RELOP simple_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" rel_expression : simple_expression RELOP simple_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" rel_expression : simple_expression RELOP simple_expression"<<endl;
 	}
 	;
 
 simple_expression :  term
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" simple_expression : term";
+		logstream<<"\nAt line no: "<<yylineno<<" simple_expression : term"<<endl;
 	}
 	|  simple_expression ADDOP term
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" simple_expression : simple_expression ADDOP term";
+		logstream<<"\nAt line no: "<<yylineno<<" simple_expression : simple_expression ADDOP term"<<endl;
 	}
 	;
 
 term :  unary_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" term : unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" term : unary_expression"<<endl;
 	}
 	|  term MULOP unary_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" term : term MULOP unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" term : term MULOP unary_expression"<<endl;
 	}
 	;
 
 unary_expression :  ADDOP unary_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" unary_expression : ADDOP unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : ADDOP unary_expression"<<endl;
 	}
 	|  NOT unary_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" unary_expression : NOT unary_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : NOT unary_expression"<<endl;
 	}
 	|  factor
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" unary_expression : factor";
+		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : factor"<<endl;
 	}
 	;
 
 factor :  variable
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : variable";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : variable"<<endl;
 	}
 	|  ID LPAREN argument_list RPAREN
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : ID LPAREN argument_list RPAREN";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : ID LPAREN argument_list RPAREN"<<endl;
 	}
 	|  LPAREN expression RPAREN
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : LPAREN expression RPAREN";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : LPAREN expression RPAREN"<<endl;
 	}
 	|  CONST_INT
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : CONST_INT";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : CONST_INT"<<endl;
 	}
 	|  CONST_FLOAT
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : CONST_FLOAT";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : CONST_FLOAT"<<endl;
 	}
 	|  variable INCOP
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : variable INCOP";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : variable INCOP"<<endl;
 	}
 	|  variable DECOP
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" factor : variable DECOP";
+		logstream<<"\nAt line no: "<<yylineno<<" factor : variable DECOP"<<endl;
 	}
 	;
 
 argument_list :  arguments
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" argument_list : arguments";
+		logstream<<"\nAt line no: "<<yylineno<<" argument_list : arguments"<<endl;
 	}
-	|
+	| 
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" argument_list : empty";
+		logstream<<"\nAt line no: "<<yylineno<<" argument_list :"<<endl;
 	}
-	
 	;
 
 arguments :  arguments COMMA logic_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" arguments : arguments COMMA logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" arguments : arguments COMMA logic_expression"<<endl;
 	}
 	|  logic_expression
 	{
-		logstream<<"At line no: "<<get_lineno("")<<" arguments : logic_expression";
+		logstream<<"\nAt line no: "<<yylineno<<" arguments : logic_expression"<<endl;
 	}
 	;

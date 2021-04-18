@@ -1,4 +1,5 @@
-%option noyywrap yylineno
+
+%option noyywrap yylineno 
 
 %{
 
@@ -10,6 +11,8 @@
 using namespace std;
 
 
+/// define LEXICAL_OUTPUT_ENABLED 
+/// to print lexical diagnostics to logsream 
 
 //#define LEXICAL_OUTPUT_ENABLED
 
@@ -97,14 +100,6 @@ string get_row_string(string s)
 	return ret;
 }
 
-int get_lineno(string text = yytext)
-{
-	int ret =  yylineno;
-	for(char c:text)
-		ret-=c=='\n';
-	return ret;
-}
-
 void processsToken(string token , string attr)
 {
 	#ifdef LEXICAL_OUTPUT_ENABLED
@@ -122,18 +117,6 @@ void processError(int line_number, string text, string reason)
   	logstream<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
 }
 
-void insertSymbol(string key , string value)
-{
-	if(symboltable){
-	if(symboltable->insert(key , value))
-		symboltable->printNonEmptyBuckets(logstream);
-	}
-	else 
-	{
-		errorstream<<"file : "<< __FILE__<<" line: "<<__LINE__<<" Symboltable not found";
-		assert(0);
-	}
-}
 
 
 %}
@@ -220,7 +203,7 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 {LINE_COMMENT}	{
 				
 					#ifdef LEXICAL_OUTPUT_ENABLED
-						logstream<<"\nLine no "<< get_lineno() <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
+						logstream<<"\nLine no "<< yylineno <<": Token <COMMENT> Lexeme "<<yytext<<" found\n";
 					#endif
 				}
 {BLOCK_COMMENT_START}	{
@@ -232,8 +215,9 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 		COMMENT_BUFFER+=yytext;
 
 		//yytext = COMMENT_BUFFER;
+		
 		#ifdef LEXICAL_OUTPUT_ENABLED
-	  		logstream<<"\nLine no "<< get_lineno(COMMENT_BUFFER) <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
+	  		logstream<<"\nLine no "<<  yylineno <<": Token <COMMENT> Lexeme "<<COMMENT_BUFFER<<" found\n";
 		#endif
 
 		COMMENT_BUFFER.clear();
@@ -242,8 +226,8 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 	. COMMENT_BUFFER+=yytext;
 	{WHITE_SPACES} COMMENT_BUFFER+=yytext;
 	<<EOF>> {
-				//yytext = COMMENT_BUFFER.c_str();
-				processError( get_lineno(COMMENT_BUFFER)  ,COMMENT_BUFFER , "Unterminated Comment");
+				
+				processError(  yylineno  ,COMMENT_BUFFER , "Unterminated Comment");
 
 				COMMENT_BUFFER.clear();
 				BEGIN INITIAL;
@@ -262,10 +246,12 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 			string row_symbol = get_row_string(STRING_BUFFER);
 			
 			
-			yylval.StringPointer =  new string(STRING_BUFFER);
+			
 			processsToken("STRING" , STRING_BUFFER);
 
-			cerr<<"\nLine no "<< get_lineno(STRING_BUFFER) <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
+			
+
+			cerr<<"\nLine no "<<  yylineno <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
 			cerr<<" --> <STRING, "<<row_symbol<<">\n";
 
 			STRING_BUFFER.clear();
@@ -279,13 +265,17 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 	. STRING_BUFFER+=yytext;
 
 	<<EOF>> {
-				processError( get_lineno(STRING_BUFFER)  ,STRING_BUFFER , "Unterminated String");
+				
+				processError(  yylineno  ,STRING_BUFFER , "Unterminated String");
+
 				STRING_BUFFER.clear();
 				BEGIN INITIAL;
 			}
 	\n {
 				STRING_BUFFER+=yytext;
-				processError( get_lineno(STRING_BUFFER)  ,STRING_BUFFER , "Unterminated String");
+
+				processError(  yylineno  ,STRING_BUFFER , "Unterminated String");
+				
 				STRING_BUFFER.clear();
 				BEGIN INITIAL;
 			}
@@ -299,10 +289,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 		processsToken("CONST_INT" , symbol);
 		
 		#ifdef LEXICAL_OUTPUT_ENABLED
-			logstream<<"\nLine no "<< get_lineno() <<": Token <CONST_INT> Lexeme "<<symbol<<" found\n";
+			logstream<<"\nLine no "<< yylineno <<": Token <CONST_INT> Lexeme "<<symbol<<" found\n";
 		#endif
 
-		yylval.StringPointer = new string(symbol);
+
 
 		return CONST_INT;
 	}
@@ -311,10 +301,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 		processsToken("CONST_FLOAT" ,symbol );
 
 		#ifdef LEXICAL_OUTPUT_ENABLED
-			logstream<<"\nLine no "<< get_lineno() <<": Token <CONST_FLOAT> Lexeme "<<symbol<<" found\n";
+			logstream<<"\nLine no "<< yylineno <<": Token <CONST_FLOAT> Lexeme "<<symbol<<" found\n";
 		#endif
 
-		yylval.StringPointer = new string(symbol);
+
 
 		return CONST_FLOAT;
 	}
@@ -332,8 +322,9 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					ascii_symbol = get_row_char(ascii_symbol);
 
 					processsToken("CONST_CHAR" , ascii_symbol);
-					cerr<<"\nLine no "<< get_lineno() <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
-					insertSymbol(symbol ,"CONST_CHAR" );
+					cerr<<"\nLine no "<< yylineno <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
+					
+					
 
 					return CONST_CHAR;
 				}
@@ -579,10 +570,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 {LOGICOP}	{
 				processsToken("LOGICOP",string(yytext));
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <LOGICOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <LOGICOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+				
 
 				return LOGICOP;
         }
@@ -590,9 +581,9 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 				processsToken("ADDOP",string(yytext));
 
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <ADDOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <ADDOP> Lexeme "<<yytext<<" found\n";
 				#endif
-				yylval.StringPointer = new string(yytext);
+				
 
 				return ADDOP;
 			}
@@ -600,10 +591,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 				processsToken("MULOP",string(yytext));
 				
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <MULOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <MULOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+
 
 				return MULOP;
 			}
@@ -611,10 +602,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 				processsToken("INCOP",string(yytext));
                 
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <INCOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <INCOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+
 
 				return INCOP;
 			}
@@ -623,10 +614,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 				processsToken("RELOP",string(yytext));
                 
 				#ifdef LEXICAL_OUTPUT_ENABLED
-                	logstream<<"\nLine no "<< get_lineno() <<": Token <RELOP> Lexeme "<<yytext<<" found\n";
+                	logstream<<"\nLine no "<< yylineno <<": Token <RELOP> Lexeme "<<yytext<<" found\n";
 				#endif
 
-				yylval.StringPointer = new string(yytext);
+
 
 				return RELOP;
 			}
@@ -637,38 +628,36 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					processsToken("ID" , symbol);
 
 					#ifdef LEXICAL_OUTPUT_ENABLED
-						cerr<<"\nLine no "<< get_lineno() <<": Token <ID> Lexeme "<<symbol<<" found\n";
+						cerr<<"\nLine no "<< yylineno <<": Token <ID> Lexeme "<<symbol<<" found\n";
 					#endif
-					// insertSymbol(symbol , "ID");
-					// if(symboltable->insert(symbl,"ID"))
-					// 	symboltable->printNonEmpotyBuckets(cerr);
+					
 
-					yylval.StringPointer = new string(symbol);
+
 
 					return ID;
 				}
 
 
 {MULTIPLE_DECIMAL_ERROR}	{
-								processError( get_lineno()  , yytext , "Too many decimal points");
+								processError( yylineno  , yytext , "Too many decimal points");
 							}
 {NUMBERIC_IDENTIFIER_ERROR}		{
-									processError( get_lineno()  , yytext , "Invalid prefix on ID or invalid suffix on Number");
+									processError( yylineno  , yytext , "Invalid prefix on ID or invalid suffix on Number");
 								}
 {NUMBER_FORMAT_ERROR}	{
-							processError( get_lineno()  , yytext , "Ill formed number");
+							processError( yylineno  , yytext , "Ill formed number");
 						}
 {MULTI_CHAR_ERROR}	{
-						processError( get_lineno()  , yytext , "Multi character constant error");
+						processError( yylineno  , yytext , "Multi character constant error");
 					}
 {UNTERMINATED_CHAR_ERROR}	{
-							processError( get_lineno()  , yytext , "Unterminated character");
+							processError( yylineno  , yytext , "Unterminated character");
 						}	
 {EMPTY_CHAR_ERROR}	{
-						processError( get_lineno()  , yytext , "Empty character constant error");
+						processError( yylineno  , yytext , "Empty character constant error");
 					}
 .	{
-		processError( get_lineno()  , yytext , "Unrecognized character" );
+		processError( yylineno  , yytext , "Unrecognized character" );
 	}
 %%
 
