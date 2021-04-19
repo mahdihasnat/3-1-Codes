@@ -5,6 +5,7 @@
 using namespace std;
 
 #include "Info.h"
+#include "SymbolTable.h"
 
 extern int yylineno;
 extern char * yytext;
@@ -14,13 +15,12 @@ extern SymbolTable<Info> *symboltable;
 extern ofstream logstream;
 extern ofstream errorstream;
 
-
+SymbolInfoPointer lazy_parameters;
 
 void yyerror(const string &s)
 {
 	error_count++;
 	
-	cout<<s<<"\n";
 	errorstream<<"Error at Line "<<yylineno<<": ";
 	errorstream<<s<<"\n\n";
 }
@@ -65,7 +65,14 @@ void print(SymbolInfoPointer sip)
 		
 		sip = sip->getNextSymbolInfo();
 	}
-	logstream<<endl;
+	if(!is_new_line)
+		logstream<<endl;
+}
+
+
+void add_func_parameters(SymbolInfoPointer parameters)
+{
+	lazy_parameters = parameters;
 }
 
 void add_variable_declaration(SymbolInfoPointer sip)
@@ -82,6 +89,15 @@ void add_variable_declaration(SymbolInfoPointer sip)
 	// 				| ID
 	// 				| ID LTHIRD CONST_INT RTHIRD
 	// 				;	
+
+	// ----- or ----
+	// passed final parameter_list
+	// parameter_list  : parameter_list COMMA type_specifier ID
+	// 		| parameter_list COMMA type_specifier
+	// 		| type_specifier ID
+	// 		| type_specifier
+	// 		;
+	if(sip == 0) return ;
 	sip = sip->getNextSymbolInfo();
 	while (sip)
 	{
@@ -100,5 +116,33 @@ void add_variable_declaration(SymbolInfoPointer sip)
 	}
 	
 }
+
+void add_func_definition(SymbolInfoPointer returnType  , SymbolInfoPointer funcName ,SymbolInfoPointer parameters )
+{
+	///todo: check consistency
+
+	symboltable->insert(new SymbolInfo<Info>(funcName));
+	add_func_parameters(parameters);
+}
+
+void add_func_declaration(SymbolInfoPointer returnType  , SymbolInfoPointer funcName ,SymbolInfoPointer parameters )
+{
+	/// todo: check consistency
+	symboltable->insert(new SymbolInfo<Info>(funcName));
+}
+
+void enterScope()
+{
+	symboltable->enterScope();
+	add_variable_declaration(lazy_parameters);
+	lazy_parameters = nullptr;
+}
+
+void exitScope()
+{
+	symboltable->printNonEmptyBuckets(logstream);
+	symboltable->exitScope();
+}
+
 
 #endif

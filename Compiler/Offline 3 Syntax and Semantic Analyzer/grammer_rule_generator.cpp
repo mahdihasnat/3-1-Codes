@@ -52,7 +52,7 @@ int main()
 			for(string s: rhts){
 				cout<<" "<<s;
 				if(s=="LCURL")
-						cout<<"{symboltable->enterScope();}";
+						cout<<"{enterScope();}";
 				else if(s=="RCURL")
 						cout<<"{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}";
 			}

@@ -145,6 +145,9 @@ func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 		$5 -> push_back( $6 );
 		$$ = $1;
 		print($$);
+
+		add_func_declaration($1,$2,$4);
+
 	}
 	|  type_specifier ID LPAREN RPAREN SEMICOLON
 	{
@@ -155,27 +158,30 @@ func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 		$4 -> push_back( $5 );
 		$$ = $1;
 		print($$);
+
+		add_func_declaration($1,$2,nullptr);
+
 	}
 	;
 
-func_definition :  type_specifier ID LPAREN parameter_list RPAREN compound_statement
+func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_definition($1 , $2 , $4);} compound_statement
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl;
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
 		$4 -> push_back( $5 );
-		$5 -> push_back( $6 );
+		$5 -> push_back( $7 );
 		$$ = $1;
 		print($$);
 	}
-	|  type_specifier ID LPAREN RPAREN compound_statement
+	|  type_specifier ID LPAREN RPAREN {add_func_definition($1 , $2 , nullptr);} compound_statement
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl;
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
-		$4 -> push_back( $5 );
+		$4 -> push_back( $6 );
 		$$ = $1;
 		print($$);
 	}
@@ -213,20 +219,23 @@ parameter_list :  parameter_list COMMA type_specifier ID
 	}
 	;
 
-compound_statement :  LCURL{symboltable->enterScope();} statements RCURL{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}
+compound_statement :  LCURL{enterScope();} statements RCURL
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL statements RCURL"<<endl;
 		$1 -> push_back( $3 );
 		$3 -> push_back( $4 );
 		$$ = $1;
 		print($$);
+		exitScope();
 	}
-	|  LCURL{symboltable->enterScope();} RCURL{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}
+	|  LCURL{enterScope();} RCURL
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL RCURL"<<endl;
 		$1 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+		exitScope();
 	}
 	;
 
@@ -638,7 +647,7 @@ int main(int argc,char *argv[])
 	
 	
 
-	ScopeTable<string>::setTotalBucket(7);
+	ScopeTable<Info>::setTotalBucket(30);
 	symboltable = new SymbolTable<Info>();
 
 	yyin=fp;
