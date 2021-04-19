@@ -41,7 +41,7 @@ public:
             delete parentScopeTable;
     }
 
-    bool insert(SymbolInfo<valueType> *symbolinfo)
+    bool insert(SymbolInfo<valueType> *symbolinfo) /// symbol info connected to scopetable
     {
         int buncket_index = symbolinfo->hashCode() % total_bucket;
         SymbolInfo<valueType> *previous_symbolinfo = bucket[buncket_index];
@@ -51,7 +51,7 @@ public:
         {
             if (previous_symbolinfo->getName() == symbolinfo->getName())
             {
-                cerr << (*previous_symbolinfo) << " already exists in current ScopeTable" << endl;
+                //cerr << (*previous_symbolinfo) << " already exists in current ScopeTable" << endl;
                 //cerr << (*symbolinfo) << " found in ScopTable " << getId() << " at position " << buncket_index << ", " << index << "" << endl;
                 delete symbolinfo;
                 return false;

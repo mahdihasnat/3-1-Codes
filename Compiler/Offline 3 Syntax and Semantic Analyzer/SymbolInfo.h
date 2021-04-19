@@ -26,6 +26,16 @@ public:
     SymbolInfo(string key, valueType value, SymbolInfo *nextSymbolInfo = nullptr) : key(key), value(value), nextSymbolInfo(nextSymbolInfo)
     {
     }
+
+    SymbolInfo(const SymbolInfo<valueType> & ref) : key(ref.key) , value(ref.value) , nextSymbolInfo(nullptr)
+    {
+    }
+    
+    SymbolInfo( SymbolInfo<valueType> * ref) : key(ref->key) , value(ref->value) , nextSymbolInfo(nullptr)
+    {
+    }
+
+
     ~SymbolInfo()
     {
         if (nextSymbolInfo)

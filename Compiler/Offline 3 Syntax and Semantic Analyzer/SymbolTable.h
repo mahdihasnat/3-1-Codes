@@ -75,6 +75,17 @@ public:
             return false;
         }
     }
+
+    bool insert(SymbolInfo<valueType> * symbolinfo) /// symbolinfo stayed in  symboltable / scopetable 
+    {
+        if (currentScopeTable)
+            return currentScopeTable->insert(symbolinfo);
+        else
+        {
+            return false;
+        }
+    }
+
     bool erase(string key)
     {
         if (currentScopeTable)

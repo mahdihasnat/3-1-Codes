@@ -1,2 +1,4 @@
+Error at Line 6: Multiple Declaration of c
 
-Total Errors: 0
+
+Total Errors: 1

@@ -237,6 +237,7 @@ var_declaration :  type_specifier declaration_list SEMICOLON
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+		add_variable_declaration($$);
 	}
 	;
 
@@ -643,11 +644,17 @@ int main(int argc,char *argv[])
 	yyin=fp;
 	yyparse();
 	
-	yylex_destroy();
+	
 
-	delete symboltable;
+	logstream<<"\n\t\tsymbol table:\n";
+	symboltable->printNonEmptyBuckets(logstream);
 
+	logstream<<"\nTotal Lines: "<<yylineno<<endl;
+	logstream<<"\nTotal Errors: "<<error_count<<endl;
 	errorstream<<"\nTotal Errors: "<<error_count<<endl;
+
+	yylex_destroy();
+	delete symboltable;
 
 	fclose(fp);
 	

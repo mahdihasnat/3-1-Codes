@@ -21,6 +21,10 @@ public:
 	{
 			
 	}
+	string getType()
+	{
+		return type;
+	}
 	
 	~Info()
 	{
