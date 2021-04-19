@@ -6,7 +6,6 @@ using namespace std;
 #include "SymbolInfo.h"
 #include "SymbolTable.h"
 
-#define YACC_OUTPUT_ENABLED 1
 
 /// declared in scanner.l 
 extern int yylineno;

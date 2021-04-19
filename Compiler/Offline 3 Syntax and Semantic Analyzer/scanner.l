@@ -5,7 +5,7 @@
 
 
 #include "SymbolTable.h"
-#include "y.tab.hpp"
+#include "y.tab.h"
 
 #include<bits/stdc++.h>
 using namespace std;
