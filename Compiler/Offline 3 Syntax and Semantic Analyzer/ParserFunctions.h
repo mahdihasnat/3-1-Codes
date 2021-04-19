@@ -17,7 +17,15 @@ void yyerror(const char *s)
 
 void print(SymbolInfoPointer sip)
 {
-	logstream<<endl<< sip->getName() <<endl;
+	logstream<<endl;
+	while (sip)
+	{
+		logstream<<" "<< sip->getName();
+		sip = sip->getNextSymbolInfo();
+	}
+	logstream<<endl;
+	
+	
 }
 
 

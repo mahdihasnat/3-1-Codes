@@ -16,7 +16,7 @@ l.o : y.tab.h scanner.l
 	${LEX}  scanner.l
 	${CC} ${CPPFLAGS} -c -o l.o lex.yy.c
 
-y.o: parser.y SymbolTable.h SymbolInfo.h ScopeTable.h
+y.o: parser.y SymbolTable.h SymbolInfo.h ScopeTable.h ParserFunctions.h
 	${YACC} -d -y --report=all parser.y
 	${CC} ${CPPFLAGS} -c -o y.o y.tab.c
 

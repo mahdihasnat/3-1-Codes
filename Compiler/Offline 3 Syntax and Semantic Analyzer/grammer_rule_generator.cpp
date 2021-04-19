@@ -49,8 +49,13 @@ int main()
 				cout<<endl<<from<<" : ";
 			else if (rhts.size() or end_rule == false) cout<<"\t| ";
 
-			for(string s: rhts)
+			for(string s: rhts){
 				cout<<" "<<s;
+				if(s=="LCURL")
+						cout<<"{symboltable->enterScope();}";
+				else if(s=="RCURL")
+						cout<<"{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}";
+			}
 			if(rhts.size() or end_rule == false)
 			{
 				if(rhts.size() == 5 and rhts.front() == "IF")
@@ -61,10 +66,6 @@ int main()
 				cout<<"\t\tlogstream<<\"\\nAt line no: \"<<yylineno<<\" "<<from<<" :";
 				for(string s: rhts){
 					cout<<" "<<s;
-					if(s=="LCURL")
-						cout<<"{symboltable->enterScope();}";
-					else if(s=="RCURL")
-						cout<<"{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}";
 				}
 				
 				cout<<"\"<<endl;"<<endl;
@@ -76,6 +77,11 @@ int main()
 					cout<<"\t\t$$ = $1;\n";
 				}
 				else cout<<"\t\t$$=nullptr;\n";
+
+				cout<<"\t\tprint($$);\n";
+
+				if(from == "start" )
+					cout<<"\t\tdelete $$;\n";
 
 				cout<<"\t}";
 				cout<<endl;
