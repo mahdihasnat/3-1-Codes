@@ -142,11 +142,11 @@ parameter_list :  parameter_list COMMA type_specifier ID
 	}
 	;
 
-compound_statement :  LCURL statements RCURL
+compound_statement :  LCURL { symboltable->enterScope(); } statements RCURL { symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL statements RCURL"<<endl;
 	}
-	|  LCURL RCURL
+	|  LCURL { symboltable->enterScope(); }  RCURL { symboltable->printNonEmptyBuckets(logstream);symboltable->exitScope();}
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" compound_statement : LCURL RCURL"<<endl;
 	}

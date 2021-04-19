@@ -3,6 +3,8 @@
 
 #include "ScopeTable.h"
 
+extern ofstream logstream;
+
 template <typename valueType>
 class SymbolTable
 {
@@ -27,18 +29,18 @@ public:
         ScopeTable<valueType> *parentScopeTable = currentScopeTable;
         currentScopeTable = new ScopeTable<valueType>(parentScopeTable, nextNewChild);
         nextNewChild = 1;
-        cerr << "New ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
+        logstream << "\nNew ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
     }
     void exitScope()
     {
-
+        
         if (currentScopeTable)
         {
             nextNewChild = currentScopeTable->getCurrentId() + 1;
 
             ScopeTable<valueType> *parentScopeTable = currentScopeTable->getParentScopeTable();
 
-            cerr << "ScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
+            logstream << "\nScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
             currentScopeTable->setParentScopeTable(nullptr); /// !! IMPORTANT otherwise entire symboltable will be lost
             delete currentScopeTable;
 
@@ -46,7 +48,7 @@ public:
         }
         else
         {
-            cerr << "Current ScopeTable is Empty!" << endl;
+            logstream << "\nCurrent ScopeTable is Empty!" << endl;
         }
     }
 

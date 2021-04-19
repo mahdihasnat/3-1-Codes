@@ -21,7 +21,6 @@ using namespace std;
 extern ofstream logstream;
 extern ofstream errorstream;
 extern YYSTYPE yylval;
-extern SymbolTable<string> *symboltable;
 
 extern int error_count;
 void yyerror(char *);
@@ -551,7 +550,6 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 			logstream<<"\nLine no "<<yylineno<<": Token <LCURL> Lexeme "<<yytext<<" found\n";
 		#endif
 
-		symboltable->enterScope();
 
 		return LCURL;
 	}
@@ -562,7 +560,6 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 			logstream<<"\nLine no "<<yylineno<<": Token <RCURL> Lexeme "<<yytext<<" found\n";
 		#endif
 
-		symboltable->exitScope();
 
 		return RCURL;
 	}

@@ -12,11 +12,11 @@ all: y.o l.o a.out run
 # ${CC} ${CPPFLAGS} y.o l.o -lfl
 # ./a.out input.txt log.txt error.txt
 
-l.o : y.tab.h scanner.l
+l.o : y.tab.h scanner.l 
 	${LEX}  scanner.l
 	${CC} ${CPPFLAGS} -c -o l.o lex.yy.c
 
-y.o: parser.y
+y.o: parser.y SymbolTable.h
 	${YACC} -d -y parser.y
 	${CC} ${CPPFLAGS} -c -o y.o y.tab.c
 
