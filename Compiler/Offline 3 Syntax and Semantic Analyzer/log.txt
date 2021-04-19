@@ -41,8 +41,6 @@ At line no: 5 type_specifier : INT
 
 At line no: 5 parameter_list : parameter_list COMMA type_specifier ID
 
-New ScopeTable with id 1.1 created
-
 At line no: 6 variable : ID
 
 At line no: 6 factor : variable
@@ -73,13 +71,7 @@ At line no: 6 statement : RETURN expression SEMICOLON
 
 At line no: 6 statements : statement
 
-ScopeTable # 1.1
-
-ScopeTable # 1
-
-ScopeTable with id 1.1 removed
-
-At line no: 7 compound_statement : LCURL statements RCURL
+At line no: 7 compound_statement : LCURL{symboltable->enterScope();} statements RCURL{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}
 
 At line no: 7 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
@@ -88,8 +80,6 @@ At line no: 7 unit : func_definition
 At line no: 7 program : program unit
 
 At line no: 9 type_specifier : VOID
-
-New ScopeTable with id 1.2 created
 
 At line no: 10 variable : ID
 
@@ -145,13 +135,7 @@ At line no: 11 statement : expression_statement
 
 At line no: 11 statements : statements statement
 
-ScopeTable # 1.2
-
-ScopeTable # 1
-
-ScopeTable with id 1.2 removed
-
-At line no: 12 compound_statement : LCURL statements RCURL
+At line no: 12 compound_statement : LCURL{symboltable->enterScope();} statements RCURL{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}
 
 At line no: 12 func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
@@ -160,8 +144,6 @@ At line no: 12 unit : func_definition
 At line no: 12 program : program unit
 
 At line no: 14 type_specifier : INT
-
-New ScopeTable with id 1.3 created
 
 At line no: 15 type_specifier : INT
 
@@ -497,13 +479,7 @@ At line no: 21 statement : RETURN expression SEMICOLON
 
 At line no: 21 statements : statements statement
 
-ScopeTable # 1.3
-
-ScopeTable # 1
-
-ScopeTable with id 1.3 removed
-
-At line no: 22 compound_statement : LCURL statements RCURL
+At line no: 22 compound_statement : LCURL{symboltable->enterScope();} statements RCURL{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}
 
 At line no: 22 func_definition : type_specifier ID LPAREN RPAREN compound_statement
 

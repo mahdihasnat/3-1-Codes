@@ -17,14 +17,14 @@ class ScopeTable
 private:
     static int total_bucket;
 
-    SymbolInfoChain<valueType> **bucket;
+    SymbolInfo<valueType> **bucket;
     ScopeTable<valueType> *parentScopeTable;
     string id;
 
 public:
     ScopeTable(ScopeTable<valueType> *parentScopeTable = 0, int current_id = 1) : parentScopeTable(parentScopeTable)
     {
-        bucket = new SymbolInfoChain<valueType> *[total_bucket];
+        bucket = new SymbolInfo<valueType> *[total_bucket];
         for (int i = 0; i < total_bucket; i++)
             bucket[i] = nullptr;
         if (parentScopeTable)
@@ -41,10 +41,10 @@ public:
             delete parentScopeTable;
     }
 
-    bool insert(SymbolInfoChain<valueType> *symbolinfo)
+    bool insert(SymbolInfo<valueType> *symbolinfo)
     {
         int buncket_index = symbolinfo->hashCode() % total_bucket;
-        SymbolInfoChain<valueType> *previous_symbolinfo = bucket[buncket_index];
+        SymbolInfo<valueType> *previous_symbolinfo = bucket[buncket_index];
         int index = 0;
 
         while (previous_symbolinfo)
@@ -78,13 +78,13 @@ public:
     }
     bool insert(string key, valueType value)
     {
-        return insert(new SymbolInfoChain<valueType>(key, value));
+        return insert(new SymbolInfo<valueType>(key, value));
     }
 
-    SymbolInfoChain<valueType> *find(string key)
+    SymbolInfo<valueType> *find(string key)
     {
-        int bucket_index = SymbolInfoChain<valueType>(key, valueType()).hashCode() % total_bucket;
-        SymbolInfoChain<valueType> *currentSymbolInfo = bucket[bucket_index];
+        int bucket_index = SymbolInfo<valueType>(key, valueType()).hashCode() % total_bucket;
+        SymbolInfo<valueType> *currentSymbolInfo = bucket[bucket_index];
         int index = 0;
         while (currentSymbolInfo)
         {
@@ -100,9 +100,9 @@ public:
     }
     bool erase(string key)
     {
-        int bucket_index = SymbolInfoChain<valueType>(key, valueType()).hashCode() % total_bucket;
-        SymbolInfoChain<valueType> *currentSymbolInfo = bucket[bucket_index];
-        SymbolInfoChain<valueType> *previousSymbolInfo = nullptr;
+        int bucket_index = SymbolInfo<valueType>(key, valueType()).hashCode() % total_bucket;
+        SymbolInfo<valueType> *currentSymbolInfo = bucket[bucket_index];
+        SymbolInfo<valueType> *previousSymbolInfo = nullptr;
         int index = 0;
         while (currentSymbolInfo)
         {
@@ -110,7 +110,7 @@ public:
             {
                 cerr << "Found in ScopeTable# " << getId() << " at position " << bucket_index << ", " << index << endl;
 
-                SymbolInfoChain<valueType> *nextSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
+                SymbolInfo<valueType> *nextSymbolInfo = currentSymbolInfo->getNextSymbolInfo();
 
                 if (previousSymbolInfo)
                     previousSymbolInfo->setNextSymbolInfo(nextSymbolInfo);
@@ -141,7 +141,7 @@ public:
             if (bucket[i])
             {
                 os << " "<<i << " --> ";
-                SymbolInfoChain<valueType> *currentSymbolInfo = bucket[i];
+                SymbolInfo<valueType> *currentSymbolInfo = bucket[i];
                 while (currentSymbolInfo)
                 {
                     os << (*currentSymbolInfo) << " " ;
@@ -158,7 +158,7 @@ public:
         for (int i = 0; i < ScopeTable::total_bucket; i++)
         {
             os << i << " --> ";
-            SymbolInfoChain<valueType> *currentSymbolInfo = st.bucket[i];
+            SymbolInfo<valueType> *currentSymbolInfo = st.bucket[i];
             while (currentSymbolInfo)
             {
                 os << " " << (*currentSymbolInfo);

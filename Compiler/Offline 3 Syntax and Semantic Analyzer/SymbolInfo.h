@@ -1,8 +1,11 @@
 #ifndef ADDED_SYMBOLINFO
 #define ADDED_SYMBOLINFO
 
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
+
+#include "Info.h"
+
 /*
         Stores (key ,value , nextSymbolInfo pointer in hashtable)
         Actually represents List of SymbolInfo , so when deleted everething this Object points to also deleted
@@ -11,19 +14,19 @@ using namespace std;
         cascaded delete is used , everything this object points also get deleted 
     */
 template <typename valueType>
-class SymbolInfoChain
+class SymbolInfo
 {
 
 private:
     string key;
     valueType value;
-    SymbolInfoChain<valueType> *nextSymbolInfo;
+    SymbolInfo<valueType> *nextSymbolInfo;
 
 public:
-    SymbolInfoChain(string key, valueType value, SymbolInfoChain *nextSymbolInfo = nullptr) : key(key), value(value), nextSymbolInfo(nextSymbolInfo)
+    SymbolInfo(string key, valueType value, SymbolInfo *nextSymbolInfo = nullptr) : key(key), value(value), nextSymbolInfo(nextSymbolInfo)
     {
     }
-    ~SymbolInfoChain()
+    ~SymbolInfo()
     {
         if (nextSymbolInfo)
             delete nextSymbolInfo;
@@ -45,16 +48,29 @@ public:
         return value;
     }
 
-    SymbolInfoChain<valueType> *getNextSymbolInfo() const
+    void push_back(SymbolInfo<valueType> * newSymbolInfo)
+    {
+        SymbolInfo<valueType> * prev  , * now ;
+        now = this;
+        while (now)
+        {
+            prev = now;
+            now = now->getNextSymbolInfo();
+            
+        }
+        prev ->setNextSymbolInfo(newSymbolInfo);
+    }
+
+    SymbolInfo<valueType> *getNextSymbolInfo() const
     {
         return nextSymbolInfo;
     }
-    void setNextSymbolInfo(SymbolInfoChain<valueType> *nextSymbolInfo)
+    void setNextSymbolInfo(SymbolInfo<valueType> *nextSymbolInfo)
     {
         this->nextSymbolInfo = nextSymbolInfo;
     }
 
-    friend ostream &operator<<(ostream &os, const SymbolInfoChain &sym)
+    friend ostream &operator<<(ostream &os, const SymbolInfo &sym)
     {
         os << string("< ") << sym.getName() << " : " << sym.getType() << ">";
         return os;

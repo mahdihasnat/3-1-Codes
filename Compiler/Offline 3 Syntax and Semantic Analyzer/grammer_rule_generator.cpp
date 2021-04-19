@@ -8,8 +8,12 @@ int main()
 
 	string from ;
 
+	set<string > non_terminals;
+
 	while(cin>>from)
 	{
+		
+		non_terminals.insert(from);
 
 		bool first_rule = 1;
 		
@@ -37,7 +41,7 @@ int main()
 					end_rule = 1;
 					break ;
 				}
-				else rhts.push_back(x);
+				else rhts.push_back(x) , non_terminals.insert(x);
 
 			}
 
@@ -55,10 +59,24 @@ int main()
 				cout<<endl;
 				cout<<"\t{\n";
 				cout<<"\t\tlogstream<<\"\\nAt line no: \"<<yylineno<<\" "<<from<<" :";
-				for(string s: rhts)
+				for(string s: rhts){
 					cout<<" "<<s;
+					if(s=="LCURL")
+						cout<<"{symboltable->enterScope();}";
+					else if(s=="RCURL")
+						cout<<"{symboltable->printNonEmptyBuckets(logstream); symboltable->exitScope();}";
+				}
 				
 				cout<<"\"<<endl;"<<endl;
+
+				if(rhts.size())
+				{
+					for(int i=1;i<rhts.size();i++)
+						cout<<"\t\t$"<<i<<" -> push_back( $"<<i+1<<" );\n";
+					cout<<"\t\t$$ = $1;\n";
+				}
+				else cout<<"\t\t$$=nullptr;\n";
+
 				cout<<"\t}";
 				cout<<endl;
 			}
@@ -80,5 +98,8 @@ int main()
 
 
 	}
+
+	for(string s: non_terminals)
+		cout<<"%type <symbolInfoPointer> "<<s<<"\n";
 
 }

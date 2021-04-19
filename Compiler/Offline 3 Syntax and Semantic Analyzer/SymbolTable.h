@@ -52,12 +52,12 @@ public:
         }
     }
 
-    SymbolInfoChain<valueType> *lookUp(string key)
+    SymbolInfo<valueType> *lookUp(string key)
     {
         ScopeTable<valueType> *current = getCurrentScopeTable();
         while (current)
         {
-            SymbolInfoChain<valueType> *now = current->find(key);
+            SymbolInfo<valueType> *now = current->find(key);
             if (now)
                 return now;
             current = current->getParentScopeTable();

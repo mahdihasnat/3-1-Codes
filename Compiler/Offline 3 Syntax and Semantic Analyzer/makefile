@@ -16,23 +16,21 @@ l.o : y.tab.h scanner.l
 	${LEX}  scanner.l
 	${CC} ${CPPFLAGS} -c -o l.o lex.yy.c
 
-y.o: parser.y SymbolTable.h
-	${YACC} -d -y parser.y
+y.o: parser.y SymbolTable.h SymbolInfo.h ScopeTable.h
+	${YACC} -d -y --report=all parser.y
 	${CC} ${CPPFLAGS} -c -o y.o y.tab.c
 
 a.out: l.o y.o
 	${CC} ${CPPFLAGS} y.o l.o -lfl
 
 run:
-#valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt log.txt error.txt
-	./a.out input.txt log.txt error.txt
+	valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt log.txt error.txt
+#./a.out input.txt log.txt error.txt
 
 clean: 
 	rm -f *.out
 	rm -f *.o
 	rm -f lex.yy.c
-	rm -f lex.yy.cpp
-	rm -f y.tab.cpp
 	rm -f y.tab.c
-	rm -f y.tab.hpp
 	rm -f y.tab.h
+	rm -f y.output
