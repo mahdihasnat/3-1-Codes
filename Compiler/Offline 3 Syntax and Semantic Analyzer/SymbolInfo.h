@@ -43,6 +43,11 @@ public:
     }
     int hashCode()
     {
+        return hashCodeImpl(key);
+    }
+
+    static int hashCodeImpl(string key)
+    {
         int total_ascii = 0;
         for (char c : key)
             total_ascii += c;
@@ -56,6 +61,10 @@ public:
     valueType getType() const
     {
         return value;
+    }
+    valueType * getTypeLocation()
+    {
+        return &value;
     }
 
     void push_back(SymbolInfo<valueType> * newSymbolInfo)

@@ -62,7 +62,7 @@ public:
                 return now;
             current = current->getParentScopeTable();
         }
-        cerr << key << " not found in SymbolTable" << endl;
+        //cerr << key << " not found in SymbolTable" << endl;
         return nullptr;
     }
     bool insert(string key, valueType type)

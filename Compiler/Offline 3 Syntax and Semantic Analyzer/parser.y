@@ -421,12 +421,23 @@ expression_statement :  SEMICOLON
 variable :  ID
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" variable : ID"<<endl;
+		
+		$1 -> getTypeLocation()-> setReturnType(getVariableType($1 -> getName() ));
+		
 		$$ = $1;
 		print($$);
 	}
 	|  ID LTHIRD expression RTHIRD
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" variable : ID LTHIRD expression RTHIRD"<<endl;
+
+		$1 -> getTypeLocation()-> setReturnType(getVariableType($1 -> getName() ));
+		
+		if($3 -> getTypeLocation() -> getReturnType() != "INT")
+		{
+			yyerror("Non-integer Array Index index type : "+ $3 -> getTypeLocation() -> getReturnType());
+		}
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -444,6 +455,9 @@ expression :  logic_expression
 	|  variable ASSIGNOP logic_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" expression : variable ASSIGNOP logic_expression"<<endl;
+
+
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;

@@ -1,4 +1,8 @@
-Error at Line 6: Multiple Declaration of c
+Error at Line 11: Multiple Declaration of c
+
+Error at Line 12: Non-integer Array Index index type : 
+
+Error at Line 17: Undeclared Variable: b
 
 
-Total Errors: 1
+Total Errors: 3

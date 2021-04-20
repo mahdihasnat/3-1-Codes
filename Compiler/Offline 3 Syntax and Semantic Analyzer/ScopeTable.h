@@ -83,14 +83,14 @@ public:
 
     SymbolInfo<valueType> *find(string key)
     {
-        int bucket_index = SymbolInfo<valueType>(key, valueType()).hashCode() % total_bucket;
+        int bucket_index = SymbolInfo<valueType>::hashCodeImpl(key)% total_bucket;
         SymbolInfo<valueType> *currentSymbolInfo = bucket[bucket_index];
         int index = 0;
         while (currentSymbolInfo)
         {
             if (currentSymbolInfo->getName() == key)
             {
-                cerr << (*currentSymbolInfo) << " found in ScopeTable# " << getId() << " at " << bucket_index << " , " << index << endl;
+                //cerr << (*currentSymbolInfo) << " found in ScopeTable# " << getId() << " at " << bucket_index << " , " << index << endl;
                 return currentSymbolInfo;
             }
             index++;
