@@ -10,6 +10,7 @@ using namespace std;
 #define DBG(a) cerr<< "line "<<__LINE__ <<" : "<< #a <<" --> "<<(a)<<endl
 #define NL cerr<<endl
 
+#define getReturnTypeFromSIP(sip) sip -> getTypeLocation()->getReturnType()
 
 extern int yylineno;
 extern char * yytext;
@@ -56,6 +57,7 @@ void print(SymbolInfoPointer sip , ostream & out = logstream)
 
 		
 		out<< sip->getName();
+		//out<<"<"<<sip->getType()<<">";
 
 		if(isTypeSpecifier(sip))
 			out<<"  ";
@@ -89,6 +91,27 @@ void add_func_parameters(SymbolInfoPointer parameters)
 }
 
 
+bool assignAbleType(string ltype, string rtype)
+{
+	if(ltype == rtype )
+		return true;
+	else if(ltype == "INT" and rtype == "FLOAT")
+	{
+		yyerror("Type Mismatch : FLOAT to INT " );
+		return true;
+	}
+	else return false;
+}
+
+bool parseAbleArguments(Parameters lparam , Parameters rparam)
+{
+	if(lparam.size() != rparam.size())
+		return false;
+	for(int i=0;i<lparam.size();i++)
+		if(assignAbleType(lparam[i] , rparam[i]) == false)
+			return false;
+	return true;
+}
 
 Parameters calcParametersFromParameterList(SymbolInfoPointer parameters)
 {
@@ -178,6 +201,9 @@ void add_variable_declaration(SymbolInfoPointer sip)
 				
 				new_symbol->getTypeLocation()->setReturnType(type_specifier);
 				used_type_specifier = true;
+				
+				if(sip->getNextSymbolInfo() and sip->getNextSymbolInfo()->getTypeLocation()->getType()=="LTHIRD")
+					new_symbol->getTypeLocation()->setArray();
 
 				bool inserted = symboltable->insert(new_symbol); //owner of new_symbol is symboltable
 				if(!inserted)
@@ -234,7 +260,7 @@ void add_func_definition(SymbolInfoPointer returnType  , SymbolInfoPointer funcN
 
 
 
-string getVariableType(string varName)
+string getVariableType(string varName )
 {
 	SymbolInfoPointer sip = symboltable->lookUp(varName);
 	if(sip == nullptr)
@@ -242,13 +268,40 @@ string getVariableType(string varName)
 		yyerror("Undeclared Variable: "+varName);
 		return "VOID";
 	}
+	else if(sip->getTypeLocation()-> isArray())
+	{
+		yyerror("Index not used in Array : "+ varName);
+		return "ERROR";
+	}
+	else if(sip->getTypeLocation()-> isFunction())
+	{
+		yyerror("Parameters not used in Function : "+ varName);
+		return "ERROR";
+	}
 	else 
 	{
-		return sip->getTypeLocation()->getReturnType();
+		return getReturnTypeFromSIP(sip);
+	}
+}
+string getArrayType(string varName)
+{
+	SymbolInfoPointer sip = symboltable->lookUp(varName);
+	if(sip == nullptr)
+	{
+		yyerror("Undeclared Variable: "+varName);
+		return "VOID";
+	}
+	else if(sip->getTypeLocation()-> isArray())
+		return getReturnTypeFromSIP(sip);
+	else 
+	{
+		yyerror("Not an Array : "+ varName);
+		return "ERROR";
 	}
 }
 
-string getFuncType(string funcName , SymbolInfoPointer argumentList)
+
+string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 {	
 	// argument_list : arguments
 	// 			|
@@ -258,8 +311,33 @@ string getFuncType(string funcName , SymbolInfoPointer argumentList)
 	// 		| logic_expression
 	// 		;
 	
-	return "NOTIMPL";
+	Parameters params=  argumentList ?  argumentList->getTypeLocation()->getParameters() : Parameters();
+
+
+	SymbolInfoPointer ref = symboltable->lookUp(funcName);
+
+	string type = "ERROR";
+
+	if(ref == nullptr )
+		yyerror("Function not declared/defined : " + funcName);
+	else if(ref->getTypeLocation()->isFunction() == false )
+		yyerror("Not a Function: " + funcName);
+	else if(parseAbleArguments(ref->getTypeLocation()->getParameters()  , params) == false)
+		yyerror("Invalid arguments for function call: " + funcName);
+	else type =  getReturnTypeFromSIP(ref);
+
+	return type;
 }
+
+string combineArithmaticType(string type1 , string type2)
+{
+	if(type1 == "ERROR" or type2 == "ERROR")
+		return "ERROR";
+	else if(type1 == "FLOAT" or type2 == "FLOAT")
+		return "FLOAT";
+	else return "INT";
+}
+
 
 void enterScope()
 {

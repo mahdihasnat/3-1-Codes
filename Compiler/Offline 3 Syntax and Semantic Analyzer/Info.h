@@ -37,6 +37,7 @@ private:
 	string type ;
 	Parameters parameters;
 	bool is_func = false;
+	bool is_array = false;
 	string returnType;
 public:
 	Info( string type) : type(type)
@@ -64,10 +65,32 @@ public:
 	{
 		return parameters;
 	}
+
+	Parameters * getParametersLocation()
+	{
+		return &parameters;
+	}
+
+	bool isFunction()
+	{
+		return is_func;
+	}
+
 	void setFunction()
 	{
 		is_func = true;
 	}
+
+	bool isArray()
+	{
+		return is_array;
+	}
+	void setArray()
+	{
+		is_array = true;
+	}
+
+	
 	
 	~Info()
 	{

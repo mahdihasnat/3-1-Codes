@@ -406,6 +406,9 @@ statement :  var_declaration
 expression_statement :  SEMICOLON
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" expression_statement : SEMICOLON"<<endl;
+		
+		$1->getTypeLocation()->setReturnType("VOID");
+
 		$$ = $1;
 		print($$);
 	}
@@ -431,9 +434,9 @@ variable :  ID
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" variable : ID LTHIRD expression RTHIRD"<<endl;
 
-		$1 -> getTypeLocation()-> setReturnType(getVariableType($1 -> getName() ));
+		$1 -> getTypeLocation()-> setReturnType(getArrayType($1 -> getName()  ));
 		
-		if($3 -> getTypeLocation() -> getReturnType() != "INT")
+		if(getReturnTypeFromSIP($3) != "INT")
 		{
 			yyerror("Non-integer Array Index index type : "+ $3 -> getTypeLocation() -> getReturnType());
 		}
@@ -456,7 +459,14 @@ expression :  logic_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" expression : variable ASSIGNOP logic_expression"<<endl;
 
+		string type1 = getReturnTypeFromSIP($1);
+		string type2 = getReturnTypeFromSIP($3);
 
+		if(type1  != type2 )
+			yyerror("Type Mismatch : "+type1 + " " + $2 -> getName() + " " + type2);
+			
+		$1 -> getTypeLocation() -> setReturnType(type1);
+		
 
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
@@ -474,6 +484,18 @@ logic_expression :  rel_expression
 	|  rel_expression LOGICOP rel_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" logic_expression : rel_expression LOGICOP rel_expression"<<endl;
+
+		string type1  = $1->getTypeLocation()->getReturnType();
+		string type2  = $3->getTypeLocation()->getReturnType();
+		string resultType = "ERROR";
+
+		if(type1!="INT" or type2 != "INT" )
+			yyerror("Type mismatch of Logic operation : " + type1 + " "+ $2 ->getTypeLocation()->getType() +  " " + type2);
+		else 
+			resultType = "INT";
+
+		$1 -> getTypeLocation() -> setReturnType(resultType);
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -484,12 +506,25 @@ logic_expression :  rel_expression
 rel_expression :  simple_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" rel_expression : simple_expression"<<endl;
+
 		$$ = $1;
 		print($$);
 	}
 	|  simple_expression RELOP simple_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" rel_expression : simple_expression RELOP simple_expression"<<endl;
+
+		string type1 = getReturnTypeFromSIP($1);
+		string type2 = getReturnTypeFromSIP($3);
+		string resultType = "ERROR";
+
+		if(type1 == "ERROR" or type2 == "ERROR" or type1 == "VOID" or type2 == "VOID" )
+			yyerror("Type mismatch of relational operation : " + type1 + " "+ $2 ->getTypeLocation()->getType() +  " " + type2);
+		else 
+			resultType = "INT";
+		
+		$1 -> getTypeLocation() -> setReturnType(resultType);
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -506,6 +541,9 @@ simple_expression :  term
 	|  simple_expression ADDOP term
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" simple_expression : simple_expression ADDOP term"<<endl;
+
+		$1 -> getTypeLocation() -> setReturnType( combineArithmaticType(getReturnTypeFromSIP($1) , getReturnTypeFromSIP($3)) );
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -522,6 +560,21 @@ term :  unary_expression
 	|  term MULOP unary_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" term : term MULOP unary_expression"<<endl;
+
+		string type1 = getReturnTypeFromSIP($1);
+		string type2 = getReturnTypeFromSIP($3);
+		string resultType  = "ERROR";
+		if($2 -> getName() == "%")
+		{
+			if(type1 != "INT" or type2 != "INT")
+				yyerror("Integer operand on modulus operator : "+type1+" % "+type2);
+			else resultType = "INT";
+		}
+		else 
+			resultType  = combineArithmaticType(type1 , type2);
+	
+		$1 -> getTypeLocation() -> setReturnType( resultType);
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -532,6 +585,16 @@ term :  unary_expression
 unary_expression :  ADDOP unary_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : ADDOP unary_expression"<<endl;
+
+		string resultType = "ERROR";
+		if(getReturnTypeFromSIP($2) == "VOID")
+			yyerror("Type Mismatch : PLUS VOID");
+		else 
+			resultType = getReturnTypeFromSIP($2);
+
+		$1 -> getTypeLocation() -> setReturnType( resultType);
+		
+
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
@@ -539,6 +602,15 @@ unary_expression :  ADDOP unary_expression
 	|  NOT unary_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" unary_expression : NOT unary_expression"<<endl;
+
+		string type = $2->getTypeLocation() -> getReturnType();
+		string resultType =  assignAbleType("INT" , type) ? "INT" : "ERROR";
+
+		if(resultType == "ERROR")
+			yyerror("Type Mismatch : NOT "+ type);
+
+		$1 -> getTypeLocation() -> setReturnType( resultType );
+
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
@@ -560,6 +632,9 @@ factor :  variable
 	|  ID LPAREN argument_list RPAREN
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" factor : ID LPAREN argument_list RPAREN"<<endl;
+
+		$1 -> getTypeLocation() -> setReturnType( getFuncReturnType($1 -> getName() , $3) );
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -569,6 +644,9 @@ factor :  variable
 	|  LPAREN expression RPAREN
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" factor : LPAREN expression RPAREN"<<endl;
+
+		$1 -> getTypeLocation()->setReturnType( getReturnTypeFromSIP($2));
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -577,18 +655,28 @@ factor :  variable
 	|  CONST_INT
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" factor : CONST_INT"<<endl;
+
+		$1->getTypeLocation() -> setReturnType("INT");
+
 		$$ = $1;
 		print($$);
 	}
 	|  CONST_FLOAT
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" factor : CONST_FLOAT"<<endl;
+
+		$1->getTypeLocation() -> setReturnType("FLOAT");
+
 		$$ = $1;
 		print($$);
 	}
 	|  variable INCOP
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" factor : variable INCOP"<<endl;
+
+		if(getReturnTypeFromSIP($1) != "INT" and getReturnTypeFromSIP($1) != "FLOAT" )
+			yyerror("Type Mismatch : "+ getReturnTypeFromSIP($1) + " INCOP");
+
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
@@ -596,6 +684,10 @@ factor :  variable
 	|  variable DECOP
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" factor : variable DECOP"<<endl;
+
+		if(getReturnTypeFromSIP($1) != "INT" and getReturnTypeFromSIP($1) != "FLOAT" )
+			yyerror("Type Mismatch : "+ getReturnTypeFromSIP($1) + " DECOP");
+
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
@@ -619,6 +711,9 @@ argument_list :  arguments
 arguments :  arguments COMMA logic_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" arguments : arguments COMMA logic_expression"<<endl;
+
+		$1 -> getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($3));
+
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -627,6 +722,7 @@ arguments :  arguments COMMA logic_expression
 	|  logic_expression
 	{
 		logstream<<"\nAt line no: "<<yylineno<<" arguments : logic_expression"<<endl;
+		$1 -> getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($1));
 		$$ = $1;
 		print($$);
 	}
