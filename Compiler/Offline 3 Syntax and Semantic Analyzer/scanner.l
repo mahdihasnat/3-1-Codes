@@ -178,8 +178,10 @@ ADDOP [+\-]
 	// + , - ADDOP
 MULOP [*/%]
 	//*, /, % MULOP
-INCOP ("++")|("--")
-	//++, - - INCOP
+INCOP ("++")
+	//++,  INCOP
+DECOP ("--")
+	// -- , DECOP
 RELOP ([<>]=?)|([=!]=)
 	//<, <=, >, >=, ==, != RELOP
 LOGICOP "&&"|"||"
@@ -330,6 +332,15 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 
 					return CONST_CHAR;
 				}
+"printf"	{
+		yylval.symbolInfoPointer = processsToken("PRINTLN", yytext );
+
+		#ifdef LEXICAL_OUTPUT_ENABLED
+			logstream<<"\nLine no "<<yylineno<<": Token <PRINTLN> Lexeme "<<yytext<<" found\n";
+		#endif
+
+		return PRINTLN;
+	}
 "if"	{
 		yylval.symbolInfoPointer = processsToken("IF", yytext );
 
@@ -608,6 +619,17 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 
 
 				return INCOP;
+			}
+{DECOP}		{
+				yylval.symbolInfoPointer = processsToken("DECOP",string(yytext));
+                
+				#ifdef LEXICAL_OUTPUT_ENABLED
+                	logstream<<"\nLine no "<< yylineno <<": Token <DECOP> Lexeme "<<yytext<<" found\n";
+				#endif
+
+
+
+				return DECOP;
 			}
 {RELOP}		{
 

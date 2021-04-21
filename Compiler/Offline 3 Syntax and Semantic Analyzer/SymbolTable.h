@@ -29,7 +29,7 @@ public:
         ScopeTable<valueType> *parentScopeTable = currentScopeTable;
         currentScopeTable = new ScopeTable<valueType>(parentScopeTable, nextNewChild);
         nextNewChild = 1;
-        logstream << "\nNew ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
+        //logstream << "\nNew ScopeTable with id " << currentScopeTable->getId() << " created" << endl;
     }
     void exitScope()
     {
@@ -40,7 +40,7 @@ public:
 
             ScopeTable<valueType> *parentScopeTable = currentScopeTable->getParentScopeTable();
 
-            logstream << "\nScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
+            //logstream << "\nScopeTable with id " << currentScopeTable->getId() << " removed" << endl;
             currentScopeTable->setParentScopeTable(nullptr); /// !! IMPORTANT otherwise entire symboltable will be lost
             delete currentScopeTable;
 
@@ -113,12 +113,14 @@ public:
 
     void printNonEmptyBuckets(ostream & os)
     {
+        os<<endl;
         ScopeTable<valueType> *current = getCurrentScopeTable();
         while (current)
         {
             current->printNonEmptyBuckets(os);
             current = current->getParentScopeTable();
         }
+        os<<endl;
     }
 
     friend ostream &operator<<(ostream &os, const SymbolTable &st) //print all scope table

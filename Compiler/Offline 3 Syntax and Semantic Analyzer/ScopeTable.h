@@ -150,11 +150,13 @@ public:
                 os << endl;
             }
         }
+        os<<endl;
+        os<<endl;
     }
 
     friend ostream &operator<<(ostream &os, ScopeTable &st)
     {
-        os << "ScopeTable # " << st.getId() << endl;
+        os << "\nScopeTable # " << st.getId() << endl;
         for (int i = 0; i < ScopeTable::total_bucket; i++)
         {
             os << i << " --> ";
@@ -166,6 +168,7 @@ public:
             }
             os << endl;
         }
+        os<<endl;
         return os;
     }
 

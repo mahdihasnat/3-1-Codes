@@ -24,7 +24,7 @@ a.out: l.o y.o
 	${CC} ${CPPFLAGS} y.o l.o -lfl
 
 run:
-#valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt log.txt error.txt
+# valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt log.txt error.txt
 	./a.out input.txt log.txt error.txt
 
 clean: 

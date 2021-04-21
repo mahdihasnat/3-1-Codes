@@ -91,7 +91,7 @@ public:
 
     friend ostream &operator<<(ostream &os, const SymbolInfo &sym)
     {
-        os << string("< ") << sym.getName() << " : " << sym.getType() << ">";
+        os << string("< ") << sym.getName() << " , " << sym.getType() << " >";
         return os;
     }
 };

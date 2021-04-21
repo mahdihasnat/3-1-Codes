@@ -1,24 +1,4 @@
-Error at Line 6: Multiple Declaration of c
-
-Error at Line 7: Non-integer Array Index index type : FLOAT
-
-Error at Line 8: Type Mismatch : INT = FLOAT
-
-Error at Line 9: Integer operand on modulus operator : INT % FLOAT
-
-Error at Line 9: Type Mismatch : INT = ERROR
-
-Error at Line 10: Index not used in Array : a
-
-Error at Line 10: Type Mismatch : ERROR = INT
-
-Error at Line 11: Index not used in Array : a
-
-Error at Line 11: Invalid arguments for function call: func
-
-Error at Line 12: Undeclared Variable: b
-
-Error at Line 12: Type Mismatch : VOID = INT
+Error at line 3: syntax error
 
 
-Total Errors: 11
+Total errors: 1

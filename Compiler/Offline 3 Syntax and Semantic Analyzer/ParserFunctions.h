@@ -26,8 +26,12 @@ void yyerror(const string &s)
 {
 	error_count++;
 	cout<<s<<"\n";
-	errorstream<<"Error at Line "<<yylineno<<": ";
+	
+	errorstream<<"Error at line "<<yylineno<<": ";
 	errorstream<<s<<"\n\n";
+	
+	logstream<<"\nError at line "<<yylineno<<": ";
+	logstream<<s<<"\n";
 }
 
 void yywarning(const string &s)
@@ -60,27 +64,31 @@ void print(SymbolInfoPointer sip , ostream & out = logstream)
 		//out<<"<"<<sip->getType()<<">";
 
 		if(isTypeSpecifier(sip))
-			out<<"  ";
+			out<<" ";
 		else if(
-			sip->getType().getType() == "RETURN" 
+			sip->getType().getType() == "RETURN" or
+			sip->getType().getType() == "IF" or
+			sip->getType().getType() == "WHILE" 
 		)
 			out<<" ";
-
 
 		if(sip->getType().getType() == "LCURL") padding += 2;
 
 		if(sip->getType().getType() == "SEMICOLON" or 
 				sip->getType().getType() == "LCURL" or
-					sip->getType().getType() == "RCURL" )
+					sip->getType().getType() == "RCURL" or
+					sip->getType().getType() == "ELSE" )
 		{
 			out<<endl;
+			if(sip->getTypeLocation()->getType() == "RCURL")
+				out<<"\n";
 			is_new_line = 1;
 		}
 		else is_new_line = 0;
 		
 		sip = sip->getNextSymbolInfo();
 	}
-	if(!is_new_line)
+	//if(!is_new_line)
 		out<<endl;
 }
 
@@ -95,6 +103,10 @@ bool assignAbleType(string ltype, string rtype)
 {
 	if(ltype == rtype )
 		return true;
+	else if(ltype == "FLOAT" and rtype == "INT")
+	{
+		return true;
+	}
 	else if(ltype == "INT" and rtype == "FLOAT")
 	{
 		yyerror("Type Mismatch : FLOAT to INT " );
@@ -193,7 +205,7 @@ void add_variable_declaration(SymbolInfoPointer sip)
 			
 			if(type_specifier.empty() or type_specifier == "VOID")
 			{
-				yyerror("Invalid type_specifier "+ type_specifier+" for variable "+ sip->getName());
+				yyerror("Variable type cannot be "+type_specifier);
 			}
 			else 
 			{
@@ -242,11 +254,14 @@ void add_func_declaration(SymbolInfoPointer returnType  , SymbolInfoPointer func
 	else 
 	{
 		if(
-			ref->getTypeLocation()->getParameters() != parameterTypeList or
-		 ref->getTypeLocation()->getReturnType() != returnType->getTypeLocation()->getType()
+			ref->getTypeLocation()->getParameters() != parameterTypeList 
 		)
 		{
-			yyerror("Conflicting types for function: "+ funcName->getName());
+			yyerror("Total number of arguments mismatch with declaration in function "+ funcName->getName());
+		}
+		else if(ref->getTypeLocation()->getReturnType() != returnType->getTypeLocation()->getType())
+		{
+			yyerror("Return type mismatch with function declaration in function "+funcName->getName());
 		}
 	}
 	
@@ -265,13 +280,13 @@ string getVariableType(string varName )
 	SymbolInfoPointer sip = symboltable->lookUp(varName);
 	if(sip == nullptr)
 	{
-		yyerror("Undeclared Variable: "+varName);
+		yyerror("Undeclared variable "+varName);
 		return "VOID";
 	}
 	else if(sip->getTypeLocation()-> isArray())
 	{
-		yyerror("Index not used in Array : "+ varName);
-		return "ERROR";
+		yyerror("Type mismatch, "+varName+" is an array");
+		return getReturnTypeFromSIP(sip);
 	}
 	else if(sip->getTypeLocation()-> isFunction())
 	{
@@ -288,15 +303,15 @@ string getArrayType(string varName)
 	SymbolInfoPointer sip = symboltable->lookUp(varName);
 	if(sip == nullptr)
 	{
-		yyerror("Undeclared Variable: "+varName);
+		yyerror("Undeclared variable "+varName);
 		return "VOID";
 	}
 	else if(sip->getTypeLocation()-> isArray())
 		return getReturnTypeFromSIP(sip);
 	else 
 	{
-		yyerror("Not an Array : "+ varName);
-		return "ERROR";
+		yyerror(varName + " not an array");
+		return getReturnTypeFromSIP(sip);
 	}
 }
 
@@ -319,12 +334,14 @@ string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 	string type = "ERROR";
 
 	if(ref == nullptr )
-		yyerror("Function not declared/defined : " + funcName);
+		yyerror("Undeclared function " + funcName);
 	else if(ref->getTypeLocation()->isFunction() == false )
 		yyerror("Not a Function: " + funcName);
 	else if(parseAbleArguments(ref->getTypeLocation()->getParameters()  , params) == false)
 		yyerror("Invalid arguments for function call: " + funcName);
-	else type =  getReturnTypeFromSIP(ref);
+	
+	if(ref != nullptr)
+	type =  getReturnTypeFromSIP(ref);
 
 	return type;
 }
@@ -333,6 +350,11 @@ string combineArithmaticType(string type1 , string type2)
 {
 	if(type1 == "ERROR" or type2 == "ERROR")
 		return "ERROR";
+	else if(type1 == "VOID" or type2 == "VOID")
+	{
+		yyerror("Void statement used in expression");
+		return "ERROR";
+	}
 	else if(type1 == "FLOAT" or type2 == "FLOAT")
 		return "FLOAT";
 	else return "INT";

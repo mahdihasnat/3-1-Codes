@@ -99,15 +99,15 @@ public:
 
 	friend ostream & operator <<(ostream & os ,const Info & i)
 	{
-		os<<i.returnType<<" ";
+		// os<<i.returnType<<" ";
 		os<<i.type;
-		if(i.is_func)
-		{
-			os<<"(";
-			for(auto x: i.parameters)
-				os<<" ,"<<x;
-			os<<")";
-		}
+		// if(i.is_func)
+		// {
+		// 	os<<"(";
+		// 	for(auto x: i.parameters)
+		// 		os<<" ,"<<x;
+		// 	os<<")";
+		// }
 		return os;
 	}
 };
