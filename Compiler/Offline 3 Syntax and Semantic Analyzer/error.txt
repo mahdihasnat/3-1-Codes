@@ -1,4 +1,10 @@
 Error at line 3: syntax error
 
+Error at line 4: Variable name not found after INT in function declaration
 
-Total errors: 1
+Error at line 8: syntax error
+
+Error at line 9: syntax error
+
+
+Total errors: 4

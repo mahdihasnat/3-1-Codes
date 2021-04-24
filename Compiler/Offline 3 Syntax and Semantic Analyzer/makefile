@@ -1,7 +1,7 @@
 CC = g++
 LEX = flex
 YACC = bison
-CPPFLAGS = -g
+CPPFLAGS =
 
 all: y.o l.o a.out run
 	

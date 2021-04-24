@@ -22,8 +22,8 @@ extern ofstream logstream;
 extern ofstream errorstream;
 extern YYSTYPE yylval;
 
-extern int error_count;
-void yyerror(char *);
+
+void yyerror(const string &s);
 
 string COMMENT_BUFFER;
 string STRING_BUFFER;
@@ -114,9 +114,10 @@ SymbolInfoPointer processsToken(string token , string lexeme)
 
 void processError(int line_number, string text, string reason)
 {
-	error_count++;
-  	errorstream<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
-  	logstream<<"\nError at line no "<<line_number<<": "<<reason<<" "<<text<<"\n";
+	//error_count++;
+  	//errorstream<<"\nError at line "<<line_number<<": "<<reason<<" "<<text<<"\n";
+  	//logstream<<"\nError at line "<<line_number<<": "<<reason<<" "<<text<<"\n";
+	yyerror(reason + " " + text);
 }
 
 

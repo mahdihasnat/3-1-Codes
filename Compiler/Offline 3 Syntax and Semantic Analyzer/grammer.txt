@@ -24,6 +24,7 @@ parameter_list  : parameter_list COMMA type_specifier ID
 		| parameter_list COMMA type_specifier
  		| type_specifier ID
 		| type_specifier
+		| parameter_list error
  		;
 
  		
@@ -43,6 +44,7 @@ declaration_list : declaration_list COMMA ID
  		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
  		  | ID
  		  | ID LTHIRD CONST_INT RTHIRD
+ 		  | declaration_list error 
  		  ;
  		  
 statements : statement
@@ -68,7 +70,7 @@ variable : ID
 	 | ID LTHIRD expression RTHIRD 
 	 ;
 	 
- expression : logic_expression	
+expression : logic_expression 
 	   | variable ASSIGNOP logic_expression 	
 	   ;
 			

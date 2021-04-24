@@ -217,6 +217,11 @@ parameter_list :  parameter_list COMMA type_specifier ID
 		$$ = $1;
 		print($$);
 	}
+	| parameter_list error
+	{
+		$$ = $1;
+		print($$);
+	}
 	;
 
 compound_statement :  LCURL{enterScope();} statements RCURL
@@ -302,6 +307,11 @@ declaration_list :  declaration_list COMMA ID
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
 		$$ = $1;
+		print($$);
+	}
+	| declaration_list error 
+	{
+		$$ = $1 ;
 		print($$);
 	}
 	;
