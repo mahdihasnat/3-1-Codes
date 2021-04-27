@@ -253,7 +253,11 @@ void add_func_declaration(SymbolInfoPointer returnType  , SymbolInfoPointer func
 	}
 	else 
 	{
-		if(
+		if(ref->getTypeLocation()->isFunction() == false)
+		{
+			yyerror(funcName->getName() + " redeclared as different kind of entity");
+		}
+		else if(
 			ref->getTypeLocation()->getParameters() != parameterTypeList 
 		)
 		{
