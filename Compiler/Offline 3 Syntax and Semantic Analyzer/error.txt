@@ -1,12 +1,50 @@
-Error at line 3: syntax error
+Error at line 21: Multiple Declaration of a
 
-Error at line 4: Variable name not found after INT in function declaration
+Error at line 24: Return type mismatch with function declaration in function foo3
 
-Error at line 8: syntax error
+Error at line 28: z redeclared as different kind of entity
 
-Error at line 9: syntax error
+Error at line 32: Total number of arguments mismatch with declaration in function var
 
-Error at line 10: Unrecognized character #
+Error at line 42: Variable type cannot be VOID
+
+Error at line 43: Multiple Declaration of a
+
+Error at line 43: Multiple Declaration of c
+
+Error at line 45: Type Mismatch : FLOAT to INT 
+
+Error at line 45: Type Mismatch : FLOAT to INT 
+
+Error at line 48: Type mismatch, c is an array
+
+Error at line 49: Total number of arguments mismatch in function correct_foo
+
+Error at line 51: Undeclared variable k
+
+Error at line 51: Type Mismatch : VOID = INT
+
+Error at line 52: b not an array
+
+Error at line 53: Expression inside third brackets not an integer
+
+Error at line 54: Void statement used in expression
+
+Error at line 54: Type Mismatch : INT = ERROR
+
+Error at line 57: Type Mismatch : INT = VOID
+
+Error at line 58: Type Mismatch : FLOAT to INT 
+
+Error at line 59: Modulus by Zero
+
+Error at line 60: Non-Integer operand on modulus operator
+
+Error at line 62: Undeclared function foo5
+
+Error at line 62: Type Mismatch : INT = ERROR
+
+Error at line 67: Undeclared variable h
 
 
-Total errors: 5
+Total errors: 24

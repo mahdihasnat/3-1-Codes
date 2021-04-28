@@ -254,6 +254,13 @@ var_declaration :  type_specifier declaration_list SEMICOLON
 		print($$);
 		add_variable_declaration($$);
 	}
+	| type_specifier error SEMICOLON 
+	{
+		logRule("var_declaration : type_specifier error SEMICOLON");
+		$1 -> push_back( $3 );
+		$$ = $1;
+		print($$);
+	}
 	;
 
 type_specifier :  INT
@@ -773,13 +780,13 @@ arguments :  arguments COMMA logic_expression
 int main(int argc,char *argv[])
 {
 
-	if(argc < 4 )
+	if(argc < 2 )
 	{
-		printf("Provide input.txt log.txt error.txt");
+		printf("Provide input_file [log_file=log.txt] [error_file=error.txt]");
 		exit(1);
 	}
 
-	FILE * fp , * fp2 , * fp3 ;
+	FILE * fp ;
 
 	fp=fopen(argv[1],"r");
 	if( fp == NULL)
@@ -788,14 +795,12 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 
-	
-	fp3= fopen(argv[3],"w");
-	fclose(fp3);
-	
+	string log_file = argc >= 3 ? string(argv[2]) : "log.txt";
+	string error_file = argc >= 4 ? string(argv[3]) : "error.txt";
 	
 
-	logstream.open(argv[2] , ios::out);
-	errorstream.open(argv[3] , ios::out);
+	logstream.open(log_file , ios::out);
+	errorstream.open(error_file , ios::out);
 	
 	
 

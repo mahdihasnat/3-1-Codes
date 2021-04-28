@@ -33,7 +33,8 @@ compound_statement : LCURL statements RCURL
  		    ;
  		    
 var_declaration : type_specifier declaration_list SEMICOLON
- 		 ;
+			| type_specifier error SEMICOLON
+ 		 	;
  		 
 type_specifier	: INT
  		| FLOAT

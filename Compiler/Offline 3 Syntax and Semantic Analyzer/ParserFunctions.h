@@ -25,7 +25,6 @@ SymbolInfoPointer lazy_parameters;
 void yyerror(const string &s)
 {
 	error_count++;
-	cout<<s<<"\n";
 	
 	errorstream<<"Error at line "<<yylineno<<": ";
 	errorstream<<s<<"\n\n";

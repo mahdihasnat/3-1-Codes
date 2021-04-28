@@ -5,27 +5,27 @@ CPPFLAGS =
 
 all: y.o l.o a.out run
 	
-# ${YACC} -d -y -o y.tab.cpp parser.y
-# ${LEX}  -o lex.yy.cpp scanner.l 
+# ${YACC} -d -y -o y.tab.cpp 1705003.y
+# ${LEX}  -o lex.yy.cpp 1705003.l 
 # ${CC} ${CPPFLAGS} -c -o l.o lex.yy.cpp
 # ${CC} ${CPPFLAGS} -c -o y.o y.tab.cpp
 # ${CC} ${CPPFLAGS} y.o l.o -lfl
 # ./a.out input.txt log.txt error.txt
 
-l.o : y.tab.h scanner.l 
-	${LEX}  scanner.l
+l.o : y.tab.h 1705003.l 
+	${LEX}  1705003.l
 	${CC} ${CPPFLAGS} -c -o l.o lex.yy.c
 
-y.o: parser.y SymbolTable.h SymbolInfo.h ScopeTable.h ParserFunctions.h
-	${YACC} -d -y --report=all parser.y
+y.o: 1705003.y SymbolTable.h SymbolInfo.h ScopeTable.h ParserFunctions.h
+	${YACC} -d -y --report=all 1705003.y
 	${CC} ${CPPFLAGS} -c -o y.o y.tab.c
 
 a.out: l.o y.o
 	${CC} ${CPPFLAGS} y.o l.o -lfl
 
 run:
-# valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt log.txt error.txt
-	./a.out input.txt log.txt error.txt
+#	valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt 
+	./a.out input.txt 
 
 clean: 
 	rm -f *.out
