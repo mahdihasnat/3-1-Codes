@@ -49,6 +49,7 @@ declaration_list : declaration_list COMMA ID
  		  
 statements : statement
 	   | statements statement
+	   | statements error
 	   ;
 	   
 statement : var_declaration
@@ -106,9 +107,12 @@ factor : variable
 	
 argument_list : arguments
 			  |
+			  | error
 			  ;
 	
 arguments : arguments COMMA logic_expression
 	      | logic_expression
+		  | arguments error
+		  | error logic_expression
 	      ;
  

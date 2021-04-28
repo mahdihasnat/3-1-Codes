@@ -6,5 +6,7 @@ Error at line 8: syntax error
 
 Error at line 9: syntax error
 
+Error at line 10: Unrecognized character #
 
-Total errors: 4
+
+Total errors: 5

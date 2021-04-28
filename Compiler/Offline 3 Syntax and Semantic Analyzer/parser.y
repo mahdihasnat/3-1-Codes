@@ -93,7 +93,7 @@ int error_count = 0;
 
 start :  program
 	{
-		logstream<<"\nLine "<<yylineno<<": start : program"<<endl;
+		logRule("start : program");
 		$$ = $1;
 		//print($$);
 		delete $$;
@@ -102,14 +102,14 @@ start :  program
 
 program :  program unit
 	{
-		logstream<<"\nLine "<<yylineno<<": program : program unit"<<endl;
+		logRule("program : program unit");
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
 	}
 	|  unit
 	{
-		logstream<<"\nLine "<<yylineno<<": program : unit"<<endl;
+		logRule("program : unit");
 		$$ = $1;
 		print($$);
 	}
@@ -117,19 +117,19 @@ program :  program unit
 
 unit :  var_declaration
 	{
-		logstream<<"\nLine "<<yylineno<<": unit : var_declaration"<<endl;
+		logRule("unit : var_declaration");
 		$$ = $1;
 		print($$);
 	}
 	|  func_declaration
 	{
-		logstream<<"\nLine "<<yylineno<<": unit : func_declaration"<<endl;
+		logRule("unit : func_declaration");
 		$$ = $1;
 		print($$);
 	}
 	|  func_definition
 	{
-		logstream<<"\nLine "<<yylineno<<": unit : func_definition"<<endl;
+		logRule("unit : func_definition");
 		$$ = $1;
 		print($$);
 	}
@@ -137,7 +137,7 @@ unit :  var_declaration
 
 func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON"<<endl;
+		logRule("func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -151,7 +151,7 @@ func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 	}
 	|  type_specifier ID LPAREN RPAREN SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON"<<endl;
+		logRule("func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -166,7 +166,7 @@ func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 
 func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_definition($1 , $2 , $4);} compound_statement
 	{
-		logstream<<"\nLine "<<yylineno<<": func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl;
+		logRule("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -177,7 +177,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 	}
 	|  type_specifier ID LPAREN RPAREN {add_func_definition($1 , $2 , nullptr);} compound_statement
 	{
-		logstream<<"\nLine "<<yylineno<<": func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl;
+		logRule("func_definition : type_specifier ID LPAREN RPAREN compound_statement");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -189,7 +189,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 parameter_list :  parameter_list COMMA type_specifier ID
 	{
-		logstream<<"\nLine "<<yylineno<<": parameter_list : parameter_list COMMA type_specifier ID"<<endl;
+		logRule("parameter_list : parameter_list COMMA type_specifier ID");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -198,7 +198,7 @@ parameter_list :  parameter_list COMMA type_specifier ID
 	}
 	|  parameter_list COMMA type_specifier
 	{
-		logstream<<"\nLine "<<yylineno<<": parameter_list : parameter_list COMMA type_specifier"<<endl;
+		logRule("parameter_list : parameter_list COMMA type_specifier");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -206,19 +206,20 @@ parameter_list :  parameter_list COMMA type_specifier ID
 	}
 	|  type_specifier ID
 	{
-		logstream<<"\nLine "<<yylineno<<": parameter_list : type_specifier ID"<<endl;
+		logRule("parameter_list : type_specifier ID");
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
 	}
 	|  type_specifier
 	{
-		logstream<<"\nLine "<<yylineno<<": parameter_list : type_specifier"<<endl;
+		logRule("parameter_list : type_specifier");
 		$$ = $1;
 		print($$);
 	}
 	| parameter_list error
 	{
+		logRule("parameter_list : parameter_list error");
 		$$ = $1;
 		print($$);
 	}
@@ -226,7 +227,7 @@ parameter_list :  parameter_list COMMA type_specifier ID
 
 compound_statement :  LCURL{enterScope();} statements RCURL
 	{
-		logstream<<"\nLine "<<yylineno<<": compound_statement : LCURL statements RCURL"<<endl;
+		logRule("compound_statement : LCURL statements RCURL");
 		$1 -> push_back( $3 );
 		$3 -> push_back( $4 );
 		$$ = $1;
@@ -235,7 +236,7 @@ compound_statement :  LCURL{enterScope();} statements RCURL
 	}
 	|  LCURL{enterScope();} RCURL
 	{
-		logstream<<"\nLine "<<yylineno<<": compound_statement : LCURL RCURL"<<endl;
+		logRule("compound_statement : LCURL RCURL");
 		$1 -> push_back( $3 );
 		$$ = $1;
 		print($$);
@@ -246,7 +247,7 @@ compound_statement :  LCURL{enterScope();} statements RCURL
 
 var_declaration :  type_specifier declaration_list SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": var_declaration : type_specifier declaration_list SEMICOLON"<<endl;
+		logRule("var_declaration : type_specifier declaration_list SEMICOLON");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -257,19 +258,19 @@ var_declaration :  type_specifier declaration_list SEMICOLON
 
 type_specifier :  INT
 	{
-		logstream<<"\nLine "<<yylineno<<": type_specifier : INT"<<endl;
+		logRule("type_specifier : INT");
 		$$ = $1;
 		print($$);
 	}
 	|  FLOAT
 	{
-		logstream<<"\nLine "<<yylineno<<": type_specifier : FLOAT"<<endl;
+		logRule("type_specifier : FLOAT");
 		$$ = $1;
 		print($$);
 	}
 	|  VOID
 	{
-		logstream<<"\nLine "<<yylineno<<": type_specifier : VOID"<<endl;
+		logRule("type_specifier : VOID");
 		$$ = $1;
 		print($$);
 	}
@@ -277,7 +278,7 @@ type_specifier :  INT
 
 declaration_list :  declaration_list COMMA ID
 	{
-		logstream<<"\nLine "<<yylineno<<": declaration_list : declaration_list COMMA ID"<<endl;
+		logRule("declaration_list : declaration_list COMMA ID");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -285,7 +286,7 @@ declaration_list :  declaration_list COMMA ID
 	}
 	|  declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
 	{
-		logstream<<"\nLine "<<yylineno<<": declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD"<<endl;
+		logRule("declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -296,13 +297,13 @@ declaration_list :  declaration_list COMMA ID
 	}
 	|  ID
 	{
-		logstream<<"\nLine "<<yylineno<<": declaration_list : ID"<<endl;
+		logRule("declaration_list : ID");
 		$$ = $1;
 		print($$);
 	}
 	|  ID LTHIRD CONST_INT RTHIRD
 	{
-		logstream<<"\nLine "<<yylineno<<": declaration_list : ID LTHIRD CONST_INT RTHIRD"<<endl;
+		logRule("declaration_list : ID LTHIRD CONST_INT RTHIRD");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -311,6 +312,7 @@ declaration_list :  declaration_list COMMA ID
 	}
 	| declaration_list error 
 	{
+		logRule("declaration_list : declaration_list error");
 		$$ = $1 ;
 		print($$);
 	}
@@ -318,14 +320,20 @@ declaration_list :  declaration_list COMMA ID
 
 statements :  statement
 	{
-		logstream<<"\nLine "<<yylineno<<": statements : statement"<<endl;
+		logRule("statements : statement");
 		$$ = $1;
 		print($$);
 	}
 	|  statements statement
 	{
-		logstream<<"\nLine "<<yylineno<<": statements : statements statement"<<endl;
+		logRule("statements : statements statement");
 		$1 -> push_back( $2 );
+		$$ = $1;
+		print($$);
+	}
+	| statements error
+	{
+		logRule("statements : statements error");
 		$$ = $1;
 		print($$);
 	}
@@ -351,7 +359,7 @@ statement :  var_declaration
 	}
 	|  FOR LPAREN expression_statement expression_statement expression RPAREN statement
 	{
-		logstream<<"\nLine "<<yylineno<<": statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement"<<endl;
+		logRule("statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -363,7 +371,7 @@ statement :  var_declaration
 	}
 	|  IF LPAREN expression RPAREN statement %prec SINGLE_IF
 	{
-		logstream<<"\nLine "<<yylineno<<": statement : IF LPAREN expression RPAREN statement"<<endl;
+		logRule("statement : IF LPAREN expression RPAREN statement");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -373,7 +381,7 @@ statement :  var_declaration
 	}
 	|  IF LPAREN expression RPAREN statement ELSE statement
 	{
-		logstream<<"\nLine "<<yylineno<<": statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl;
+		logRule("statement : IF LPAREN expression RPAREN statement ELSE statement");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -385,7 +393,7 @@ statement :  var_declaration
 	}
 	|  WHILE LPAREN expression RPAREN statement
 	{
-		logstream<<"\nLine "<<yylineno<<": statement : WHILE LPAREN expression RPAREN statement"<<endl;
+		logRule("statement : WHILE LPAREN expression RPAREN statement");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
@@ -395,7 +403,7 @@ statement :  var_declaration
 	}
 	|  PRINTLN LPAREN ID RPAREN SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": statement : PRINTLN LPAREN ID RPAREN SEMICOLON"<<endl;
+		logRule("statement : PRINTLN LPAREN ID RPAREN SEMICOLON");
 
 		$3 -> getTypeLocation() -> setReturnType( getVariableType( $3 -> getName() ) );
 
@@ -408,7 +416,7 @@ statement :  var_declaration
 	}
 	|  RETURN expression SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": statement : RETURN expression SEMICOLON"<<endl;
+		logRule("statement : RETURN expression SEMICOLON");
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$$ = $1;
@@ -418,7 +426,7 @@ statement :  var_declaration
 
 expression_statement :  SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": expression_statement : SEMICOLON"<<endl;
+		logRule("expression_statement : SEMICOLON");
 		
 		$1->getTypeLocation()->setReturnType("VOID");
 
@@ -427,7 +435,7 @@ expression_statement :  SEMICOLON
 	}
 	|  expression SEMICOLON
 	{
-		logstream<<"\nLine "<<yylineno<<": expression_statement : expression SEMICOLON"<<endl;
+		logRule("expression_statement : expression SEMICOLON");
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
@@ -436,7 +444,7 @@ expression_statement :  SEMICOLON
 
 variable :  ID
 	{
-		logstream<<"\nLine "<<yylineno<<": variable : ID"<<endl;
+		logRule("variable : ID");
 		
 		$1 -> getTypeLocation()-> setReturnType(getVariableType($1 -> getName() ));
 		
@@ -445,7 +453,7 @@ variable :  ID
 	}
 	|  ID LTHIRD expression RTHIRD
 	{
-		logstream<<"\nLine "<<yylineno<<": variable : ID LTHIRD expression RTHIRD"<<endl;
+		logRule("variable : ID LTHIRD expression RTHIRD");
 
 		$1 -> getTypeLocation()-> setReturnType(getArrayType($1 -> getName()  ));
 		
@@ -465,13 +473,13 @@ variable :  ID
 
 expression :  logic_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": expression : logic expression"<<endl;
+		logRule("expression : logic expression");
 		$$ = $1;
 		print($$);
 	}
 	|  variable ASSIGNOP logic_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": expression : variable ASSIGNOP logic_expression"<<endl;
+		logRule("expression : variable ASSIGNOP logic_expression");
 
 		string type1 = getReturnTypeFromSIP($1);
 		string type2 = getReturnTypeFromSIP($3);
@@ -491,13 +499,13 @@ expression :  logic_expression
 
 logic_expression :  rel_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": logic_expression : rel_expression"<<endl;
+		logRule("logic_expression : rel_expression");
 		$$ = $1;
 		print($$);
 	}
 	|  rel_expression LOGICOP rel_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": logic_expression : rel_expression LOGICOP rel_expression"<<endl;
+		logRule("logic_expression : rel_expression LOGICOP rel_expression");
 
 		string type1  = $1->getTypeLocation()->getReturnType();
 		string type2  = $3->getTypeLocation()->getReturnType();
@@ -519,14 +527,14 @@ logic_expression :  rel_expression
 
 rel_expression :  simple_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": rel_expression : simple_expression"<<endl;
+		logRule("rel_expression : simple_expression");
 
 		$$ = $1;
 		print($$);
 	}
 	|  simple_expression RELOP simple_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": rel_expression : simple_expression RELOP simple_expression"<<endl;
+		logRule("rel_expression : simple_expression RELOP simple_expression");
 
 		string type1 = getReturnTypeFromSIP($1);
 		string type2 = getReturnTypeFromSIP($3);
@@ -548,13 +556,13 @@ rel_expression :  simple_expression
 
 simple_expression :  term
 	{
-		logstream<<"\nLine "<<yylineno<<": simple_expression : term"<<endl;
+		logRule("simple_expression : term");
 		$$ = $1;
 		print($$);
 	}
 	|  simple_expression ADDOP term
 	{
-		logstream<<"\nLine "<<yylineno<<": simple_expression : simple_expression ADDOP term"<<endl;
+		logRule("simple_expression : simple_expression ADDOP term");
 
 		$1 -> getTypeLocation() -> setReturnType( combineArithmaticType(getReturnTypeFromSIP($1) , getReturnTypeFromSIP($3)) );
 
@@ -567,13 +575,13 @@ simple_expression :  term
 
 term :  unary_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": term : unary_expression"<<endl;
+		logRule("term : unary_expression");
 		$$ = $1;
 		print($$);
 	}
 	|  term MULOP unary_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": term : term MULOP unary_expression"<<endl;
+		logRule("term : term MULOP unary_expression");
 
 		string type1 = getReturnTypeFromSIP($1);
 		string type2 = getReturnTypeFromSIP($3);
@@ -600,7 +608,7 @@ term :  unary_expression
 
 unary_expression :  ADDOP unary_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": unary_expression : ADDOP unary_expression"<<endl;
+		logRule("unary_expression : ADDOP unary_expression");
 
 		string resultType = "ERROR";
 		if(getReturnTypeFromSIP($2) == "VOID")
@@ -617,7 +625,7 @@ unary_expression :  ADDOP unary_expression
 	}
 	|  NOT unary_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": unary_expression : NOT unary expression"<<endl;
+		logRule("unary_expression : NOT unary expression");
 
 		string type = $2->getTypeLocation() -> getReturnType();
 		string resultType =  assignAbleType("INT" , type) ? "INT" : "ERROR";
@@ -633,7 +641,7 @@ unary_expression :  ADDOP unary_expression
 	}
 	|  factor
 	{
-		logstream<<"\nLine "<<yylineno<<": unary_expression : factor"<<endl;
+		logRule("unary_expression : factor");
 		$$ = $1;
 		print($$);
 	}
@@ -641,13 +649,13 @@ unary_expression :  ADDOP unary_expression
 
 factor :  variable
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : variable"<<endl;
+		logRule("factor : variable");
 		$$ = $1;
 		print($$);
 	}
 	|  ID LPAREN argument_list RPAREN
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : ID LPAREN argument_list RPAREN"<<endl;
+		logRule("factor : ID LPAREN argument_list RPAREN");
 
 		$1 -> getTypeLocation() -> setReturnType( getFuncReturnType($1 -> getName() , $3) );
 
@@ -659,7 +667,7 @@ factor :  variable
 	}
 	|  LPAREN expression RPAREN
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : LPAREN expression RPAREN"<<endl;
+		logRule("factor : LPAREN expression RPAREN");
 
 		$1 -> getTypeLocation()->setReturnType( getReturnTypeFromSIP($2));
 
@@ -670,7 +678,7 @@ factor :  variable
 	}
 	|  CONST_INT
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : CONST_INT"<<endl;
+		logRule("factor : CONST_INT");
 
 		$1->getTypeLocation() -> setReturnType("INT");
 
@@ -679,7 +687,7 @@ factor :  variable
 	}
 	|  CONST_FLOAT
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : CONST_FLOAT"<<endl;
+		logRule("factor : CONST_FLOAT");
 
 		$1->getTypeLocation() -> setReturnType("FLOAT");
 
@@ -688,7 +696,7 @@ factor :  variable
 	}
 	|  variable INCOP
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : variable INCOP"<<endl;
+		logRule("factor : variable INCOP");
 
 		if(getReturnTypeFromSIP($1) != "INT" and getReturnTypeFromSIP($1) != "FLOAT" )
 			yyerror("Type Mismatch : "+ getReturnTypeFromSIP($1) + " INCOP");
@@ -699,7 +707,7 @@ factor :  variable
 	}
 	|  variable DECOP
 	{
-		logstream<<"\nLine "<<yylineno<<": factor : variable DECOP"<<endl;
+		logRule("factor : variable DECOP");
 
 		if(getReturnTypeFromSIP($1) != "INT" and getReturnTypeFromSIP($1) != "FLOAT" )
 			yyerror("Type Mismatch : "+ getReturnTypeFromSIP($1) + " DECOP");
@@ -712,21 +720,26 @@ factor :  variable
 
 argument_list :  arguments
 	{
-		logstream<<"\nLine "<<yylineno<<": argument_list : arguments"<<endl;
+		logRule("argument_list : arguments");
 		$$ = $1;
 		print($$);
 	}
 	| 
 	{
-		logstream<<"\nLine "<<yylineno<<": argument_list :"<<endl;
+		logRule("argument_list :");
 		$$=nullptr;
 		print($$);
+	}
+	| error
+	{
+		logRule("argument_list : error");
+		$$ = nullptr;
 	}
 	;
 
 arguments :  arguments COMMA logic_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": arguments : arguments COMMA logic_expression"<<endl;
+		logRule("arguments : arguments COMMA logic_expression");
 
 		$1 -> getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($3));
 
@@ -737,9 +750,22 @@ arguments :  arguments COMMA logic_expression
 	}
 	|  logic_expression
 	{
-		logstream<<"\nLine "<<yylineno<<": arguments : logic_expression"<<endl;
+		logRule("arguments : logic_expression");
 		$1 -> getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($1));
 		$$ = $1;
+		print($$);
+	}
+	| arguments error
+	{
+		logRule("arguments : arguments error");
+		$$ = $1;
+		print($$);
+	}
+	| error logic_expression
+	{
+		logRule("arguments : error logic_expression");
+		$$ = $2;
+		$$ ->  getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($$));
 		print($$);
 	}
 	;

@@ -47,6 +47,11 @@ inline bool isTypeSpecifier(SymbolInfoPointer sip)
 			sip->getTypeLocation()->getType() == "VOID";
 }
 
+void logRule(string rule)
+{
+	logstream<<"\nLine "<<yylineno<<": "<<rule<<endl;
+}
+
 void print(SymbolInfoPointer sip , ostream & out = logstream)
 {
 	out<<endl;
@@ -324,10 +329,13 @@ string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 {	
 	// argument_list : arguments
 	// 			|
+	//			| error
 	// 			;
 
 	// arguments : arguments COMMA logic_expression
 	// 		| logic_expression
+	// 		| arguments error
+	// 		| error logic_expression
 	// 		;
 	
 	Parameters params=  argumentList ?  argumentList->getTypeLocation()->getParameters() : Parameters();
