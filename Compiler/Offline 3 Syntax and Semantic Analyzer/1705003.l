@@ -255,9 +255,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 			yylval.symbolInfoPointer = processsToken("STRING" , STRING_BUFFER);
 
 			
-
-			cerr<<"\nLine no "<<  yylineno <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
-			cerr<<" --> <STRING, "<<row_symbol<<">\n";
+			#ifdef LEXICAL_OUTPUT_ENABLED 
+				logstream<<"\nLine no "<<  yylineno <<": Token <STRING> Lexeme "<<STRING_BUFFER<<" found";
+				logstream<<" --> <STRING, "<<row_symbol<<">\n";
+			#endif
 
 			STRING_BUFFER.clear();
 			BEGIN INITIAL;
@@ -334,8 +335,10 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 					ascii_symbol = get_row_char(ascii_symbol);
 
 					yylval.symbolInfoPointer = processsToken("CONST_CHAR" , ascii_symbol);
-					cerr<<"\nLine no "<< yylineno <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
-					
+
+					#ifdef LEXICAL_OUTPUT_ENABLED 
+						cerr<<"\nLine no "<< yylineno <<": Token <CONST_CHAR> Lexeme "<<symbol<<"found --> <CHAR_CONST, "<<ascii_symbol<<"> \n";
+					#endif
 					
 
 					return CONST_CHAR;

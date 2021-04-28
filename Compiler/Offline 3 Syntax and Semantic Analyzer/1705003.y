@@ -133,6 +133,12 @@ unit :  var_declaration
 		$$ = $1;
 		print($$);
 	}
+	| error SEMICOLON
+	{
+		logRule("unit :  error SEMICOLON");
+		$$  = $2;
+		print($$);
+	}
 	;
 
 func_declaration :  type_specifier ID LPAREN parameter_list RPAREN SEMICOLON

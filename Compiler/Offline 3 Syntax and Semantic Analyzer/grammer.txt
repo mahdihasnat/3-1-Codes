@@ -9,6 +9,7 @@ program : program unit
 unit : var_declaration
      | func_declaration
      | func_definition
+	 | error SEMICOLON
      ;
      
 func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
