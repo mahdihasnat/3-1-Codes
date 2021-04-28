@@ -349,6 +349,8 @@ string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 		yyerror("Undeclared function " + funcName);
 	else if(ref->getTypeLocation()->isFunction() == false )
 		yyerror("Not a Function: " + funcName);
+	else if(ref->getTypeLocation()->getParameters().size() != params.size())
+		yyerror("Total number of arguments mismatch in function "+funcName);
 	else if(parseAbleArguments(ref->getTypeLocation()->getParameters()  , params) == false)
 		yyerror("Invalid arguments for function call: " + funcName);
 	

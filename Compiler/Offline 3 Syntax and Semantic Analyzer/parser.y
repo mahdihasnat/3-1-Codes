@@ -341,19 +341,19 @@ statements :  statement
 
 statement :  var_declaration
 	{
-		logstream<<"Line "<<yylineno<<": statement : var_declaration"<<endl;
+		logRule("statement : var_declaration");
 		$$ = $1;
 		print($$);
 	}
 	|  expression_statement
 	{
-		logstream<<"Line "<<yylineno<<": statement : expression_statement"<<endl;
+		logRule("statement : expression_statement");
 		$$ = $1;
 		print($$);
 	}
 	|  compound_statement
 	{
-		logstream<<"Line "<<yylineno<<": statement : compound_statement"<<endl;
+		logRule("statement : compound_statement");
 		$$ = $1;
 		print($$);
 	}

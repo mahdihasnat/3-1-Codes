@@ -303,6 +303,13 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 	}
 {CONST_FLOAT}	{
 		string symbol = string(yytext);
+
+		stringstream ss;
+		ss<<setprecision(2)<<fixed<<atof(yytext);
+		string formated_symbol = ss.str();
+
+		symbol = formated_symbol;
+
 		yylval.symbolInfoPointer = processsToken("CONST_FLOAT" ,symbol );
 
 		#ifdef LEXICAL_OUTPUT_ENABLED

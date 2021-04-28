@@ -157,6 +157,7 @@ Line 8: var_declaration : type_specifier declaration_list SEMICOLON
 
 int x,z;
 
+
 Line 8: statement : var_declaration
 
 int x,z;
@@ -269,6 +270,7 @@ x=2
 Line 11: expression_statement : expression SEMICOLON
 
 x=2;
+
 
 Line 11: statement : expression_statement
 
