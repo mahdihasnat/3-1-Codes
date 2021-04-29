@@ -1,4 +1,3 @@
-
 Line 1: type_specifier : INT
 
 int 
@@ -196,6 +195,7 @@ Line 9: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.1
  9 --> < c , ID > 
  10 --> < d , ID > 
@@ -210,8 +210,6 @@ ScopeTable # 1
  8 --> < func , ID > 
  15 --> < foo3 , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 9: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -329,6 +327,7 @@ Line 13: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.2
  7 --> < a , ID > 
  8 --> < b , ID > 
@@ -344,8 +343,6 @@ ScopeTable # 1
  8 --> < func , ID > 
  15 --> < foo3 , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 13: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -448,6 +445,7 @@ Line 18: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.3
  7 --> < a , ID > 
 
@@ -463,8 +461,6 @@ ScopeTable # 1
  15 --> < foo3 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 18: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -600,6 +596,7 @@ Line 22: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.4
  7 --> < a , ID > 
  8 --> < b , ID > 
@@ -617,8 +614,6 @@ ScopeTable # 1
  15 --> < foo3 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 22: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -739,6 +734,7 @@ Line 26: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.5
  7 --> < a , ID > 
  8 --> < b , ID > 
@@ -756,8 +752,6 @@ ScopeTable # 1
  15 --> < foo3 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 26: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -869,6 +863,7 @@ Line 30: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.6
  10 --> < d , ID > 
 
@@ -885,8 +880,6 @@ ScopeTable # 1
  15 --> < foo3 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 30: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -1002,6 +995,7 @@ Line 34: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.7
  7 --> < a , ID > 
 
@@ -1018,8 +1012,6 @@ ScopeTable # 1
  15 --> < foo3 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 34: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -1153,6 +1145,7 @@ Line 38: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.8
  7 --> < a , ID > 
 
@@ -1170,8 +1163,6 @@ ScopeTable # 1
  16 --> < foo4 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 38: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -2855,6 +2846,7 @@ Line 71: compound_statement : LCURL statements RCURL
 
 
 
+
 ScopeTable # 1.9
  7 --> < a , ID > 
  8 --> < b , ID > 
@@ -2876,8 +2868,6 @@ ScopeTable # 1
  16 --> < foo4 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
-
 
 
 Line 71: func_definition : type_specifier ID LPAREN RPAREN compound_statement
@@ -2997,6 +2987,7 @@ int main(){
 Line 72: start : program
 
 
+
 ScopeTable # 1
  0 --> < x , ID > 
  1 --> < y , ID > < main , ID > 
@@ -3009,7 +3000,6 @@ ScopeTable # 1
  16 --> < foo4 , ID > 
  24 --> < foo , ID > 
  29 --> < var , ID > 
-
 
 
 

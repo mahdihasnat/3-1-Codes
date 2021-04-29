@@ -58,6 +58,7 @@ statement : var_declaration
 	  | expression_statement
 	  | compound_statement
 	  | FOR LPAREN expression_statement expression_statement expression RPAREN statement
+	  |  FOR LPAREN expression_statement expression_statement RPAREN statement
 	  | IF LPAREN expression RPAREN statement
 	  | IF LPAREN expression RPAREN statement ELSE statement
 	  | WHILE LPAREN expression RPAREN statement

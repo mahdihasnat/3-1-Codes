@@ -29,8 +29,8 @@ void yyerror(const string &s)
 	errorstream<<"Error at line "<<yylineno<<": ";
 	errorstream<<s<<"\n\n";
 	
-	logstream<<"\nError at line "<<yylineno<<": ";
-	logstream<<s<<"\n";
+	logstream<<"Error at line "<<yylineno<<": ";
+	logstream<<s<<"\n\n";
 }
 
 void yywarning(const string &s)
@@ -48,18 +48,23 @@ inline bool isTypeSpecifier(SymbolInfoPointer sip)
 
 void logRule(string rule)
 {
-	logstream<<"\nLine "<<yylineno<<": "<<rule<<endl;
+	logstream<<"Line "<<yylineno<<": "<<rule<<endl<<endl;
 }
 
 void print(SymbolInfoPointer sip , ostream & out = logstream)
 {
-	out<<endl;
+	
 	int padding=0;
 	bool is_new_line = 1;
+	int total_curl_brace = 0;
+	int total_parentheses = 0;
+	int last_for_parentheses = -1;
 	while (sip)
 	{
-		
-		if(sip->getType().getType() == "RCURL") padding-=2;
+
+		string type = sip->getType().getType();
+
+		if(type == "RCURL") padding-=2;
 
 		if(is_new_line)	out<<string(padding , ' ');
 
@@ -70,22 +75,34 @@ void print(SymbolInfoPointer sip , ostream & out = logstream)
 		if(isTypeSpecifier(sip))
 			out<<" ";
 		else if(
-			sip->getType().getType() == "RETURN" or
-			sip->getType().getType() == "IF" or
-			sip->getType().getType() == "WHILE" 
+			type == "RETURN" or
+			type == "IF" or
+			type == "WHILE" 
 		)
 			out<<" ";
 
-		if(sip->getType().getType() == "LCURL") padding += 2;
+		if(type == "LCURL") padding += 2;
 
-		if(sip->getType().getType() == "SEMICOLON" or 
-				sip->getType().getType() == "LCURL" or
-					sip->getType().getType() == "RCURL" or
-					sip->getType().getType() == "ELSE" )
+		if(type == "LCURL") total_curl_brace++;
+		if(type == "RCURL") total_curl_brace--;
+
+		if(type == "LPAREN") total_parentheses++;
+		if(type == "RPAREN") total_parentheses--;
+
+		if(type == "FOR")
+			last_for_parentheses = total_parentheses + 1;
+
+		if(type == "SEMICOLON" or 
+				type == "LCURL" or
+					type == "RCURL" or
+					type == "ELSE" )
 		{
-			out<<endl;
-			if(sip->getTypeLocation()->getType() == "RCURL")
-				out<<"\n";
+			if(type != "SEMICOLON" or total_parentheses != last_for_parentheses )
+				out<<endl;
+
+			if(type == "RCURL" and total_curl_brace == 0)
+				out<<endl;
+
 			is_new_line = 1;
 		}
 		else is_new_line = 0;
@@ -94,6 +111,7 @@ void print(SymbolInfoPointer sip , ostream & out = logstream)
 	}
 	//if(!is_new_line)
 		out<<endl;
+	out<<endl;
 }
 
 

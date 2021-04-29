@@ -120,7 +120,6 @@ public:
             current->printNonEmptyBuckets(os);
             current = current->getParentScopeTable();
         }
-        os<<endl;
     }
 
     friend ostream &operator<<(ostream &os, const SymbolTable &st) //print all scope table

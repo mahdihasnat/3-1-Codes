@@ -382,6 +382,17 @@ statement :  var_declaration
 		$$ = $1;
 		print($$);
 	}
+	|  FOR LPAREN expression_statement expression_statement RPAREN statement
+	{
+		logRule("statement : FOR LPAREN expression_statement expression_statement RPAREN statement");
+		$1 -> push_back( $2 );
+		$2 -> push_back( $3 );
+		$3 -> push_back( $4 );
+		$4 -> push_back( $5 );
+		$5 -> push_back( $6 );
+		$$ = $1;
+		print($$);
+	}
 	|  IF LPAREN expression RPAREN statement %prec SINGLE_IF
 	{
 		logRule("statement : IF LPAREN expression RPAREN statement");
