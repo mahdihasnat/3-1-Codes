@@ -1,7 +1,7 @@
 #ifndef ADDED_SYMBOLTABLE
 #define ADDED_SYMBOLTABLE
 
-#include "ScopeTable.h"
+#include "ScopeTable.hpp"
 
 extern ofstream logstream;
 

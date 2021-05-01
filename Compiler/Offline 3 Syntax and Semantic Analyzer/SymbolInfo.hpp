@@ -4,7 +4,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "Info.h"
+#include "Info.hpp"
 
 /*
         Stores (key ,value , nextSymbolInfo pointer in hashtable)

@@ -3,12 +3,12 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#include "SymbolInfo.h"
-#include "SymbolTable.h"
+#include "SymbolInfo.hpp"
+#include "SymbolTable.hpp"
 
-#include "ParserFunctions.h"
+#include "ParserFunctions.hpp"
 
-#include "Info.h"
+#include "Info.hpp"
 
 /// declared in scanner.l 
 
@@ -837,7 +837,7 @@ int main(int argc,char *argv[])
 	errorstream<<"\nTotal errors: "<<error_count<<endl;
 	
 
-	yylex_destroy();
+	//yylex_destroy();
 	delete symboltable;
 
 	fclose(fp);

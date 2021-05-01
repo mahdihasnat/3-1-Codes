@@ -16,7 +16,7 @@ l.o : y.tab.h 1705003.l
 	${LEX}  1705003.l
 	${CC} ${CPPFLAGS} -c -o l.o lex.yy.c
 
-y.o: 1705003.y SymbolTable.h SymbolInfo.h ScopeTable.h ParserFunctions.h
+y.o: 1705003.y SymbolTable.hpp SymbolInfo.hpp ScopeTable.hpp ParserFunctions.hpp
 	${YACC} -d -y --report=all 1705003.y
 	${CC} ${CPPFLAGS} -c -o y.o y.tab.c
 

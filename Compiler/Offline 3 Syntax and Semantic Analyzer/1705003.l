@@ -4,7 +4,7 @@
 %{
 
 
-#include "SymbolTable.h"
+#include "SymbolTable.hpp"
 #include "y.tab.h"
 
 #include<bits/stdc++.h>

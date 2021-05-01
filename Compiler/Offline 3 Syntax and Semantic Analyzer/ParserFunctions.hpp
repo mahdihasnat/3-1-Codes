@@ -4,8 +4,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#include "Info.h"
-#include "SymbolTable.h"
+#include "Info.hpp"
+#include "SymbolTable.hpp"
 
 #define DBG(a) cerr<< "line "<<__LINE__ <<" : "<< #a <<" --> "<<(a)<<endl
 #define NL cerr<<endl

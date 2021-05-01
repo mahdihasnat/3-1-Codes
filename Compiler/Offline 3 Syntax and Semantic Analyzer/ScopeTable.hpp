@@ -1,7 +1,7 @@
 #ifndef ADDED_SCOPETABLE
 #define ADDED_SCOPETABLE
 
-#include "SymbolInfo.h"
+#include "SymbolInfo.hpp"
 
 #include <bits/stdc++.h>
 using namespace std;
