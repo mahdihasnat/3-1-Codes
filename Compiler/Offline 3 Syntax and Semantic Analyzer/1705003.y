@@ -446,6 +446,20 @@ statement :  var_declaration
 		$$ = $1;
 		print($$);
 	}
+	| func_declaration
+	{
+		logRule("statement : func_declaration");
+		$$ = $1;
+		print($$);
+		//yyerror("Function declaration is not in global scope");
+	}
+	| func_definition
+	{
+		logRule("statement : func_definition");
+		$$ = $1;
+		print($$);
+		yyerror("Function defination is not in global scope");
+	}
 	;
 
 expression_statement :  SEMICOLON

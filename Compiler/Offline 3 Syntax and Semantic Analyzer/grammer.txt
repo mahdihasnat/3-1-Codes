@@ -64,6 +64,8 @@ statement : var_declaration
 	  | WHILE LPAREN expression RPAREN statement
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 	  | RETURN expression SEMICOLON
+	  | func_declaration
+	  | func_definition 
 	  ;
 	  
 expression_statement 	: SEMICOLON			
