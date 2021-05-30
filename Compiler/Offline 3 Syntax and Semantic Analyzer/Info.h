@@ -1,15 +1,16 @@
 #ifndef ADDED_INFO
 #define ADDED_INFO
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+
+#include "ReutrnType.h"
 
 //typedef pair<string,string> pss;
 
-typedef vector<string> Parameters;
+typedef vector<ReturnType> Parameters;
 
-#define SymbolInfoPointer SymbolInfo<Info>*
-
+#define SymbolInfoPointer SymbolInfo<Info> *
 
 // bool operator != (const Parameters &l, const Parameters & r)
 // {
@@ -30,34 +31,34 @@ typedef vector<string> Parameters;
 // 	return 1;
 // }
 
-
 class Info
 {
 private:
-	string type ;
+	string type;
 	Parameters parameters;
 	bool is_func = false;
 	bool is_array = false;
-	string returnType;
+	ReturnType returnType;
+
 public:
-	Info( string type) : type(type)
+	Info(string type) : type(type)
 	{
-			
+		returnType = Error;
 	}
 	string getType()
 	{
 		return type;
 	}
-	string getReturnType()
+	ReturnType getReturnType()
 	{
 		return returnType;
 	}
-	void setReturnType(string returnType)
+	void setReturnType(ReturnType returnType)
 	{
-		this->returnType=returnType;
+		this->returnType = returnType;
 	}
 
-	void setParameters(Parameters parameters )
+	void setParameters(Parameters parameters)
 	{
 		this->parameters = parameters;
 	}
@@ -66,7 +67,7 @@ public:
 		return parameters;
 	}
 
-	Parameters * getParametersLocation()
+	Parameters *getParametersLocation()
 	{
 		return &parameters;
 	}
@@ -90,17 +91,14 @@ public:
 		is_array = true;
 	}
 
-	
-	
 	~Info()
 	{
-
 	}
 
-	friend ostream & operator <<(ostream & os ,const Info & i)
+	friend ostream &operator<<(ostream &os, const Info &i)
 	{
 		// os<<i.returnType<<" ";
-		os<<i.type;
+		os << i.type;
 		// if(i.is_func)
 		// {
 		// 	os<<"(";

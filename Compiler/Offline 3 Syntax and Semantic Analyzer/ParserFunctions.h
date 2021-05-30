@@ -6,6 +6,7 @@ using namespace std;
 
 #include "Info.h"
 #include "SymbolTable.h"
+#include "ReutrnType.h"
 
 #define DBG(a) cerr<< "line "<<__LINE__ <<" : "<< #a <<" --> "<<(a)<<endl
 #define NL cerr<<endl
@@ -121,15 +122,15 @@ void add_func_parameters(SymbolInfoPointer parameters)
 }
 
 
-bool assignAbleType(string ltype, string rtype)
+bool assignAbleType(ReturnType ltype, ReturnType rtype)
 {
 	if(ltype == rtype )
 		return true;
-	else if(ltype == "FLOAT" and rtype == "INT")
+	else if(ltype == Float and rtype == Int)
 	{
 		return true;
 	}
-	else if(ltype == "INT" and rtype == "FLOAT")
+	else if(ltype == Int and rtype == Float)
 	{
 		yyerror("Type Mismatch : FLOAT to INT " );
 		return true;
@@ -165,7 +166,7 @@ Parameters calcParametersFromParameterList(SymbolInfoPointer parameters)
 				void_used = 1;
 				//yyerror("Invalid use of type void in parameter declaration");
 			}
-			ret.push_back(parameters->getTypeLocation()->getType());
+			ret.push_back(StringToReturnType(parameters->getTypeLocation()->getType()));
 		}
 		parameters = parameters->getNextSymbolInfo();
 	}
@@ -205,19 +206,19 @@ void add_variable_declaration(SymbolInfoPointer sip)
 	// 		;
 	if(sip == 0) return ;
 
-	string type_specifier ;
+	ReturnType type_specifier  = Error;
 	bool used_type_specifier  = false ; 
 	while (sip)
 	{
 		if(isTypeSpecifier(sip))
 		{
 			
-			if(!type_specifier.empty() and used_type_specifier == false and type_specifier != "VOID")
+			if(type_specifier != Error and used_type_specifier == false and type_specifier != Void)
 			{
-				yyerror("Variable name not found after type_specifier "+ type_specifier + " in function declaration");
+				yyerror("Variable name not found after type_specifier " + to_string(type_specifier) + " in function declaration");
 			}
 
-			type_specifier = sip->getType().getType();
+			type_specifier = StringToReturnType(sip->getType().getType());
 			used_type_specifier = false;
 		}
 			
@@ -225,9 +226,9 @@ void add_variable_declaration(SymbolInfoPointer sip)
 		if(sip->getType().getType() == "ID")
 		{
 			
-			if(type_specifier.empty() or type_specifier == "VOID")
+			if(type_specifier == Error or type_specifier == Void)
 			{
-				yyerror("Variable type cannot be "+type_specifier);
+				yyerror("Variable type cannot be "+ to_string(type_specifier));
 			}
 			else 
 			{
@@ -249,9 +250,9 @@ void add_variable_declaration(SymbolInfoPointer sip)
 		sip = sip->getNextSymbolInfo();
 	}
 
-	if(!type_specifier.empty() and used_type_specifier == false and type_specifier != "VOID")
+	if(type_specifier != Error and used_type_specifier == false and type_specifier != Void)
 	{
-		yyerror("Variable name not found after "+ type_specifier + " in function declaration");
+		yyerror("Variable name not found after "+ to_string(type_specifier) + " in function declaration");
 	}
 	
 }
@@ -267,7 +268,7 @@ void add_func_declaration(SymbolInfoPointer returnType  , SymbolInfoPointer func
 	{
 		ref = new SymbolInfo<Info>(funcName);
 		ref->getTypeLocation()->setParameters(parameterTypeList);
-		ref->getTypeLocation()->setReturnType(returnType->getTypeLocation()->getType());
+		ref->getTypeLocation()->setReturnType(StringToReturnType(returnType->getTypeLocation()->getType()));
 		ref->getTypeLocation()->setFunction();
 
 
@@ -285,7 +286,7 @@ void add_func_declaration(SymbolInfoPointer returnType  , SymbolInfoPointer func
 		{
 			yyerror("Total number of arguments mismatch with declaration in function "+ funcName->getName());
 		}
-		else if(ref->getTypeLocation()->getReturnType() != returnType->getTypeLocation()->getType())
+		else if(ref->getTypeLocation()->getReturnType() != StringToReturnType(returnType->getTypeLocation()->getType()))
 		{
 			yyerror("Return type mismatch with function declaration in function "+funcName->getName());
 		}
@@ -301,13 +302,13 @@ void add_func_definition(SymbolInfoPointer returnType  , SymbolInfoPointer funcN
 
 
 
-string getVariableType(string varName )
+ReturnType getVariableType(string varName )
 {
 	SymbolInfoPointer sip = symboltable->lookUp(varName);
 	if(sip == nullptr)
 	{
 		yyerror("Undeclared variable "+varName);
-		return "VOID";
+		return Error;
 	}
 	else if(sip->getTypeLocation()-> isArray())
 	{
@@ -317,20 +318,20 @@ string getVariableType(string varName )
 	else if(sip->getTypeLocation()-> isFunction())
 	{
 		yyerror("Parameters not used in Function : "+ varName);
-		return "ERROR";
+		return Error;
 	}
 	else 
 	{
 		return getReturnTypeFromSIP(sip);
 	}
 }
-string getArrayType(string varName)
+ReturnType getArrayType(string varName)
 {
 	SymbolInfoPointer sip = symboltable->lookUp(varName);
 	if(sip == nullptr)
 	{
 		yyerror("Undeclared variable "+varName);
-		return "VOID";
+		return Error;
 	}
 	else if(sip->getTypeLocation()-> isArray())
 		return getReturnTypeFromSIP(sip);
@@ -342,7 +343,7 @@ string getArrayType(string varName)
 }
 
 
-string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
+ReturnType getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 {	
 	// argument_list : arguments
 	// 			|
@@ -360,7 +361,7 @@ string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 
 	SymbolInfoPointer ref = symboltable->lookUp(funcName);
 
-	string type = "ERROR";
+	ReturnType type = Error;
 
 	if(ref == nullptr )
 		yyerror("Undeclared function " + funcName);
@@ -372,23 +373,23 @@ string getFuncReturnType(string funcName , SymbolInfoPointer argumentList)
 		yyerror("Invalid arguments for function call: " + funcName);
 	
 	if(ref != nullptr)
-	type =  getReturnTypeFromSIP(ref);
+		type =  getReturnTypeFromSIP(ref);
 
 	return type;
 }
 
-string combineArithmaticType(string type1 , string type2)
+ReturnType combineArithmaticType(ReturnType type1 , ReturnType type2)
 {
-	if(type1 == "ERROR" or type2 == "ERROR")
-		return "ERROR";
-	else if(type1 == "VOID" or type2 == "VOID")
+	if(type1 == Error or type2 == Error)
+		return Error;
+	else if(type1 == Void or type2 == Void)
 	{
 		yyerror("Void statement used in expression");
-		return "ERROR";
+		return Error;
 	}
-	else if(type1 == "FLOAT" or type2 == "FLOAT")
-		return "FLOAT";
-	else return "INT";
+	else if(type1 == Float or type2 == Float)
+		return Float;
+	else return Int;
 }
 
 

@@ -6,6 +6,6 @@ flex 1705003.l
 echo '3'
 g++ -w -c -o l.o lex.yy.c
 echo '4'
-g++ -o a.out y.o l.o -lfl
+g++ -o a.out y.o l.o ReturnType.cpp -lfl
 echo '5'
 ./a.out input.txt
