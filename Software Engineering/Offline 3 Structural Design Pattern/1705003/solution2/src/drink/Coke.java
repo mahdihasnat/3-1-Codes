@@ -10,7 +10,7 @@ public class Coke extends Drink {
 
     @Override
     public int getPrice() {
-        return super.getPrice();
+        return 30+ super.getPrice();
     }
 
     @Override
