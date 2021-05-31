@@ -1,7 +1,7 @@
 package src.food;
 
 public abstract class FoodDecorator implements Food {
-    private Food food;
+    private final Food food;
 
     public FoodDecorator(Food food) {
         this.food = food;
@@ -14,6 +14,6 @@ public abstract class FoodDecorator implements Food {
 
     @Override
     public String toString() {
-        return food.toString() ;
+        return food.toString();
     }
 }

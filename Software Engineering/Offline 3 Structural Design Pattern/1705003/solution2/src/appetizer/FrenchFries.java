@@ -10,6 +10,6 @@ public class FrenchFries extends Appetizer {
 
     @Override
     public String toString() {
-        return "FrenchFries with "+super.toString();
+        return "FrenchFries with " + super.toString();
     }
 }

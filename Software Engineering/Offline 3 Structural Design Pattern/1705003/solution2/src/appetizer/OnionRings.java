@@ -10,6 +10,6 @@ public class OnionRings extends Appetizer {
 
     @Override
     public String toString() {
-        return "OnionRings with "+super.toString();
+        return "OnionRings with " + super.toString();
     }
 }

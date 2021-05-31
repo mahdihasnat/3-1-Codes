@@ -10,11 +10,11 @@ public class Coffee extends Drink {
 
     @Override
     public int getPrice() {
-        return 60 + super.getPrice();
+        return 40 + super.getPrice();
     }
 
     @Override
     public String toString() {
-        return "Coffee with "+super.toString();
+        return "Coffee with " + super.toString();
     }
 }

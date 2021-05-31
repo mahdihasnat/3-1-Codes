@@ -1,12 +1,10 @@
 package src.client;
 
-import src.appetizer.FrenchFries;
-import src.appetizer.OnionRings;
-import src.drink.Coffee;
-import src.drink.Coke;
+
 import src.food.Food;
-import src.pizza.BeefPizza;
-import src.pizza.VeggiePizza;
+import src.food.FoodName;
+import src.foodfactory.FoodFactory;
+import src.foodfactory.SimpleFoodFactory;
 
 public class Client {
     public static void main(String[] args) {
@@ -18,31 +16,22 @@ public class Client {
         5. A Beef Pizza only
          */
 
+        FoodFactory foodFactory = new SimpleFoodFactory();
 
-        Food pizza = new BeefPizza();
-        pizza = new FrenchFries(pizza);
+        Food pizza = foodFactory.getFood(FoodName.BeefPizza, FoodName.FrenchFries);
         System.out.println(pizza + " $" + pizza.getPrice());
 
-        pizza = new VeggiePizza();
-        pizza = new OnionRings(pizza);
+        pizza = foodFactory.getFood(FoodName.VeggiePizza, FoodName.OnionRings);
         System.out.println(pizza + " $" + pizza.getPrice());
 
-        pizza = new VeggiePizza();
-        pizza = new FrenchFries(pizza);
-        pizza = new Coke(pizza);
+        pizza = foodFactory.getFood(FoodName.VeggiePizza, FoodName.FrenchFries, FoodName.Coke);
         System.out.println(pizza + " $" + pizza.getPrice());
 
-        pizza = new VeggiePizza();
-        pizza = new OnionRings(pizza);
-        pizza = new Coffee(pizza);
+        pizza = foodFactory.getFood(FoodName.VeggiePizza, FoodName.OnionRings, FoodName.Coffee);
         System.out.println(pizza + " $" + pizza.getPrice());
 
-
-        pizza = new BeefPizza();
+        pizza = foodFactory.getFood(FoodName.BeefPizza);
         System.out.println(pizza + " $" + pizza.getPrice());
-
-
-
 
     }
 }
