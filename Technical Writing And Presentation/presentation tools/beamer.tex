@@ -1,0 +1,105 @@
+\documentclass{beamer}
+
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{tikz}
+
+\usetheme{Copenhagen}
+
+\usecolortheme{beaver}
+
+\title{Sample Beamer}
+\subtitle{A Starting}
+\author{Mahdi Hasnat Siyam}
+\author[mahdi]{Mahdi }
+
+\institute[CSE,BUET]{BUET BUET BUET}
+\date{\today}
+
+\logo{\includegraphics[height=1cm]{buet.png}}
+
+\AtBeginSection[]
+{
+	\begin{frame}
+		\frametitle{Table of Contents}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\begin{document}
+
+	\frame{\titlepage}	
+
+	\begin{frame}
+		\frametitle{Table of Contents}
+		\tableofcontents
+	\end{frame}
+
+	\section{First Section }
+
+	\begin{frame}{Frame 1}
+		Text section in frame 1
+	\end{frame}
+
+	\section{Second Section}
+	\begin{frame}{Frame 2}
+		Text section in frame 2
+		\begin{figure}[h]
+			\centering
+			\caption{Brave browser Home Page}
+			\includegraphics[scale = 0.1]{fig1.png}
+			\label{fig:1}
+		\end{figure}
+	\end{frame}
+
+	\section{Slide Section}
+	\begin{frame}{Lists within frame}
+		\begin{itemize}
+			\item<2> Slide 1
+			\item<2-> from Slide 2
+			\item<-3> Til Slide 3
+			\item<1-4> ALl slide
+		\end{itemize}
+	\end{frame}
+
+	\section{Column Section}
+	\begin{frame}{Column example}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				Left column
+			\end{column}
+
+			\begin{column}{0.5\textwidth}
+				\alert{Right column}
+			\end{column}
+
+
+		\end{columns}
+	\end{frame}
+
+	\section{Block section}
+
+	\begin{frame}{Block example}
+		\begin{block}{Basic block}
+			samle text
+		\end{block}
+		\pause
+		\begin{alertblock}{Attention}
+			haha thanks
+		\end{alertblock}
+		\begin{example}
+			Sample example
+		\end{example}
+
+	\end{frame}
+
+	\section{Graphic drawing tools}
+	\begin{frame}{Vector based drawing tools}
+		Vector formats
+		\begin{itemize}
+			\item EPS
+			\item SVG
+		\end{itemize}
+	\end{frame}
+
+\end{document}

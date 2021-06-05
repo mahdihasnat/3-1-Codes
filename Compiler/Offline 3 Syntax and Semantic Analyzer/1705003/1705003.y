@@ -638,7 +638,7 @@ term :  unary_expression
 				if(type1 != Error and type2 != Error)
 					yyerror("Non-Integer operand on modulus operator");
 			}
-			else if( stoi($3 -> getName()) == 0)
+			else if( isZero($3 -> getName()) )
 				yyerror("Modulus by Zero");
 			else
 				resultType = Int;
@@ -659,16 +659,23 @@ unary_expression :  ADDOP unary_expression
 	{
 		logRule("unary_expression : ADDOP unary_expression");
 
+		ReturnType type = getReturnTypeFromSIP($2);
 		ReturnType resultType = Error;
-		if(getReturnTypeFromSIP($2) == Void)
-			yyerror("Type Mismatch : PLUS VOID");
-		else 
-			resultType = getReturnTypeFromSIP($2);
 
-		$1 -> getTypeLocation() -> setReturnType( resultType);
-		
+		switch (type)
+		{
+		case Void:
+			yyerror("Void statement used in expression");
+			break;
 
-		$1 -> push_back( $2 );
+		default:
+			resultType = type;
+			break;
+		}
+
+		$1->getTypeLocation()->setReturnType(resultType);
+
+		$1->push_back($2);
 		$$ = $1;
 		print($$);
 	}
@@ -676,13 +683,28 @@ unary_expression :  ADDOP unary_expression
 	{
 		logRule("unary_expression : NOT unary expression");
 
-		ReturnType type = $2->getTypeLocation() -> getReturnType();
-		ReturnType resultType =  assignAbleType(Int , type) ? Int : Error;
+		ReturnType type = $2->getTypeLocation()->getReturnType();
+		ReturnType resultType = Error;
 
-		if(resultType == Error)
-			yyerror("Type Mismatch : NOT "+ to_string(type));
+		switch (type)
+		{
+		case Void:
+			yyerror("Void statement used in expression");
+			break;
 
-		$1 -> getTypeLocation() -> setReturnType( resultType );
+		case Float:
+			yyerror("Invalid not operation for float type");
+			break;
+
+		case Int:
+			resultType = Int;
+			break;
+		
+		default:
+			break;
+		}
+
+		$1->getTypeLocation()->setReturnType(resultType);
 
 		$1 -> push_back( $2 );
 		$$ = $1;
@@ -747,8 +769,29 @@ factor :  variable
 	{
 		logRule("factor : variable INCOP");
 
-		if(getReturnTypeFromSIP($1) != Int and getReturnTypeFromSIP($1) != Float )
-			yyerror("Type Mismatch : "+ to_string(getReturnTypeFromSIP($1)) + " INCOP");
+
+		ReturnType type = getReturnTypeFromSIP($1);
+		ReturnType resultType = Error;
+
+		switch (type)
+		{
+		case Void:
+			yyerror("Void statement used in expression");
+			break;
+
+		case Int:
+		case Float:
+			resultType = type;
+			break;
+			
+		default:
+			break;
+		}
+
+		$1 -> getTypeLocation() -> setReturnType(resultType);
+
+		// if(getReturnTypeFromSIP($1) != Int and getReturnTypeFromSIP($1) != Float )
+		// 	yyerror("Type Mismatch : "+ to_string(getReturnTypeFromSIP($1)) + " INCOP");
 
 		$1 -> push_back( $2 );
 		$$ = $1;
@@ -758,8 +801,28 @@ factor :  variable
 	{
 		logRule("factor : variable DECOP");
 
-		if(getReturnTypeFromSIP($1) != Int and getReturnTypeFromSIP($1) != Float )
-			yyerror("Type Mismatch : "+ to_string(getReturnTypeFromSIP($1)) + " DECOP");
+		ReturnType type = getReturnTypeFromSIP($1);
+		ReturnType resultType = Error;
+
+		switch (type)
+		{
+		case Void:
+			yyerror("Void statement used in expression");
+			break;
+
+		case Int:
+		case Float:
+			resultType = type;
+			break;
+
+		default:
+			break;
+		}
+
+		// if(getReturnTypeFromSIP($1) != Int and getReturnTypeFromSIP($1) != Float )
+		// 	yyerror("Type Mismatch : "+ to_string(getReturnTypeFromSIP($1)) + " DECOP");
+
+		$1 -> getTypeLocation() -> setReturnType(resultType);
 
 		$1 -> push_back( $2 );
 		$$ = $1;

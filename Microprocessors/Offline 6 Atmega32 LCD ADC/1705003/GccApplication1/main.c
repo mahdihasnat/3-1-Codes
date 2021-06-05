@@ -56,8 +56,9 @@ int main(void)
 	// adif = set 1 when conversion is complete
 	// adie = 1 to enable adc interrupt
 	// adps = adc prescaler select bits
+	//      = 101 for 32			
 	
-	ADCSRA = 0b10001101;	
+	ADCSRA = 0b10001101;
 	sei();
 	ADCSRA |= 1<<ADSC;
 	

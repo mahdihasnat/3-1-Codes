@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1617634381 "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.tex" "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.pdf" "practice" 1617698745
+["pdflatex"] 1617634381 "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.tex" "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.pdf" "practice" 1622729533
   "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.aux" 1617634383 1762 615621d8a38735019331482942fb8b3c "pdflatex"
   "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.tex" 1617634380 2651 92b1189113c8228b58ad0014c712a719 ""
   "c:/texlive/2020/texmf-dist/fonts/map/fontname/texfonts.map" 1616240857 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -111,11 +111,11 @@
   "practice.toc" 1617634383 327 47d7a5c297ac5a021bca139e6702a0aa "pdflatex"
   "universe.jpg" 1617627664 28172 9d30f06d62324c2bb8ce6ebc912c5573 ""
   (generated)
-  "practice.log"
+  "practice.out"
   "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.aux"
   "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.pdf"
-  "practice.out"
-  "practice.toc"
+  "practice.pdf"
   "practice.aux"
   "c:/Users/mahdi/Desktop/New folder/3-1-Codes/Technical Writing And Presentation/sample/practice.log"
-  "practice.pdf"
+  "practice.log"
+  "practice.toc"

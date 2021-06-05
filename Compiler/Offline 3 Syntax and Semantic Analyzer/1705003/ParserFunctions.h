@@ -406,5 +406,13 @@ void exitScope()
 	symboltable->exitScope();
 }
 
+bool isZero(const string & s)
+{
+	for(const char &c: s)
+		if(c!='0' and c != '.')
+			return 0;
+	return 1;
+}
+
 
 #endif
