@@ -83,40 +83,37 @@ println PROC
     RET 2
     
 println ENDP
-f PROC
-PUSH BP
-f_exit:
-POP BP
-RET 0
-f ENDP
-foo PROC
-PUSH BP
-MOV DX , 4[BP]
-MOV DX , 6[BP]
-MOV DX , 4[BP]
-PUSH DX
-CALL PRINTLN
-foo_exit:
-POP BP
-RET 4
-foo ENDP
 main PROC
 PUSH BP
-;Line 18: DATA SEGMENT INITIALIZATION
+MOV BP , SP
+;Line 11: DATA SEGMENT INITIALIZATION
 MOV AX, @DATA
 MOV DS, AX
-;Line 16: integar = 2
-MOV DX , 2
-CMP DX , 0
-JZ not_one_1
-MOV DX , 0
-JMP not_end_0
-not_one_1:
+SUB SP , 2
+SUB SP , 2
+SUB SP , 2
+;Line 5: integar = 1
 MOV DX , 1
-not_end_0:
+MOV 0[BP] , DX
+;Line 6: integar = 2
+MOV DX , 2
+MOV -2[BP] , DX
+;Line 7: integar = 12
+MOV DX , 12
+MOV -4[BP] , DX
+MOV DX , 0[BP]
+PUSH DX
+CALL PRINTLN
+MOV DX , -2[BP]
+PUSH DX
+CALL PRINTLN
+MOV DX , -4[BP]
+PUSH DX
+CALL PRINTLN
+ADD SP , 6
 main_exit:
 POP BP
-;Line 18: EXIT 0
+;Line 11: EXIT 0
 MOV AH, 4CH
 INT 21H
 RET 0

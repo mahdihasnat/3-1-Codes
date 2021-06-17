@@ -28,6 +28,7 @@ int error_count = 0;
 vector< pair< string , int > > globals;
 
 #define FIXED_POINT_MULTIPLIER 100
+#define gTL getTypeLocation
 
 template<class T1,class T2>
 ostream & operator << ( ostream & os ,const pair<T1,T2> &p)
@@ -241,6 +242,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			code = combine(code , new Code(funcName + " PROC"));
 
 			code = combine(code , new Code("PUSH BP"));
+			code = combine(code , new Code("MOV BP , SP"));
 
 
 			if(funcName == "main")
@@ -300,17 +302,15 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			code = combine(code , new Code(funcName + " PROC"));
 
 			code = combine(code , new Code("PUSH BP"));
+			code = combine(code , new Code("MOV BP , SP"));
 
-			
-			
+
 			if(funcName == "main")
 			{
 				code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
 				code = combine(code , "MOV AX, @DATA");
 				code = combine(code , "MOV DS, AX");
 			}
-			
-
 			
 
 			code = combine(
@@ -761,6 +761,33 @@ expression :  logic_expression
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+
+		if(noerror())
+		{
+			Code * code = nullptr;
+
+			code = combine(
+				code ,
+				$3 -> getTypeLocation()->getCode()
+			);
+
+			string var_name = $1 -> getName();
+			SymbolInfoPointer ref = symboltable->lookUp(var_name);
+			assert(ref);
+			
+			if(ref -> getTypeLocation() -> isArray())
+			{
+				assert(0);// todo : implemented
+			}
+			else 
+			{
+				code = combine(code , "MOV "+getSingleVariableAddress(ref)+" , DX" );
+			}
+			
+			$$ -> getTypeLocation() -> setCode( code );
+
+		}
 	}
 	;
 

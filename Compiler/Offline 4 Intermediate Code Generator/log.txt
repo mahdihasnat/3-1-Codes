@@ -1,26 +1,252 @@
-Line 2: type_specifier : VOID
+Line 2: type_specifier : INT
 
-void 
+int 
 
-Line 4: expression_statement : SEMICOLON
+Line 4: type_specifier : INT
 
-;
+int 
+
+Line 4: declaration_list : ID
+
+a
+
+Line 4: declaration_list : declaration_list COMMA ID
+
+a,b
+
+Line 4: declaration_list : declaration_list COMMA ID
+
+a,b,c
+
+Line 4: var_declaration : type_specifier declaration_list SEMICOLON
+
+int a,b,c;
 
 
-Line 4: statement : expression_statement
+Line 4: statement : var_declaration
 
-;
+int a,b,c;
 
 
 Line 4: statements : statement
 
-;
+int a,b,c;
 
 
-Line 5: compound_statement : LCURL statements RCURL
+Line 5: variable : ID
+
+a
+
+Line 5: factor : CONST_INT
+
+1
+
+Line 5: unary_expression : factor
+
+1
+
+Line 5: term : unary_expression
+
+1
+
+Line 5: simple_expression : term
+
+1
+
+Line 5: rel_expression : simple_expression
+
+1
+
+Line 5: logic_expression : rel_expression
+
+1
+
+Line 5: expression : variable ASSIGNOP logic_expression
+
+a=1
+
+Line 5: expression_statement : expression SEMICOLON
+
+a=1;
+
+
+Line 5: statement : expression_statement
+
+a=1;
+
+
+Line 5: statements : statements statement
+
+int a,b,c;
+a=1;
+
+
+Line 6: variable : ID
+
+b
+
+Line 6: factor : CONST_INT
+
+2
+
+Line 6: unary_expression : factor
+
+2
+
+Line 6: term : unary_expression
+
+2
+
+Line 6: simple_expression : term
+
+2
+
+Line 6: rel_expression : simple_expression
+
+2
+
+Line 6: logic_expression : rel_expression
+
+2
+
+Line 6: expression : variable ASSIGNOP logic_expression
+
+b=2
+
+Line 6: expression_statement : expression SEMICOLON
+
+b=2;
+
+
+Line 6: statement : expression_statement
+
+b=2;
+
+
+Line 6: statements : statements statement
+
+int a,b,c;
+a=1;
+b=2;
+
+
+Line 7: variable : ID
+
+c
+
+Line 7: factor : CONST_INT
+
+12
+
+Line 7: unary_expression : factor
+
+12
+
+Line 7: term : unary_expression
+
+12
+
+Line 7: simple_expression : term
+
+12
+
+Line 7: rel_expression : simple_expression
+
+12
+
+Line 7: logic_expression : rel_expression
+
+12
+
+Line 7: expression : variable ASSIGNOP logic_expression
+
+c=12
+
+Line 7: expression_statement : expression SEMICOLON
+
+c=12;
+
+
+Line 7: statement : expression_statement
+
+c=12;
+
+
+Line 7: statements : statements statement
+
+int a,b,c;
+a=1;
+b=2;
+c=12;
+
+
+Line 8: variable : ID
+
+a
+
+Line 8: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(a);
+
+
+Line 8: statements : statements statement
+
+int a,b,c;
+a=1;
+b=2;
+c=12;
+println(a);
+
+
+Line 9: variable : ID
+
+b
+
+Line 9: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(b);
+
+
+Line 9: statements : statements statement
+
+int a,b,c;
+a=1;
+b=2;
+c=12;
+println(a);
+println(b);
+
+
+Line 10: variable : ID
+
+c
+
+Line 10: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(c);
+
+
+Line 10: statements : statements statement
+
+int a,b,c;
+a=1;
+b=2;
+c=12;
+println(a);
+println(b);
+println(c);
+
+
+Line 11: compound_statement : LCURL statements RCURL
 
 {
-  ;
+  int a,b,c;
+  a=1;
+  b=2;
+  c=12;
+  println(a);
+  println(b);
+  println(c);
 }
 
 
@@ -28,341 +254,67 @@ Line 5: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.1
-
-
-
-ScopeTable # 1
- 12 --> < f , ID{disp = -1} > 
-
-
-Line 5: func_definition : type_specifier ID LPAREN RPAREN compound_statement
-
-void f(){
-  ;
-}
-
-
-
-Line 5: unit : func_definition
-
-void f(){
-  ;
-}
-
-
-
-Line 5: program : unit
-
-void f(){
-  ;
-}
-
-
-
-Line 7: type_specifier : VOID
-
-void 
-
-Line 7: type_specifier : INT
-
-int 
-
-Line 7: parameter_list : type_specifier ID
-
-int x
-
-Line 7: type_specifier : INT
-
-int 
-
-Line 7: parameter_list : parameter_list COMMA type_specifier ID
-
-int x,int y
-
-Line 9: variable : ID
-
-x
-
-Line 9: factor : variable
-
-x
-
-Line 9: unary_expression : factor
-
-x
-
-Line 9: term : unary_expression
-
-x
-
-Line 9: simple_expression : term
-
-x
-
-Line 9: rel_expression : simple_expression
-
-x
-
-Line 9: logic_expression : rel_expression
-
-x
-
-Line 9: expression : logic expression
-
-x
-
-Line 9: expression_statement : expression SEMICOLON
-
-x;
-
-
-Line 9: statement : expression_statement
-
-x;
-
-
-Line 9: statements : statement
-
-x;
-
-
-Line 10: variable : ID
-
-y
-
-Line 10: factor : variable
-
-y
-
-Line 10: unary_expression : factor
-
-y
-
-Line 10: term : unary_expression
-
-y
-
-Line 10: simple_expression : term
-
-y
-
-Line 10: rel_expression : simple_expression
-
-y
-
-Line 10: logic_expression : rel_expression
-
-y
-
-Line 10: expression : logic expression
-
-y
-
-Line 10: expression_statement : expression SEMICOLON
-
-y;
-
-
-Line 10: statement : expression_statement
-
-y;
-
-
-Line 10: statements : statements statement
-
-x;
-y;
-
-
-Line 11: variable : ID
-
-x
-
-Line 11: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(x);
-
-
-Line 11: statements : statements statement
-
-x;
-y;
-println(x);
-
-
-Line 12: compound_statement : LCURL statements RCURL
-
-{
-  x;
-  y;
-  println(x);
-}
-
-
-
-
-
-ScopeTable # 1.2
- 0 --> < x , ID{disp = 4} > 
- 1 --> < y , ID{disp = 6} > 
-
-
-
-ScopeTable # 1
- 12 --> < f , ID{disp = -1} > 
- 24 --> < foo , ID{disp = -1} > 
-
-
-Line 12: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
-
-void foo(int x,int y){
-  x;
-  y;
-  println(x);
-}
-
-
-
-Line 12: unit : func_definition
-
-void foo(int x,int y){
-  x;
-  y;
-  println(x);
-}
-
-
-
-Line 12: program : program unit
-
-void f(){
-  ;
-}
-
-void foo(int x,int y){
-  x;
-  y;
-  println(x);
-}
-
-
-
-Line 14: type_specifier : INT
-
-int 
-
-Line 16: factor : CONST_INT
-
-2
-
-Line 16: unary_expression : factor
-
-2
-
-Line 16: unary_expression : NOT unary expression
-
-!2
-
-Line 16: term : unary_expression
-
-!2
-
-Line 16: simple_expression : term
-
-!2
-
-Line 16: rel_expression : simple_expression
-
-!2
-
-Line 16: logic_expression : rel_expression
-
-!2
-
-Line 16: expression : logic expression
-
-!2
-
-Line 16: expression_statement : expression SEMICOLON
-
-!2;
-
-
-Line 16: statement : expression_statement
-
-!2;
-
-
-Line 16: statements : statement
-
-!2;
-
-
-Line 18: compound_statement : LCURL statements RCURL
-
-{
-  !2;
-}
-
-
-
-
-
-ScopeTable # 1.3
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = -2} > 
+ 9 --> < c , ID{disp = -4} > 
 
 
 
 ScopeTable # 1
  1 --> < main , ID{disp = -1} > 
- 12 --> < f , ID{disp = -1} > 
- 24 --> < foo , ID{disp = -1} > 
 
 
-Line 18: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 11: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
-  !2;
+  int a,b,c;
+  a=1;
+  b=2;
+  c=12;
+  println(a);
+  println(b);
+  println(c);
 }
 
 
 
-Line 18: unit : func_definition
+Line 11: unit : func_definition
 
 int main(){
-  !2;
+  int a,b,c;
+  a=1;
+  b=2;
+  c=12;
+  println(a);
+  println(b);
+  println(c);
 }
 
 
 
-Line 18: program : program unit
-
-void f(){
-  ;
-}
-
-void foo(int x,int y){
-  x;
-  y;
-  println(x);
-}
+Line 11: program : unit
 
 int main(){
-  !2;
+  int a,b,c;
+  a=1;
+  b=2;
+  c=12;
+  println(a);
+  println(b);
+  println(c);
 }
 
 
 
-Line 18: start : program
+Line 11: start : program
 
 
 
 ScopeTable # 1
  1 --> < main , ID{disp = -1} > 
- 12 --> < f , ID{disp = -1} > 
- 24 --> < foo , ID{disp = -1} > 
 
 
 
-Total lines: 18
+Total lines: 11
 Total errors: 0
 

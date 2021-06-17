@@ -1,18 +1,11 @@
 
-void f()
-{
-	;
-}
-
-void foo(int x,int y)
-{
-	x;
-	y;
-	println(x);
-}
-
 int main()
 {
-	!2;
-	
+	int a , b, c;
+	a=1;
+	b=2;
+	c=12;
+	println(a);
+	println(b);
+	println(c);
 }
