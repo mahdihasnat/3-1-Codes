@@ -125,7 +125,6 @@ start :  program
 			new Code("END main")
 		);
 
-		DBG(*code);
 
 		ofstream codestream ;
 		codestream.open("code.asm");
@@ -720,6 +719,34 @@ logic_expression :  rel_expression
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code * code  = nullptr;
+			string op = $2 -> getName();
+			if(op == "&&")	
+			{
+				string end_label = newLabel("after_and");
+				code = combine(code , $1 -> getTypeLocation() -> getCode());
+				code = combine(code ,"CMP DX , 0");
+				code = combine(code ,"JZ "+end_label );
+				code = combine(code , $3 -> getTypeLocation() -> getCode());
+				code = combine(code , end_label + ":");
+			}
+			else if(op == "||")
+			{
+				string end_label = newLabel("after_or");
+				code = combine(code , $1 -> getTypeLocation() -> getCode());
+				code = combine(code ,"CMP DX , 0");
+				code = combine(code ,"JNZ "+end_label );
+				code = combine(code , $3 -> getTypeLocation() -> getCode());
+				code = combine(code , end_label + ":");
+			}
+			else assert(0);
+
+			$$ -> getTypeLocation()-> setCode(code);
+		}
+
 	}
 	;
 
@@ -750,6 +777,65 @@ rel_expression :  simple_expression
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			/// notice: stack is pushed for temp variable
+			
+			Code * code  = nullptr;
+			code = combine(code,Comment("Relational operator checking"));
+			code = combine(
+				code ,
+				$1 -> getTypeLocation()->getCode()
+			);
+			bool to_float = type1 ==Float or type2 == Float;
+			
+			if(to_float and type1 != Float)
+			{
+				code = combine(code , Comment("Int to float"));
+				code = combine(code , "MOV AX , DX");
+				code = combine(code , "IMUL "+to_string(FIXED_POINT_MULTIPLIER));
+				code = combine(code , "MOV DX , AX");
+			}
+
+			code = combine(code , "PUSH DX");
+				//inside push
+				code = combine(
+					code ,
+					$3 -> getTypeLocation()->getCode()
+				);
+				if(to_float and type2 != Float)
+				{
+					code = combine(code , Comment("Int to float"));
+					code = combine(code , "MOV AX , DX");
+					code = combine(code , "IMUL "+to_string(FIXED_POINT_MULTIPLIER));
+					code = combine(code , "MOV DX , AX");
+				}
+
+			code = combine(code , "POP AX");
+
+			string op = $2 -> getName();
+			string opcode = "";
+
+			if(op == "<") opcode ="JL";
+			else if(op == ">") opcode ="JG";
+			else if(op == ">=") opcode ="JGE";
+			else if(op == "<=") opcode ="JLE";
+			else if(op == "==") opcode ="JE";
+			else if(op == "!=") opcode ="JNE";
+			else assert(0);
+
+			code = combine(code , "CMP AX , DX");
+
+			string ok_label = newLabel("relop_is_ok");
+
+			code = combine(code , opcode + " " + ok_label);
+			code = combine(code , "MOV DX , 0");
+			code = combine(code , ok_label + ":");
+			code = combine(code , "MOV DX , 1");
+
+			$$ -> getTypeLocation()-> setCode(code);
+		}	
 	}
 	;
 

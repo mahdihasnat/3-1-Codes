@@ -40,14 +40,20 @@ bool noerror()
 	return error_count == 0;
 }
 
-string Comment(string comment)
-{
-	return ";Line "+to_string(yylineno) + ": "+comment;
-}
-
 void yywarning(const string &s)
 {
 
+}
+
+
+string Comment(string comment)
+{
+	return ";Line " + to_string(yylineno) + ": "+comment;
+}
+string newLabel(string prefix)
+{
+	static int counter = 0;
+	return prefix + "_" + to_string(counter ++);
 }
 
 inline bool isTypeSpecifier(SymbolInfoPointer sip)

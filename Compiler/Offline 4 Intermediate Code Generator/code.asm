@@ -42,9 +42,21 @@ ADD DX , -4
 ADD BP , DX
 MOV DX , PTR WORD [BP]
 POP BP
+;Line 25: Relational operator checking
+;Line 25: integar = 2
+MOV DX , 2
+PUSH DX
+;Line 25: integar = 3
+MOV DX , 3
+POP AX
+CMP AX , DX
+JL relop_is_ok_0
+MOV DX , 0
+relop_is_ok_0:
+MOV DX , 1
 MOV DX , x
 PUSH DX
 CALL PRINTLN
 ADD SP , 10
 main ENDP
-ENDP main
+END main

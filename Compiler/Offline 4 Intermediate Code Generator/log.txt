@@ -850,13 +850,58 @@ b[2];
 z[1];
 
 
-Line 25: variable : ID
+Line 25: factor : CONST_INT
 
-x
+2
 
-Line 25: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 25: unary_expression : factor
 
-println(x);
+2
+
+Line 25: term : unary_expression
+
+2
+
+Line 25: simple_expression : term
+
+2
+
+Line 25: factor : CONST_INT
+
+3
+
+Line 25: unary_expression : factor
+
+3
+
+Line 25: term : unary_expression
+
+3
+
+Line 25: simple_expression : term
+
+3
+
+Line 25: rel_expression : simple_expression RELOP simple_expression
+
+2<3
+
+Line 25: logic_expression : rel_expression
+
+2<3
+
+Line 25: expression : logic expression
+
+2<3
+
+Line 25: expression_statement : expression SEMICOLON
+
+2<3;
+
+
+Line 25: statement : expression_statement
+
+2<3;
 
 
 Line 25: statements : statements statement
@@ -866,10 +911,30 @@ p;
 t;
 b[2];
 z[1];
+2<3;
+
+
+Line 26: variable : ID
+
+x
+
+Line 26: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
 println(x);
 
 
-Line 26: compound_statement : LCURL statements RCURL
+Line 26: statements : statements statement
+
+int x,y,z[2],p;
+p;
+t;
+b[2];
+z[1];
+2<3;
+println(x);
+
+
+Line 27: compound_statement : LCURL statements RCURL
 
 {
   int x,y,z[2],p;
@@ -877,6 +942,7 @@ Line 26: compound_statement : LCURL statements RCURL
   t;
   b[2];
   z[1];
+  2<3;
   println(x);
 }
 
@@ -903,7 +969,7 @@ ScopeTable # 1
  26 --> < t , ID{disp = 0} > 
 
 
-Line 26: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 27: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
   int x,y,z[2],p;
@@ -911,12 +977,13 @@ int main(){
   t;
   b[2];
   z[1];
+  2<3;
   println(x);
 }
 
 
 
-Line 26: unit : func_definition
+Line 27: unit : func_definition
 
 int main(){
   int x,y,z[2],p;
@@ -924,12 +991,13 @@ int main(){
   t;
   b[2];
   z[1];
+  2<3;
   println(x);
 }
 
 
 
-Line 26: program : program unit
+Line 27: program : program unit
 
 int x,y,z,a[2],b[3];
 int q[2];
@@ -954,12 +1022,13 @@ int main(){
   t;
   b[2];
   z[1];
+  2<3;
   println(x);
 }
 
 
 
-Line 26: start : program
+Line 27: start : program
 
 
 
@@ -975,6 +1044,6 @@ ScopeTable # 1
 
 
 
-Total lines: 26
+Total lines: 27
 Total errors: 0
 
