@@ -24,6 +24,34 @@ public:
             delete currentScopeTable;
     }
 
+    int getBaseIndex()
+    {
+        if(currentScopeTable)
+            return currentScopeTable->getBaseIndex();
+        else 
+        {
+            cerr<<"Current Scope is empty\n";
+            return 0;
+        }
+    }
+
+    void addBaseIndex(int x)
+    {
+        if(currentScopeTable)
+            currentScopeTable->addBaseIndex(x);
+        else 
+        {
+            cerr<<"Current Scope is empty\n";
+        }
+    }
+
+    int currentDataSize()
+    {
+        if(currentScopeTable)
+            return currentScopeTable->currentDataSize();
+        else return 0;
+    }
+
     bool isGlobalScope()
     {
         if (currentScopeTable == nullptr)

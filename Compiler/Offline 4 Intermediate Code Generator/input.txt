@@ -2,7 +2,17 @@ int x,y,z,a[2],b[3];
 int q[2];
 int  f(int x,int y,int z)
 {
-	return x;
+	
+	{
+		int a;
+		int b[10];
+		{
+			int p;
+			{
+				int q;
+			}
+		}
+	}
 }
 float t;
 int main()

@@ -21,6 +21,8 @@ private:
     ScopeTable<valueType> *parentScopeTable;
     string id;
 
+    int base_index ;
+
 public:
     ScopeTable(ScopeTable<valueType> *parentScopeTable = 0, int current_id = 1) : parentScopeTable(parentScopeTable)
     {
@@ -30,6 +32,10 @@ public:
         if (parentScopeTable)
             id = parentScopeTable->getId() + '.';
         id += to_string(current_id);
+
+        if(parentScopeTable)
+            base_index = parentScopeTable -> getBaseIndex();
+        else base_index = 0;
     }
     ~ScopeTable()
     {
@@ -39,6 +45,23 @@ public:
 
         if (parentScopeTable)
             delete parentScopeTable;
+    }
+
+    int getBaseIndex()
+    {
+        return base_index;
+    }
+
+    void addBaseIndex(int x)
+    {
+        base_index+=x;
+    }
+
+    int currentDataSize()
+    {
+        if(parentScopeTable)
+            return parentScopeTable->getBaseIndex() - getBaseIndex();
+        else return -getBaseIndex();
     }
 
     bool isGlobalScopeTable()

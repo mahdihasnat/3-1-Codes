@@ -89,52 +89,307 @@ Line 3: parameter_list : parameter_list COMMA type_specifier ID
 
 int x,int y,int z
 
-Line 5: variable : ID
+Line 7: type_specifier : INT
 
-x
+int 
 
-Line 5: factor : variable
+Line 7: declaration_list : ID
 
-x
+a
 
-Line 5: unary_expression : factor
+Line 7: var_declaration : type_specifier declaration_list SEMICOLON
 
-x
-
-Line 5: term : unary_expression
-
-x
-
-Line 5: simple_expression : term
-
-x
-
-Line 5: rel_expression : simple_expression
-
-x
-
-Line 5: logic_expression : rel_expression
-
-x
-
-Line 5: expression : logic expression
-
-x
-
-Line 5: statement : RETURN expression SEMICOLON
-
-return x;
+int a;
 
 
-Line 5: statements : statement
+Line 7: statement : var_declaration
 
-return x;
+int a;
 
 
-Line 6: compound_statement : LCURL statements RCURL
+Line 7: statements : statement
+
+int a;
+
+
+Line 8: type_specifier : INT
+
+int 
+
+Line 8: declaration_list : ID LTHIRD CONST_INT RTHIRD
+
+b[10]
+
+Line 8: var_declaration : type_specifier declaration_list SEMICOLON
+
+int b[10];
+
+
+Line 8: statement : var_declaration
+
+int b[10];
+
+
+Line 8: statements : statements statement
+
+int a;
+int b[10];
+
+
+Line 10: type_specifier : INT
+
+int 
+
+Line 10: declaration_list : ID
+
+p
+
+Line 10: var_declaration : type_specifier declaration_list SEMICOLON
+
+int p;
+
+
+Line 10: statement : var_declaration
+
+int p;
+
+
+Line 10: statements : statement
+
+int p;
+
+
+Line 12: type_specifier : INT
+
+int 
+
+Line 12: declaration_list : ID
+
+q
+
+Line 12: var_declaration : type_specifier declaration_list SEMICOLON
+
+int q;
+
+
+Line 12: statement : var_declaration
+
+int q;
+
+
+Line 12: statements : statement
+
+int q;
+
+
+Line 13: compound_statement : LCURL statements RCURL
 
 {
-  return x;
+  int q;
+}
+
+
+
+
+
+ScopeTable # 1.1.1.1.1
+ 23 --> < q , ID{disp = -24} > 
+
+
+
+ScopeTable # 1.1.1.1
+ 22 --> < p , ID{disp = -22} > 
+
+
+
+ScopeTable # 1.1.1
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = -2} > 
+
+
+
+ScopeTable # 1.1
+ 0 --> < x , ID{disp = 4} > 
+ 1 --> < y , ID{disp = 6} > 
+ 2 --> < z , ID{disp = 8} > 
+
+
+
+ScopeTable # 1
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = 0} > 
+ 2 --> < z , ID{disp = 0} > 
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = 0} > 
+ 12 --> < f , ID{disp = 0} > 
+ 23 --> < q , ID{disp = 0} > 
+
+
+Line 13: statement : compound_statement
+
+{
+  int q;
+}
+
+
+
+Line 13: statements : statements statement
+
+int p;
+{
+  int q;
+}
+
+
+
+Line 14: compound_statement : LCURL statements RCURL
+
+{
+  int p;
+  {
+    int q;
+  }
+}
+
+
+
+
+
+ScopeTable # 1.1.1.1
+ 22 --> < p , ID{disp = -22} > 
+
+
+
+ScopeTable # 1.1.1
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = -2} > 
+
+
+
+ScopeTable # 1.1
+ 0 --> < x , ID{disp = 4} > 
+ 1 --> < y , ID{disp = 6} > 
+ 2 --> < z , ID{disp = 8} > 
+
+
+
+ScopeTable # 1
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = 0} > 
+ 2 --> < z , ID{disp = 0} > 
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = 0} > 
+ 12 --> < f , ID{disp = 0} > 
+ 23 --> < q , ID{disp = 0} > 
+
+
+Line 14: statement : compound_statement
+
+{
+  int p;
+  {
+    int q;
+  }
+}
+
+
+
+Line 14: statements : statements statement
+
+int a;
+int b[10];
+{
+  int p;
+  {
+    int q;
+  }
+}
+
+
+
+Line 15: compound_statement : LCURL statements RCURL
+
+{
+  int a;
+  int b[10];
+  {
+    int p;
+    {
+      int q;
+    }
+  }
+}
+
+
+
+
+
+ScopeTable # 1.1.1
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = -2} > 
+
+
+
+ScopeTable # 1.1
+ 0 --> < x , ID{disp = 4} > 
+ 1 --> < y , ID{disp = 6} > 
+ 2 --> < z , ID{disp = 8} > 
+
+
+
+ScopeTable # 1
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = 0} > 
+ 2 --> < z , ID{disp = 0} > 
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = 0} > 
+ 12 --> < f , ID{disp = 0} > 
+ 23 --> < q , ID{disp = 0} > 
+
+
+Line 15: statement : compound_statement
+
+{
+  int a;
+  int b[10];
+  {
+    int p;
+    {
+      int q;
+    }
+  }
+}
+
+
+
+Line 15: statements : statement
+
+{
+  int a;
+  int b[10];
+  {
+    int p;
+    {
+      int q;
+    }
+  }
+}
+
+
+
+Line 16: compound_statement : LCURL statements RCURL
+
+{
+  {
+    int a;
+    int b[10];
+    {
+      int p;
+      {
+        int q;
+      }
+    }
+  }
 }
 
 
@@ -158,249 +413,285 @@ ScopeTable # 1
  23 --> < q , ID{disp = 0} > 
 
 
-Line 6: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+Line 16: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
 int f(int x,int y,int z){
-  return x;
+  {
+    int a;
+    int b[10];
+    {
+      int p;
+      {
+        int q;
+      }
+    }
+  }
 }
 
 
 
-Line 6: unit : func_definition
+Line 16: unit : func_definition
 
 int f(int x,int y,int z){
-  return x;
+  {
+    int a;
+    int b[10];
+    {
+      int p;
+      {
+        int q;
+      }
+    }
+  }
 }
 
 
 
-Line 6: program : program unit
+Line 16: program : program unit
 
 int x,y,z,a[2],b[3];
 int q[2];
 int f(int x,int y,int z){
-  return x;
+  {
+    int a;
+    int b[10];
+    {
+      int p;
+      {
+        int q;
+      }
+    }
+  }
 }
 
 
 
-Line 7: type_specifier : FLOAT
+Line 17: type_specifier : FLOAT
 
 float 
 
-Line 7: declaration_list : ID
+Line 17: declaration_list : ID
 
 t
 
-Line 7: var_declaration : type_specifier declaration_list SEMICOLON
+Line 17: var_declaration : type_specifier declaration_list SEMICOLON
 
 float t;
 
 
-Line 7: unit : var_declaration
+Line 17: unit : var_declaration
 
 float t;
 
 
-Line 7: program : program unit
+Line 17: program : program unit
 
 int x,y,z,a[2],b[3];
 int q[2];
 int f(int x,int y,int z){
-  return x;
+  {
+    int a;
+    int b[10];
+    {
+      int p;
+      {
+        int q;
+      }
+    }
+  }
 }
 
 float t;
 
 
-Line 8: type_specifier : INT
+Line 18: type_specifier : INT
 
 int 
 
-Line 10: type_specifier : INT
+Line 20: type_specifier : INT
 
 int 
 
-Line 10: declaration_list : ID
+Line 20: declaration_list : ID
 
 x
 
-Line 10: declaration_list : declaration_list COMMA ID
+Line 20: declaration_list : declaration_list COMMA ID
 
 x,y
 
-Line 10: declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
+Line 20: declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
 
 x,y,z[2]
 
-Line 10: declaration_list : declaration_list COMMA ID
+Line 20: declaration_list : declaration_list COMMA ID
 
 x,y,z[2],p
 
-Line 10: var_declaration : type_specifier declaration_list SEMICOLON
+Line 20: var_declaration : type_specifier declaration_list SEMICOLON
 
 int x,y,z[2],p;
 
 
-Line 10: statement : var_declaration
+Line 20: statement : var_declaration
 
 int x,y,z[2],p;
 
 
-Line 10: statements : statement
+Line 20: statements : statement
 
 int x,y,z[2],p;
 
 
-Line 11: variable : ID
+Line 21: variable : ID
 
 x
 
-Line 11: factor : CONST_INT
+Line 21: factor : CONST_INT
 
 1
 
-Line 11: unary_expression : factor
+Line 21: unary_expression : factor
 
 1
 
-Line 11: term : unary_expression
+Line 21: term : unary_expression
 
 1
 
-Line 11: simple_expression : term
+Line 21: simple_expression : term
 
 1
 
-Line 11: rel_expression : simple_expression
+Line 21: rel_expression : simple_expression
 
 1
 
-Line 11: logic_expression : rel_expression
+Line 21: logic_expression : rel_expression
 
 1
 
-Line 11: arguments : logic_expression
+Line 21: arguments : logic_expression
 
 1
 
-Line 11: factor : CONST_INT
+Line 21: factor : CONST_INT
 
 2
 
-Line 11: unary_expression : factor
+Line 21: unary_expression : factor
 
 2
 
-Line 11: term : unary_expression
+Line 21: term : unary_expression
 
 2
 
-Line 11: simple_expression : term
+Line 21: simple_expression : term
 
 2
 
-Line 11: rel_expression : simple_expression
+Line 21: rel_expression : simple_expression
 
 2
 
-Line 11: logic_expression : rel_expression
+Line 21: logic_expression : rel_expression
 
 2
 
-Line 11: arguments : arguments COMMA logic_expression
+Line 21: arguments : arguments COMMA logic_expression
 
 1,2
 
-Line 11: factor : CONST_INT
+Line 21: factor : CONST_INT
 
 3
 
-Line 11: unary_expression : factor
+Line 21: unary_expression : factor
 
 3
 
-Line 11: term : unary_expression
+Line 21: term : unary_expression
 
 3
 
-Line 11: simple_expression : term
+Line 21: simple_expression : term
 
 3
 
-Line 11: rel_expression : simple_expression
+Line 21: rel_expression : simple_expression
 
 3
 
-Line 11: logic_expression : rel_expression
+Line 21: logic_expression : rel_expression
 
 3
 
-Line 11: arguments : arguments COMMA logic_expression
+Line 21: arguments : arguments COMMA logic_expression
 
 1,2,3
 
-Line 11: argument_list : arguments
+Line 21: argument_list : arguments
 
 1,2,3
 
-Line 11: factor : ID LPAREN argument_list RPAREN
+Line 21: factor : ID LPAREN argument_list RPAREN
 
 f(1,2,3)
 
-Line 11: unary_expression : factor
+Line 21: unary_expression : factor
 
 f(1,2,3)
 
-Line 11: term : unary_expression
+Line 21: term : unary_expression
 
 f(1,2,3)
 
-Line 11: simple_expression : term
+Line 21: simple_expression : term
 
 f(1,2,3)
 
-Line 11: rel_expression : simple_expression
+Line 21: rel_expression : simple_expression
 
 f(1,2,3)
 
-Line 11: logic_expression : rel_expression
+Line 21: logic_expression : rel_expression
 
 f(1,2,3)
 
-Line 11: expression : variable ASSIGNOP logic_expression
+Line 21: expression : variable ASSIGNOP logic_expression
 
 x=f(1,2,3)
 
-Line 11: expression_statement : expression SEMICOLON
+Line 21: expression_statement : expression SEMICOLON
 
 x=f(1,2,3);
 
 
-Line 11: statement : expression_statement
+Line 21: statement : expression_statement
 
 x=f(1,2,3);
 
 
-Line 11: statements : statements statement
+Line 21: statements : statements statement
 
 int x,y,z[2],p;
 x=f(1,2,3);
 
 
-Line 12: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 22: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
 println(x);
 
 
-Line 12: statements : statements statement
+Line 22: statements : statements statement
 
 int x,y,z[2],p;
 x=f(1,2,3);
 println(x);
 
 
-Line 13: compound_statement : LCURL statements RCURL
+Line 23: compound_statement : LCURL statements RCURL
 
 {
   int x,y,z[2],p;
@@ -413,10 +704,10 @@ Line 13: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.2
- 0 --> < x , ID{disp = -4} > 
- 1 --> < y , ID{disp = -6} > 
- 2 --> < z , ID{disp = -8} > 
- 22 --> < p , ID{disp = -12} > 
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = -2} > 
+ 2 --> < z , ID{disp = -4} > 
+ 22 --> < p , ID{disp = -8} > 
 
 
 
@@ -431,7 +722,7 @@ ScopeTable # 1
  26 --> < t , ID{disp = 0} > 
 
 
-Line 13: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 23: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
   int x,y,z[2],p;
@@ -441,7 +732,7 @@ int main(){
 
 
 
-Line 13: unit : func_definition
+Line 23: unit : func_definition
 
 int main(){
   int x,y,z[2],p;
@@ -451,12 +742,21 @@ int main(){
 
 
 
-Line 13: program : program unit
+Line 23: program : program unit
 
 int x,y,z,a[2],b[3];
 int q[2];
 int f(int x,int y,int z){
-  return x;
+  {
+    int a;
+    int b[10];
+    {
+      int p;
+      {
+        int q;
+      }
+    }
+  }
 }
 
 float t;
@@ -468,7 +768,7 @@ int main(){
 
 
 
-Line 13: start : program
+Line 23: start : program
 
 
 
@@ -484,6 +784,6 @@ ScopeTable # 1
 
 
 
-Total lines: 13
+Total lines: 23
 Total errors: 0
 

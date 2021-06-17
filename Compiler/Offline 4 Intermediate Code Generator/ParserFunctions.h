@@ -218,7 +218,7 @@ Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = fal
 	ReturnType type_specifier  = Error;
 	bool used_type_specifier  = false ; 
 
-	int current_base_pointer = is_from_function ? 4 : -4; /// need to correct for non function
+	int current_base_pointer = is_from_function ? 4 : symboltable->getBaseIndex(); /// need to correct for non function
 	int direction =  is_from_function ? 1 : -1 ; // next_pointer = current_pointer + direction * current_var_size
 
 	while (sip)
@@ -279,8 +279,8 @@ Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = fal
 					{
 						
 						code = combine(code , new Code("SUB SP , "+to_string(var_size)));
-						new_symbol -> getTypeLocation()->setBasedDisplacement(current_base_pointer);
-						current_base_pointer += direction * var_size * 2;
+						new_symbol -> getTypeLocation()->setBasedDisplacement(symboltable->getBaseIndex());
+						symboltable->addBaseIndex(var_size*-2);
 					}
 				}
 			}
@@ -440,10 +440,17 @@ Code * enterScope()
 	return code;
 }
 
-void exitScope()
+Code * exitScope()
 {
+	Code *code =nullptr;
 	symboltable->printNonEmptyBuckets(logstream);
+	int size = symboltable->currentDataSize();
+	if(size>0)
+		code = new Code("ADD SP , " + to_string(size));
+	
 	symboltable->exitScope();
+	
+	return code;
 }
 
 bool isZero(const string & s)
