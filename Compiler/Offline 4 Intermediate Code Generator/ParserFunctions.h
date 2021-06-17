@@ -56,6 +56,20 @@ string newLabel(string prefix)
 	return prefix + "_" + to_string(counter ++);
 }
 
+Code * loadLibrary()
+{
+	string fileName = "println.asm";
+	Code * code = nullptr;
+	ifstream in(fileName);
+	string line ;
+
+	while(getline(in , line))
+	{
+		code = combine(code , line);
+	}
+	return code;
+}
+
 inline bool isTypeSpecifier(SymbolInfoPointer sip)
 {
 	if(sip == nullptr) return false;
@@ -201,7 +215,7 @@ Parameters calcParametersFromParameterList(SymbolInfoPointer parameters)
 string getSingleVariableAddress(SymbolInfoPointer ref)
 {
 	int idx = ref->getTypeLocation() -> getBasedIndex();
-	if(idx == 0)
+	if(idx == -1)
 	{
 		return ref->getName();
 	}
@@ -244,7 +258,6 @@ Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = fal
 	bool used_type_specifier  = false ; 
 
 	int current_base_pointer = is_from_function ? 4 : symboltable->getBaseIndex(); /// need to correct for non function
-	int direction =  is_from_function ? 1 : -1 ; // next_pointer = current_pointer + direction * current_var_size
 
 	while (sip)
 	{
@@ -298,7 +311,7 @@ Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = fal
 					else if(is_from_function)
 					{
 						new_symbol -> getTypeLocation()->setBasedIndex(current_base_pointer);
-						current_base_pointer+=direction*var_size*2;
+						current_base_pointer+=var_size*2;
 					}
 					else 
 					{

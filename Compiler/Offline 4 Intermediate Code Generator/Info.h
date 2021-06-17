@@ -43,7 +43,7 @@ private:
 	Code * code;
 	int basedIndex ;
 public:
-	Info(string type) : type(type),code(0),basedIndex(0)
+	Info(string type) : type(type),code(0),basedIndex(-1)
 	{
 		returnType = Error;
 	}

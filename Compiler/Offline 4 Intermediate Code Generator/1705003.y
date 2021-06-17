@@ -112,12 +112,17 @@ start :  program
 		code = combine(code , new Code(".STACK 100H"));
 
 		code = combine(code , new Code(".DATA"));
+
+		code = combine(code , "FIXED_POINT_MULTIPLIER DW 64H");
+
 		for(pair<string,int > id_sz : globals)
 		{
-			code=combine(code , new Code(id_sz.first + " DW "+to_string(id_sz.second)+" DUP 0"));
+			code=combine(code , new Code(id_sz.first + " DW "+to_string(id_sz.second)+" DUP 0000H"));
 		}
 		code = combine(code , new Code(".CODE"));
-		
+
+		code = combine(code , loadLibrary());
+
 		code = combine(code ,  $$ -> getTypeLocation()-> getCode());
 
 		code = combine(
@@ -127,7 +132,7 @@ start :  program
 
 
 		ofstream codestream ;
-		codestream.open("code.asm");
+		codestream.open("code.asm" , ios::trunc);
 		
 		codestream<<(*code);
 
@@ -226,17 +231,51 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 		string funcName = $2 -> getName();
 
-		Code * code = nullptr;
-		code = combine(code , new Code(funcName + " PROC"));
+		if(noerror())
+		{
+			Code * code = nullptr;
+			SymbolInfoPointer ref = symboltable->lookUp(funcName);
+			assert(ref);
+			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
 
-		code = combine(
-			code,
-			$7 -> getTypeLocation()->getCode()
-		);
+			code = combine(code , new Code(funcName + " PROC"));
 
-		code = combine(code , new Code(funcName + " ENDP"));
+			code = combine(code , new Code("PUSH BP"));
 
-		$$ -> getTypeLocation()->setCode(code);
+
+			if(funcName == "main")
+			{
+				code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
+				code = combine(code , "MOV AX, @DATA");
+				code = combine(code , "MOV DS, AX");
+			}
+			
+
+			
+			
+
+			code = combine(
+				code,
+				$7 -> getTypeLocation()->getCode()
+			);
+			
+			code = combine(code , funcName +"_exit:");
+			
+			code = combine(code , "POP BP");
+
+			if(funcName == "main")
+			{
+				code = combine(code , Comment("EXIT 0"));
+				code = combine(code , "MOV AH, 4CH");
+				code = combine(code , "INT 21H");
+			}
+
+			code = combine(code , "RET " + to_string(parameter_size));
+
+			code = combine(code , new Code(funcName + " ENDP"));
+
+			$$ -> getTypeLocation()->setCode(code);
+		}
 
 	}
 	|  type_specifier ID LPAREN RPAREN {add_func_definition($1 , $2 , nullptr);} compound_statement
@@ -251,18 +290,51 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 		string funcName = $2 -> getName();
 
-		Code * code = nullptr;
-		code = combine(code , new Code(funcName + " PROC"));
+		if(noerror())
+		{
+			Code * code = nullptr;
+			SymbolInfoPointer ref = symboltable->lookUp(funcName);
+			assert(ref);
+			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
 
-		code = combine(
-			code,
-			$6 -> getTypeLocation()->getCode()
-		);
+			code = combine(code , new Code(funcName + " PROC"));
 
-		code = combine(code , new Code(funcName + " ENDP"));
+			code = combine(code , new Code("PUSH BP"));
 
-		$$ -> getTypeLocation()->setCode(code);
+			
+			
+			if(funcName == "main")
+			{
+				code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
+				code = combine(code , "MOV AX, @DATA");
+				code = combine(code , "MOV DS, AX");
+			}
+			
 
+			
+
+			code = combine(
+				code,
+				$6 -> getTypeLocation()->getCode()
+			);
+			
+			code = combine(code , funcName +"_exit:");
+			
+			code = combine(code , "POP BP");
+
+			if(funcName == "main")
+			{
+				code = combine(code , Comment("EXIT 0"));
+				code = combine(code , "MOV AH, 4CH");
+				code = combine(code , "INT 21H");
+			}
+
+			code = combine(code , "RET " + to_string(parameter_size));
+
+			code = combine(code , new Code(funcName + " ENDP"));
+
+			$$ -> getTypeLocation()->setCode(code);
+		}
 	}
 	;
 
@@ -639,7 +711,7 @@ variable :  ID
 
 			int idx = ref->getTypeLocation()->getBasedIndex();
 
-			if(idx == 0)
+			if(idx == -1)
 			{
 				code = combine(code , Comment("get array element from memory"));
 				code = combine(code ,"SAL DX , 1");
@@ -794,7 +866,7 @@ rel_expression :  simple_expression
 			{
 				code = combine(code , Comment("Int to float"));
 				code = combine(code , "MOV AX , DX");
-				code = combine(code , "IMUL "+to_string(FIXED_POINT_MULTIPLIER));
+				code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
 				code = combine(code , "MOV DX , AX");
 			}
 
@@ -808,7 +880,7 @@ rel_expression :  simple_expression
 				{
 					code = combine(code , Comment("Int to float"));
 					code = combine(code , "MOV AX , DX");
-					code = combine(code , "IMUL "+to_string(FIXED_POINT_MULTIPLIER));
+					code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
 					code = combine(code , "MOV DX , AX");
 				}
 
@@ -855,6 +927,27 @@ simple_expression :  term
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+		
+		if(noerror())
+		{
+			Code * code  = nullptr;
+			string op = $2 -> getName();
+			string opcode = "";
+			
+			if(op == "+")	opcode = "ADD";
+			else if(op == "-")	opcode = "SUB";
+			else assert(0);
+			
+			code = combine(code , $1 -> getTypeLocation() -> getCode());
+			code = combine(code ,"PUSH DX");
+				code = combine(code , $3 -> getTypeLocation() -> getCode());
+			code = combine(code ,"POP AX");
+			
+			code = combine(code , opcode + " AX , DX");
+			code = combine(code , "MOV DX , AX");
+
+			$$ -> getTypeLocation()-> setCode(code);
+		}
 	}
 	;
 
@@ -892,6 +985,84 @@ term :  unary_expression
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code * code  = nullptr;
+			string op = $2 -> getName();
+			string opcode = "";
+			
+			
+			code = combine(code , $1 -> getTypeLocation() -> getCode());
+			code = combine(code ,"PUSH DX");
+				code = combine(code , $3 -> getTypeLocation() -> getCode());
+			code = combine(code ,"POP AX");
+			
+			if(op == "*")
+			{
+				code = combine(code , "IMUL DX");
+				if(type1 == Float and type2 == Float)
+				{
+					code = combine(code , "IDIV " + to_string(FIXED_POINT_MULTIPLIER));
+				}
+				code = combine(code , "MOV DX , AX");
+			}
+			else if(op == "/")
+			{
+				
+				code = combine(code , "MOV BX , DX");
+				switch (type1)
+				{
+				case Int:
+					switch (type2)
+					{
+					case Int:
+						code = combine(code , "CWD");
+						break;
+					case Float:
+						code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
+						code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
+						break;
+					default:
+						assert(0);
+						break;
+					}
+					break;
+				case Float:
+					switch (type2)
+					{
+					case Int:
+						code = combine(code , "CWD");
+						break;
+					case Float:
+						code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
+						break;
+					default:
+						assert(0);
+						break;
+					}
+					break;
+				default:
+					assert(0);
+					break;
+				}
+				code = combine(code , "IDIV BX");
+				code = combine(code , "MOV DX , AX");
+				
+			}
+			else if(op == "%")
+			{
+
+				code = combine(code , "MOV BX , DX");
+				code = combine(code , "CWD");
+				code = combine(code , "IDIV BX");
+
+			}
+			else assert(0);
+			
+
+			$$ -> getTypeLocation()-> setCode(code);
+		}
 	}
 	;
 
@@ -918,6 +1089,21 @@ unary_expression :  ADDOP unary_expression
 		$1->push_back($2);
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code * code  = nullptr;
+			string op = $1 -> getName();
+			
+			code = combine(code , $2 -> getTypeLocation() -> getCode());
+			
+			if(op == "+")	;
+			else if(op == "-")	code = combine(code , "NEG DX");
+			else assert(0);
+
+			$$ -> getTypeLocation()-> setCode(code);
+		}
+
 	}
 	|  NOT unary_expression
 	{
@@ -949,6 +1135,30 @@ unary_expression :  ADDOP unary_expression
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code * code  = nullptr;
+			
+
+			code = combine(code , $2 -> getTypeLocation() -> getCode());
+			
+			string label_end = newLabel("not_end");
+			string label_one = newLabel("not_one");
+
+			code = combine(code , "CMP DX , 0");
+			code = combine(code , "JZ "+label_one);
+			code = combine(code , "MOV DX , 0");
+			code = combine(code , "JMP "+label_end);
+			code = combine(code , label_one + ":");
+			code = combine(code , "MOV DX , 1");
+			code = combine(code , label_end + ":");
+
+
+			$$ -> getTypeLocation()-> setCode(code);
+		}
+
+
 	}
 	|  factor
 	{
@@ -986,6 +1196,10 @@ factor :  variable
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+		$$ -> getTypeLocation() -> setCode(
+			$2 -> getTypeLocation()->getCode()
+		);
 	}
 	|  CONST_INT
 	{

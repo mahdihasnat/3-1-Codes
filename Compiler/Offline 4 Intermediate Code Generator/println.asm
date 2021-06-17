@@ -1,8 +1,3 @@
-.MODEL SMALL
-.STACK 100H
-.DATA
-FIXED_POINT_MULTIPLIER DW 64H
-.CODE
 println PROC
     ;print word variable stored in stack
 
@@ -83,42 +78,3 @@ println PROC
     RET 2
     
 println ENDP
-f PROC
-PUSH BP
-f_exit:
-POP BP
-RET 0
-f ENDP
-foo PROC
-PUSH BP
-MOV DX , 4[BP]
-MOV DX , 6[BP]
-MOV DX , 4[BP]
-PUSH DX
-CALL PRINTLN
-foo_exit:
-POP BP
-RET 4
-foo ENDP
-main PROC
-PUSH BP
-;Line 18: DATA SEGMENT INITIALIZATION
-MOV AX, @DATA
-MOV DS, AX
-;Line 16: integar = 2
-MOV DX , 2
-CMP DX , 0
-JZ not_one_1
-MOV DX , 0
-JMP not_end_0
-not_one_1:
-MOV DX , 1
-not_end_0:
-main_exit:
-POP BP
-;Line 18: EXIT 0
-MOV AH, 4CH
-INT 21H
-RET 0
-main ENDP
-END main
