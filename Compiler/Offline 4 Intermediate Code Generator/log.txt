@@ -142,20 +142,20 @@ Line 6: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.1
- 0 --> < x , ID > 
- 1 --> < y , ID > 
- 2 --> < z , ID > 
+ 0 --> < x , ID{disp = 4} > 
+ 1 --> < y , ID{disp = 6} > 
+ 2 --> < z , ID{disp = 8} > 
 
 
 
 ScopeTable # 1
- 0 --> < x , ID > 
- 1 --> < y , ID > 
- 2 --> < z , ID > 
- 7 --> < a , ID > 
- 8 --> < b , ID > 
- 12 --> < f , ID > 
- 23 --> < q , ID > 
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = 0} > 
+ 2 --> < z , ID{disp = 0} > 
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = 0} > 
+ 12 --> < f , ID{disp = 0} > 
+ 23 --> < q , ID{disp = 0} > 
 
 
 Line 6: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
@@ -225,19 +225,31 @@ Line 10: declaration_list : ID
 
 x
 
+Line 10: declaration_list : declaration_list COMMA ID
+
+x,y
+
+Line 10: declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
+
+x,y,z[2]
+
+Line 10: declaration_list : declaration_list COMMA ID
+
+x,y,z[2],p
+
 Line 10: var_declaration : type_specifier declaration_list SEMICOLON
 
-int x;
+int x,y,z[2],p;
 
 
 Line 10: statement : var_declaration
 
-int x;
+int x,y,z[2],p;
 
 
 Line 10: statements : statement
 
-int x;
+int x,y,z[2],p;
 
 
 Line 11: variable : ID
@@ -372,7 +384,7 @@ x=f(1,2,3);
 
 Line 11: statements : statements statement
 
-int x;
+int x,y,z[2],p;
 x=f(1,2,3);
 
 
@@ -383,7 +395,7 @@ println(x);
 
 Line 12: statements : statements statement
 
-int x;
+int x,y,z[2],p;
 x=f(1,2,3);
 println(x);
 
@@ -391,7 +403,7 @@ println(x);
 Line 13: compound_statement : LCURL statements RCURL
 
 {
-  int x;
+  int x,y,z[2],p;
   x=f(1,2,3);
   println(x);
 }
@@ -401,25 +413,28 @@ Line 13: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.2
- 0 --> < x , ID > 
+ 0 --> < x , ID{disp = -4} > 
+ 1 --> < y , ID{disp = -6} > 
+ 2 --> < z , ID{disp = -8} > 
+ 22 --> < p , ID{disp = -12} > 
 
 
 
 ScopeTable # 1
- 0 --> < x , ID > 
- 1 --> < y , ID > < main , ID > 
- 2 --> < z , ID > 
- 7 --> < a , ID > 
- 8 --> < b , ID > 
- 12 --> < f , ID > 
- 23 --> < q , ID > 
- 26 --> < t , ID > 
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = 0} > < main , ID{disp = 0} > 
+ 2 --> < z , ID{disp = 0} > 
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = 0} > 
+ 12 --> < f , ID{disp = 0} > 
+ 23 --> < q , ID{disp = 0} > 
+ 26 --> < t , ID{disp = 0} > 
 
 
 Line 13: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
-  int x;
+  int x,y,z[2],p;
   x=f(1,2,3);
   println(x);
 }
@@ -429,7 +444,7 @@ int main(){
 Line 13: unit : func_definition
 
 int main(){
-  int x;
+  int x,y,z[2],p;
   x=f(1,2,3);
   println(x);
 }
@@ -446,7 +461,7 @@ int f(int x,int y,int z){
 
 float t;
 int main(){
-  int x;
+  int x,y,z[2],p;
   x=f(1,2,3);
   println(x);
 }
@@ -458,14 +473,14 @@ Line 13: start : program
 
 
 ScopeTable # 1
- 0 --> < x , ID > 
- 1 --> < y , ID > < main , ID > 
- 2 --> < z , ID > 
- 7 --> < a , ID > 
- 8 --> < b , ID > 
- 12 --> < f , ID > 
- 23 --> < q , ID > 
- 26 --> < t , ID > 
+ 0 --> < x , ID{disp = 0} > 
+ 1 --> < y , ID{disp = 0} > < main , ID{disp = 0} > 
+ 2 --> < z , ID{disp = 0} > 
+ 7 --> < a , ID{disp = 0} > 
+ 8 --> < b , ID{disp = 0} > 
+ 12 --> < f , ID{disp = 0} > 
+ 23 --> < q , ID{disp = 0} > 
+ 26 --> < t , ID{disp = 0} > 
 
 
 

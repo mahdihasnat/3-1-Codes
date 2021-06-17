@@ -281,7 +281,7 @@ var_declaration :  type_specifier declaration_list SEMICOLON
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
-		add_variable_declaration($$);
+		$$-> getTypeLocation()-> setCode( add_variable_declaration($$) );
 	}
 	| type_specifier error SEMICOLON 
 	{

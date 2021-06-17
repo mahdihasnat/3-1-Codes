@@ -7,7 +7,7 @@ int  f(int x,int y,int z)
 float t;
 int main()
 {
-	int x;
+	int x,y,z[2] , p;
 	x=f(1,2,3);
 	println(x);
 }

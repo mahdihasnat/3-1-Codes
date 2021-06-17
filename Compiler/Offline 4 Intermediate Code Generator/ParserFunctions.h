@@ -188,7 +188,7 @@ Parameters calcParametersFromParameterList(SymbolInfoPointer parameters)
 }
 
 
-Code* add_variable_declaration(SymbolInfoPointer sip)
+Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = false)
 {
 	/// sip = var_declaration
 	// var_declaration : type_specifier declaration_list SEMICOLON
@@ -217,6 +217,10 @@ Code* add_variable_declaration(SymbolInfoPointer sip)
 
 	ReturnType type_specifier  = Error;
 	bool used_type_specifier  = false ; 
+
+	int current_base_pointer = is_from_function ? 4 : -4; /// need to correct for non function
+	int direction =  is_from_function ? 1 : -1 ; // next_pointer = current_pointer + direction * current_var_size
+
 	while (sip)
 	{
 		if(isTypeSpecifier(sip))
@@ -266,9 +270,17 @@ Code* add_variable_declaration(SymbolInfoPointer sip)
 					{
 						globals.push_back(make_pair(sip->getName(),var_size ));
 					}
+					else if(is_from_function)
+					{
+						new_symbol -> getTypeLocation()->setBasedDisplacement(current_base_pointer);
+						current_base_pointer+=direction*var_size*2;
+					}
 					else 
 					{
-						/// code to allocate memory for local vars
+						
+						code = combine(code , new Code("SUB SP , "+to_string(var_size)));
+						new_symbol -> getTypeLocation()->setBasedDisplacement(current_base_pointer);
+						current_base_pointer += direction * var_size * 2;
 					}
 				}
 			}
@@ -420,11 +432,12 @@ ReturnType combineArithmaticType(ReturnType type1 , ReturnType type2)
 }
 
 
-void enterScope()
+Code * enterScope()
 {
 	symboltable->enterScope();
-	add_variable_declaration(lazy_parameters);
+	Code * code = add_variable_declaration(lazy_parameters,true);
 	lazy_parameters = nullptr;
+	return code;
 }
 
 void exitScope()
