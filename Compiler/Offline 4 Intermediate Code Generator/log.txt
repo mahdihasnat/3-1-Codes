@@ -89,6 +89,53 @@ Line 3: parameter_list : parameter_list COMMA type_specifier ID
 
 int x,int y,int z
 
+Line 5: variable : ID
+
+x
+
+Line 5: factor : variable
+
+x
+
+Line 5: unary_expression : factor
+
+x
+
+Line 5: term : unary_expression
+
+x
+
+Line 5: simple_expression : term
+
+x
+
+Line 5: rel_expression : simple_expression
+
+x
+
+Line 5: logic_expression : rel_expression
+
+x
+
+Line 5: expression : logic expression
+
+x
+
+Line 5: expression_statement : expression SEMICOLON
+
+x;
+
+
+Line 5: statement : expression_statement
+
+x;
+
+
+Line 5: statements : statement
+
+x;
+
+
 Line 7: type_specifier : INT
 
 int 
@@ -362,8 +409,9 @@ Line 15: statement : compound_statement
 
 
 
-Line 15: statements : statement
+Line 15: statements : statements statement
 
+x;
 {
   int a;
   int b[10];
@@ -380,6 +428,7 @@ Line 15: statements : statement
 Line 16: compound_statement : LCURL statements RCURL
 
 {
+  x;
   {
     int a;
     int b[10];
@@ -416,6 +465,7 @@ ScopeTable # 1
 Line 16: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
 int f(int x,int y,int z){
+  x;
   {
     int a;
     int b[10];
@@ -433,6 +483,7 @@ int f(int x,int y,int z){
 Line 16: unit : func_definition
 
 int f(int x,int y,int z){
+  x;
   {
     int a;
     int b[10];
@@ -452,6 +503,7 @@ Line 16: program : program unit
 int x,y,z,a[2],b[3];
 int q[2];
 int f(int x,int y,int z){
+  x;
   {
     int a;
     int b[10];
@@ -489,6 +541,7 @@ Line 17: program : program unit
 int x,y,z,a[2],b[3];
 int q[2];
 int f(int x,int y,int z){
+  x;
   {
     int a;
     int b[10];
@@ -545,157 +598,285 @@ int x,y,z[2],p;
 
 Line 21: variable : ID
 
-x
+p
 
-Line 21: factor : CONST_INT
+Line 21: factor : variable
 
-1
-
-Line 21: unary_expression : factor
-
-1
-
-Line 21: term : unary_expression
-
-1
-
-Line 21: simple_expression : term
-
-1
-
-Line 21: rel_expression : simple_expression
-
-1
-
-Line 21: logic_expression : rel_expression
-
-1
-
-Line 21: arguments : logic_expression
-
-1
-
-Line 21: factor : CONST_INT
-
-2
+p
 
 Line 21: unary_expression : factor
 
-2
+p
 
 Line 21: term : unary_expression
 
-2
+p
 
 Line 21: simple_expression : term
 
-2
+p
 
 Line 21: rel_expression : simple_expression
 
-2
+p
 
 Line 21: logic_expression : rel_expression
 
-2
+p
 
-Line 21: arguments : arguments COMMA logic_expression
+Line 21: expression : logic expression
 
-1,2
-
-Line 21: factor : CONST_INT
-
-3
-
-Line 21: unary_expression : factor
-
-3
-
-Line 21: term : unary_expression
-
-3
-
-Line 21: simple_expression : term
-
-3
-
-Line 21: rel_expression : simple_expression
-
-3
-
-Line 21: logic_expression : rel_expression
-
-3
-
-Line 21: arguments : arguments COMMA logic_expression
-
-1,2,3
-
-Line 21: argument_list : arguments
-
-1,2,3
-
-Line 21: factor : ID LPAREN argument_list RPAREN
-
-f(1,2,3)
-
-Line 21: unary_expression : factor
-
-f(1,2,3)
-
-Line 21: term : unary_expression
-
-f(1,2,3)
-
-Line 21: simple_expression : term
-
-f(1,2,3)
-
-Line 21: rel_expression : simple_expression
-
-f(1,2,3)
-
-Line 21: logic_expression : rel_expression
-
-f(1,2,3)
-
-Line 21: expression : variable ASSIGNOP logic_expression
-
-x=f(1,2,3)
+p
 
 Line 21: expression_statement : expression SEMICOLON
 
-x=f(1,2,3);
+p;
 
 
 Line 21: statement : expression_statement
 
-x=f(1,2,3);
+p;
 
 
 Line 21: statements : statements statement
 
 int x,y,z[2],p;
-x=f(1,2,3);
+p;
 
 
-Line 22: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 22: variable : ID
 
-println(x);
+t
+
+Line 22: factor : variable
+
+t
+
+Line 22: unary_expression : factor
+
+t
+
+Line 22: term : unary_expression
+
+t
+
+Line 22: simple_expression : term
+
+t
+
+Line 22: rel_expression : simple_expression
+
+t
+
+Line 22: logic_expression : rel_expression
+
+t
+
+Line 22: expression : logic expression
+
+t
+
+Line 22: expression_statement : expression SEMICOLON
+
+t;
+
+
+Line 22: statement : expression_statement
+
+t;
 
 
 Line 22: statements : statements statement
 
 int x,y,z[2],p;
-x=f(1,2,3);
+p;
+t;
+
+
+Line 23: factor : CONST_INT
+
+2
+
+Line 23: unary_expression : factor
+
+2
+
+Line 23: term : unary_expression
+
+2
+
+Line 23: simple_expression : term
+
+2
+
+Line 23: rel_expression : simple_expression
+
+2
+
+Line 23: logic_expression : rel_expression
+
+2
+
+Line 23: expression : logic expression
+
+2
+
+Line 23: variable : ID LTHIRD expression RTHIRD
+
+b[2]
+
+Line 23: factor : variable
+
+b[2]
+
+Line 23: unary_expression : factor
+
+b[2]
+
+Line 23: term : unary_expression
+
+b[2]
+
+Line 23: simple_expression : term
+
+b[2]
+
+Line 23: rel_expression : simple_expression
+
+b[2]
+
+Line 23: logic_expression : rel_expression
+
+b[2]
+
+Line 23: expression : logic expression
+
+b[2]
+
+Line 23: expression_statement : expression SEMICOLON
+
+b[2];
+
+
+Line 23: statement : expression_statement
+
+b[2];
+
+
+Line 23: statements : statements statement
+
+int x,y,z[2],p;
+p;
+t;
+b[2];
+
+
+Line 24: factor : CONST_INT
+
+1
+
+Line 24: unary_expression : factor
+
+1
+
+Line 24: term : unary_expression
+
+1
+
+Line 24: simple_expression : term
+
+1
+
+Line 24: rel_expression : simple_expression
+
+1
+
+Line 24: logic_expression : rel_expression
+
+1
+
+Line 24: expression : logic expression
+
+1
+
+Line 24: variable : ID LTHIRD expression RTHIRD
+
+z[1]
+
+Line 24: factor : variable
+
+z[1]
+
+Line 24: unary_expression : factor
+
+z[1]
+
+Line 24: term : unary_expression
+
+z[1]
+
+Line 24: simple_expression : term
+
+z[1]
+
+Line 24: rel_expression : simple_expression
+
+z[1]
+
+Line 24: logic_expression : rel_expression
+
+z[1]
+
+Line 24: expression : logic expression
+
+z[1]
+
+Line 24: expression_statement : expression SEMICOLON
+
+z[1];
+
+
+Line 24: statement : expression_statement
+
+z[1];
+
+
+Line 24: statements : statements statement
+
+int x,y,z[2],p;
+p;
+t;
+b[2];
+z[1];
+
+
+Line 25: variable : ID
+
+x
+
+Line 25: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
 println(x);
 
 
-Line 23: compound_statement : LCURL statements RCURL
+Line 25: statements : statements statement
+
+int x,y,z[2],p;
+p;
+t;
+b[2];
+z[1];
+println(x);
+
+
+Line 26: compound_statement : LCURL statements RCURL
 
 {
   int x,y,z[2],p;
-  x=f(1,2,3);
+  p;
+  t;
+  b[2];
+  z[1];
   println(x);
 }
 
@@ -722,31 +903,38 @@ ScopeTable # 1
  26 --> < t , ID{disp = 0} > 
 
 
-Line 23: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 26: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
   int x,y,z[2],p;
-  x=f(1,2,3);
+  p;
+  t;
+  b[2];
+  z[1];
   println(x);
 }
 
 
 
-Line 23: unit : func_definition
+Line 26: unit : func_definition
 
 int main(){
   int x,y,z[2],p;
-  x=f(1,2,3);
+  p;
+  t;
+  b[2];
+  z[1];
   println(x);
 }
 
 
 
-Line 23: program : program unit
+Line 26: program : program unit
 
 int x,y,z,a[2],b[3];
 int q[2];
 int f(int x,int y,int z){
+  x;
   {
     int a;
     int b[10];
@@ -762,13 +950,16 @@ int f(int x,int y,int z){
 float t;
 int main(){
   int x,y,z[2],p;
-  x=f(1,2,3);
+  p;
+  t;
+  b[2];
+  z[1];
   println(x);
 }
 
 
 
-Line 23: start : program
+Line 26: start : program
 
 
 
@@ -784,6 +975,6 @@ ScopeTable # 1
 
 
 
-Total lines: 23
+Total lines: 26
 Total errors: 0
 

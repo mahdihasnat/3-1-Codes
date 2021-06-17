@@ -41,9 +41,9 @@ private:
 	ReturnType returnType;
 
 	Code * code;
-	int based_displacement ;
+	int basedIndex ;
 public:
-	Info(string type) : type(type),code(0),based_displacement(0)
+	Info(string type) : type(type),code(0),basedIndex(0)
 	{
 		returnType = Error;
 	}
@@ -92,9 +92,13 @@ public:
 	{
 		is_array = true;
 	}
-	void setBasedDisplacement(int based_displacement)
+	void setBasedIndex(int basedIndex)
 	{
-		this->based_displacement = based_displacement;
+		this->basedIndex = basedIndex;
+	}
+	int getBasedIndex()
+	{
+		return this->basedIndex;
 	}
 	void setCode(Code * code)
 	{
@@ -120,7 +124,7 @@ public:
 		// 		os<<" ,"<<x;
 		// 	os<<")";
 		// }
-		os<<"{disp = "<<i.based_displacement<<"}";
+		os<<"{disp = "<<i.basedIndex<<"}";
 		return os;
 	}
 };

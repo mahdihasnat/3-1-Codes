@@ -27,6 +27,7 @@ ofstream errorstream;
 int error_count = 0;
 vector< pair< string , int > > globals;
 
+#define FIXED_POINT_MULTIPLIER 100
 
 template<class T1,class T2>
 ostream & operator << ( ostream & os ,const pair<T1,T2> &p)
@@ -117,8 +118,20 @@ start :  program
 		}
 		code = combine(code , new Code(".CODE"));
 		
+		code = combine(code ,  $$ -> getTypeLocation()-> getCode());
+
+		code = combine(
+			code ,
+			new Code("END main")
+		);
+
 		DBG(*code);
+
+		ofstream codestream ;
+		codestream.open("code.asm");
 		
+		codestream<<(*code);
+
 		delete $$;
 	}
 	;
@@ -129,6 +142,14 @@ program :  program unit
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
+
+		$$ -> getTypeLocation()->setCode( 
+			combine(
+				$1 -> getTypeLocation()->getCode(),
+				$2 -> getTypeLocation()->getCode()
+			)
+		 );
+
 	}
 	|  unit
 	{
@@ -203,6 +224,21 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 		$5 -> push_back( $7 );
 		$$ = $1;
 		print($$);
+
+		string funcName = $2 -> getName();
+
+		Code * code = nullptr;
+		code = combine(code , new Code(funcName + " PROC"));
+
+		code = combine(
+			code,
+			$7 -> getTypeLocation()->getCode()
+		);
+
+		code = combine(code , new Code(funcName + " ENDP"));
+
+		$$ -> getTypeLocation()->setCode(code);
+
 	}
 	|  type_specifier ID LPAREN RPAREN {add_func_definition($1 , $2 , nullptr);} compound_statement
 	{
@@ -213,6 +249,21 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 		$4 -> push_back( $6 );
 		$$ = $1;
 		print($$);
+
+		string funcName = $2 -> getName();
+
+		Code * code = nullptr;
+		code = combine(code , new Code(funcName + " PROC"));
+
+		code = combine(
+			code,
+			$6 -> getTypeLocation()->getCode()
+		);
+
+		code = combine(code , new Code(funcName + " ENDP"));
+
+		$$ -> getTypeLocation()->setCode(code);
+
 	}
 	;
 
@@ -261,7 +312,14 @@ compound_statement :  LCURL{enterScope();} statements RCURL
 		$3 -> push_back( $4 );
 		$$ = $1;
 		print($$);
-		exitScope();
+		
+		Code * code = nullptr;
+		
+		code = combine(code , $3 -> getTypeLocation() -> getCode());
+		code = combine(code ,exitScope());
+
+		$$ -> getTypeLocation()->setCode(code);
+
 	}
 	|  LCURL{enterScope();} RCURL
 	{
@@ -270,7 +328,12 @@ compound_statement :  LCURL{enterScope();} statements RCURL
 		$$ = $1;
 		print($$);
 
-		exitScope();
+		Code * code = nullptr;
+
+		code = combine(code ,exitScope());
+
+		$$ -> getTypeLocation()->setCode(code);
+
 	}
 	;
 
@@ -366,6 +429,13 @@ statements :  statement
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
+
+		$$-> getTypeLocation()->setCode(
+			combine(
+				$1 -> getTypeLocation()->getCode() , 
+				$2 -> getTypeLocation()->getCode() 
+			)
+		);
 	}
 	| statements error
 	{
@@ -448,7 +518,7 @@ statement :  var_declaration
 		$$ = $1;
 		print($$);
 	}
-	|  PRINTLN LPAREN ID RPAREN SEMICOLON
+	|  PRINTLN LPAREN variable RPAREN SEMICOLON
 	{
 		logRule("statement : PRINTLN LPAREN ID RPAREN SEMICOLON");
 
@@ -460,6 +530,22 @@ statement :  var_declaration
 		$4 -> push_back( $5 );
 		$$ = $1;
 		print($$);
+
+		Code * code = $3 -> getTypeLocation() -> getCode();
+
+		code = combine(
+			code ,
+			"PUSH DX"
+		);
+		code = combine(
+			code ,
+			"CALL PRINTLN"
+		);
+
+		$$ -> getTypeLocation() -> setCode(
+			code
+		);
+
 	}
 	|  RETURN expression SEMICOLON
 	{
@@ -507,16 +593,30 @@ variable :  ID
 	{
 		logRule("variable : ID");
 		
-		$1 -> getTypeLocation()-> setReturnType(getVariableType($1 -> getName() ));
+		string var_name = $1 -> getName() ;
+
+		$1 -> getTypeLocation()-> setReturnType(getVariableType(var_name));
 		
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			SymbolInfoPointer ref = symboltable->lookUp(var_name);
+			assert(ref);
+			$$ -> getTypeLocation() -> setCode(
+				new Code("MOV DX , "+getSingleVariableAddress(ref))
+			);
+		}
+
 	}
 	|  ID LTHIRD expression RTHIRD
 	{
 		logRule("variable : ID LTHIRD expression RTHIRD");
 
-		$1 -> getTypeLocation()-> setReturnType(getArrayType($1 -> getName() ));
+		string array_name = $1 -> getName();
+
+		$1 -> getTypeLocation()-> setReturnType(getArrayType(array_name ));
 		
 		if(getReturnTypeFromSIP($3) != Int)
 		{
@@ -530,6 +630,38 @@ variable :  ID
 		$3 -> push_back( $4 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code * code = $3 -> getTypeLocation() -> getCode(); /// dx e expr ache
+			SymbolInfoPointer ref = symboltable -> lookUp(array_name);
+			
+			assert(ref);
+
+			int idx = ref->getTypeLocation()->getBasedIndex();
+
+			if(idx == 0)
+			{
+				code = combine(code , Comment("get array element from memory"));
+				code = combine(code ,"SAL DX , 1");
+				code = combine(code ,"MOV BX , DX");
+				code = combine(code ,"MOV DX , PTR WORD " + array_name + "[BX]");
+			}
+			else 
+			{
+				code = combine(code , Comment("get array element from stack"));
+				code = combine(code , "PUSH BP");
+					code = combine(code , "SAL DX , 1");
+					code = combine(code , "NEG DX");
+					code = combine(code , "ADD DX , "+to_string(idx));
+					code = combine(code , "ADD BP , DX");
+					code = combine(code , "MOV DX , PTR WORD [BP]");
+				code = combine(code , "POP BP");
+			}
+
+			$$ -> getTypeLocation() -> setCode(code);
+		}
+
 	}
 	;
 
@@ -777,6 +909,15 @@ factor :  variable
 
 		$$ = $1;
 		print($$);
+
+		string num_str = $$ -> getName();
+
+		$$ -> getTypeLocation()->setCode(
+			combine(
+				new Code(Comment("integar = "+ num_str) ) ,
+				new Code("MOV DX , " + num_str  ) 
+			)
+		);
 	}
 	|  CONST_FLOAT
 	{
@@ -786,6 +927,16 @@ factor :  variable
 
 		$$ = $1;
 		print($$);
+
+		int num = stof( $$ -> getName() ) * FIXED_POINT_MULTIPLIER;
+		
+		$$ -> getTypeLocation()->setCode(
+			combine(
+				new Code(Comment("float number = "+ $$ -> getName()) ) ,
+				new Code("MOV DX , " + to_string(num)  ) 
+			)
+		);
+		
 	}
 	|  variable INCOP
 	{

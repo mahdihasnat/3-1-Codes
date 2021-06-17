@@ -90,6 +90,7 @@ public:
 
     SymbolInfo<valueType> *lookUp(string key)
     {
+        /// look up on all scope table
         ScopeTable<valueType> *current = getCurrentScopeTable();
         while (current)
         {

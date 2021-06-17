@@ -40,6 +40,11 @@ bool noerror()
 	return error_count == 0;
 }
 
+string Comment(string comment)
+{
+	return ";Line "+to_string(yylineno) + ": "+comment;
+}
+
 void yywarning(const string &s)
 {
 
@@ -187,6 +192,20 @@ Parameters calcParametersFromParameterList(SymbolInfoPointer parameters)
 	return ret;
 }
 
+string getSingleVariableAddress(SymbolInfoPointer ref)
+{
+	int idx = ref->getTypeLocation() -> getBasedIndex();
+	if(idx == 0)
+	{
+		return ref->getName();
+	}
+	else
+	{
+		return to_string(idx) + "[BP]";
+	}
+}
+
+
 
 Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = false)
 {
@@ -272,14 +291,14 @@ Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = fal
 					}
 					else if(is_from_function)
 					{
-						new_symbol -> getTypeLocation()->setBasedDisplacement(current_base_pointer);
+						new_symbol -> getTypeLocation()->setBasedIndex(current_base_pointer);
 						current_base_pointer+=direction*var_size*2;
 					}
 					else 
 					{
 						
-						code = combine(code , new Code("SUB SP , "+to_string(var_size)));
-						new_symbol -> getTypeLocation()->setBasedDisplacement(symboltable->getBaseIndex());
+						code = combine(code , new Code("SUB SP , "+to_string(var_size*2)));
+						new_symbol -> getTypeLocation()->setBasedIndex(symboltable->getBaseIndex());
 						symboltable->addBaseIndex(var_size*-2);
 					}
 				}

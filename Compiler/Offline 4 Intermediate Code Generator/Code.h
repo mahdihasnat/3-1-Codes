@@ -33,5 +33,6 @@ public:
 };
 
 Code * combine(Code *x,Code * y);
+Code * combine(Code *x,string instruction);
 
 #endif 
