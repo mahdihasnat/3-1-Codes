@@ -5,7 +5,7 @@
 using namespace std;
 
 #include "ReutrnType.h"
-
+#include "Code.h"
 //typedef pair<string,string> pss;
 
 typedef vector<ReturnType> Parameters;
@@ -30,27 +30,6 @@ typedef vector<ReturnType> Parameters;
 // 			return 0;
 // 	return 1;
 // }
-
-class Code
-{
-private:
-	string code;
-	Code * next_code;
-	Code * last_code;
-public:
-	Code(string code) : code(code) , next_code(nullptr) { last_code = this;}
-	~Code()
-	{
-		if(next_code)
-			delete next_code;
-	}
-	void append(Code * new_next_code)
-	{
-		this->last_code->next_code = new_next_code;
-		this->last_code = new_next_code->last_code;
-	}
-
-};
 
 class Info
 {

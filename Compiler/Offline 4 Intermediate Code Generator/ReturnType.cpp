@@ -33,3 +33,8 @@ string to_string(ReturnType r)
 		return "enum not found!";
 	}
 }
+
+ostream & operator <<( ostream &os ,const ReturnType &r)
+{
+	return os<<to_string(r);
+}

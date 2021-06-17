@@ -23,7 +23,7 @@ y.o: 1705003.y SymbolTable.h SymbolInfo.h ScopeTable.h ParserFunctions.h
 # 	${CC} ${CPPFLAGS} -c -o r.o ReturnType.cpp
 
 a.out: l.o y.o
-	${CC} ${CPPFLAGS} y.o l.o -lfl ReturnType.cpp
+	${CC} ${CPPFLAGS} y.o l.o -lfl ReturnType.cpp Code.cpp
 
 run:
 #	valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt 

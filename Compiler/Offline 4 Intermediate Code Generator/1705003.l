@@ -343,7 +343,7 @@ EMPTY_CHAR_ERROR '{CONTINUOUS_LINE}*'
 
 					return CONST_CHAR;
 				}
-"printf"	{
+"println"	{
 		yylval.symbolInfoPointer = processsToken("PRINTLN", yytext );
 
 		#ifdef LEXICAL_OUTPUT_ENABLED

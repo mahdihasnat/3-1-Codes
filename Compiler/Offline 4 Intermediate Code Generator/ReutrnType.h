@@ -12,5 +12,6 @@ enum ReturnType
 
 ReturnType StringToReturnType(string s);
 string to_string(ReturnType r);
+ostream & operator <<( ostream &os ,const ReturnType &r);
 
 #endif

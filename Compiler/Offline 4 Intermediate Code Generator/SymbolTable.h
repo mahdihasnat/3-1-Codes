@@ -24,6 +24,14 @@ public:
             delete currentScopeTable;
     }
 
+    bool isGlobalScope()
+    {
+        if (currentScopeTable == nullptr)
+            return false;
+        else
+            return currentScopeTable->isGlobalScopeTable();
+    }
+
     void enterScope()
     {
         ScopeTable<valueType> *parentScopeTable = currentScopeTable;
@@ -33,7 +41,7 @@ public:
     }
     void exitScope()
     {
-        
+
         if (currentScopeTable)
         {
             nextNewChild = currentScopeTable->getCurrentId() + 1;
@@ -76,7 +84,7 @@ public:
         }
     }
 
-    bool insert(SymbolInfo<valueType> * symbolinfo) /// symbolinfo stayed in  symboltable / scopetable 
+    bool insert(SymbolInfo<valueType> *symbolinfo) /// symbolinfo stayed in  symboltable / scopetable
     {
         if (currentScopeTable)
             return currentScopeTable->insert(symbolinfo);
@@ -111,9 +119,9 @@ public:
             cerr << "Current ScopeTable is empty!" << endl;
     }
 
-    void printNonEmptyBuckets(ostream & os)
+    void printNonEmptyBuckets(ostream &os)
     {
-        os<<endl;
+        os << endl;
         ScopeTable<valueType> *current = getCurrentScopeTable();
         while (current)
         {

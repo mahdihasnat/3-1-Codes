@@ -25,7 +25,14 @@ SymbolTable<Info> *symboltable;
 ofstream logstream ;
 ofstream errorstream;
 int error_count = 0;
+vector< pair< string , int > > globals;
 
+
+template<class T1,class T2>
+ostream & operator << ( ostream & os ,const pair<T1,T2> &p)
+{
+	return os<<"{"<<p.first<<","<<p.second<<"}";
+}
 
 %}
 
@@ -97,6 +104,21 @@ start :  program
 		logRule("start : program");
 		$$ = $1;
 		//print($$);
+		DBG(error_count);
+		
+		
+		Code *code  = new Code(".MODEL SMALL");
+		code = combine(code , new Code(".STACK 100H"));
+
+		code = combine(code , new Code(".DATA"));
+		for(pair<string,int > id_sz : globals)
+		{
+			code=combine(code , new Code(id_sz.first + " DW "+to_string(id_sz.second)+" DUP 0"));
+		}
+		code = combine(code , new Code(".CODE"));
+		
+		DBG(*code);
+		
 		delete $$;
 	}
 	;

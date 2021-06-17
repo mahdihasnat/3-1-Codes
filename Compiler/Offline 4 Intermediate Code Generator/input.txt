@@ -1,0 +1,13 @@
+int x,y,z,a[2],b[3];
+int q[2];
+int  f(int x,int y,int z)
+{
+	return x;
+}
+float t;
+int main()
+{
+	int x;
+	x=f(1,2,3);
+	println(x);
+}

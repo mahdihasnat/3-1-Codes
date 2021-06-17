@@ -41,6 +41,11 @@ public:
             delete parentScopeTable;
     }
 
+    bool isGlobalScopeTable()
+    {
+        return parentScopeTable == nullptr;
+    }
+
     bool insert(SymbolInfo<valueType> *symbolinfo) /// symbol info connected to scopetable
     {
         int buncket_index = symbolinfo->hashCode() % total_bucket;

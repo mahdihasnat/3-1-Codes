@@ -17,6 +17,7 @@ extern int yylineno;
 extern char * yytext;
 extern int error_count;
 extern SymbolTable<Info> *symboltable;
+extern vector< pair< string , int > > globals;
 
 extern ofstream logstream;
 extern ofstream errorstream;
@@ -32,6 +33,11 @@ void yyerror(const string &s)
 	
 	logstream<<"Error at line "<<yylineno<<": ";
 	logstream<<s<<"\n\n";
+}
+
+bool noerror()
+{
+	return error_count == 0;
 }
 
 void yywarning(const string &s)
@@ -182,7 +188,7 @@ Parameters calcParametersFromParameterList(SymbolInfoPointer parameters)
 }
 
 
-void add_variable_declaration(SymbolInfoPointer sip)
+Code* add_variable_declaration(SymbolInfoPointer sip)
 {
 	/// sip = var_declaration
 	// var_declaration : type_specifier declaration_list SEMICOLON
@@ -204,7 +210,10 @@ void add_variable_declaration(SymbolInfoPointer sip)
 	// 		| type_specifier ID
 	// 		| type_specifier
 	// 		;
-	if(sip == 0) return ;
+
+	Code * code = nullptr;
+
+	if(sip == 0) return code;
 
 	ReturnType type_specifier  = Error;
 	bool used_type_specifier  = false ; 
@@ -237,13 +246,30 @@ void add_variable_declaration(SymbolInfoPointer sip)
 				new_symbol->getTypeLocation()->setReturnType(type_specifier);
 				used_type_specifier = true;
 				
+				int var_size = 1;
+
 				if(sip->getNextSymbolInfo() and sip->getNextSymbolInfo()->getTypeLocation()->getType()=="LTHIRD")
+				{
 					new_symbol->getTypeLocation()->setArray();
+					string const_int_str = sip->getNextSymbolInfo()->getNextSymbolInfo()->getName();
+					var_size  = stoi(const_int_str);
+				}
 
 				bool inserted = symboltable->insert(new_symbol); //owner of new_symbol is symboltable
 				if(!inserted)
 				{
 					yyerror("Multiple Declaration of "+ sip->getName());
+				}
+				else if(noerror())
+				{
+					if(symboltable->isGlobalScope())
+					{
+						globals.push_back(make_pair(sip->getName(),var_size ));
+					}
+					else 
+					{
+						/// code to allocate memory for local vars
+					}
 				}
 			}
 		}
@@ -255,6 +281,7 @@ void add_variable_declaration(SymbolInfoPointer sip)
 		yyerror("Variable name not found after "+ to_string(type_specifier) + " in function declaration");
 	}
 	
+	return code;
 }
 
 
