@@ -1,25 +1,26 @@
 
 int x;
-int mema[10];
+int dp[100];
+int mema[100];
+void fun()
+{
+
+}
+void foo(int x,int y)
+{
+}
+int bar()
+{
+	return dp[10];
+}
+
 int main()
 {
-	
-	int i;
-	i=0;
-
-	while (1)
-	{
-		
-		int z;
-		z = i--;
-		println(z);
-		x--;
-		println(x);
-		int j;
-		mema[5]--;
-		j=mema[5];
-		println(j);
-	}
-	
+	fun();
+	x=10;
+	mema[5]=34;
+	foo(x,mema[5]);
+	dp[10] = 199;
+	x = bar();
 	println(x);
 }

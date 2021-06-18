@@ -446,6 +446,7 @@ Code *add_variable_declaration(SymbolInfoPointer sip, bool is_from_function = fa
 	ReturnType type_specifier = Error;
 	bool used_type_specifier = false;
 
+	// current_base_pointer concern number of push in function_defination : id lpaer ...
 	int current_base_pointer = is_from_function ? 4 : symboltable->getBaseIndex(); /// need to correct for non function
 
 	while (sip)

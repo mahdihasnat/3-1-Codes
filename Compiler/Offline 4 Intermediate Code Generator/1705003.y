@@ -241,7 +241,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
 
 			code = combine(code , new Code(funcName + " PROC"));
-
+			// number of push concerned add_variable_declaration::current_base_pointer
 			code = combine(code , new Code("PUSH BP"));
 			code = combine(code , new Code("MOV BP , SP"));
 
@@ -1255,13 +1255,30 @@ factor :  variable
 	{
 		logRule("factor : ID LPAREN argument_list RPAREN");
 
-		$1 -> getTypeLocation() -> setReturnType( getFuncReturnType($1 -> getName() , $3) );
+		string funcName = $1 -> getName() ;
+
+		$1 -> getTypeLocation() -> setReturnType( getFuncReturnType(funcName, $3) );
 
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
 		$3 -> push_back( $4 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code * code = nullptr ;
+
+			code = combine(
+				code ,
+				$3 ? $3 -> gTL() ->getCode() : nullptr
+			);
+
+			code = combine(code, "CALL "+funcName);
+
+			$$ -> gTL() -> setCode(code);
+		}
+
 	}
 	|  LPAREN expression RPAREN
 	{
@@ -1527,6 +1544,20 @@ arguments :  arguments COMMA logic_expression
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+		
+		if(noerror()){
+			$$ -> gTL() -> setCode(
+				combine(
+					combine(
+						$3 -> gTL()->getCode(),
+						"PUSH DX"
+					),
+					$1 -> gTL()->getCode() 
+				)
+				
+			);
+		}
+
 	}
 	|  logic_expression
 	{
@@ -1534,6 +1565,15 @@ arguments :  arguments COMMA logic_expression
 		$1 -> getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($1));
 		$$ = $1;
 		print($$);
+
+		if(noerror()){
+			$$ -> gTL() -> setCode(
+				combine(
+					$1 -> gTL()->getCode(),
+					"PUSH DX"
+				)
+			);
+		}
 	}
 	| arguments error
 	{
@@ -1547,6 +1587,15 @@ arguments :  arguments COMMA logic_expression
 		$$ = $2;
 		$$ ->  getTypeLocation()->getParametersLocation()->push_back(getReturnTypeFromSIP($$));
 		print($$);
+
+		if(noerror()){
+			$$ -> gTL() -> setCode(
+				combine(
+					$2 -> gTL()->getCode(),
+					"PUSH DX"
+				)
+			);
+		}
 	}
 	;
 %%
