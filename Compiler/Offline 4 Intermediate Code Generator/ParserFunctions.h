@@ -225,7 +225,52 @@ string getSingleVariableAddress(SymbolInfoPointer ref)
 	}
 }
 
+void readFromVariable(SymbolInfoPointer sip)
+{
+	// variable : ID 		
+	//  		| ID LTHIRD expression RTHIRD 
+	//  		;
+	assert(noerror());
+	string var_name = sip->getName();
+	SymbolInfoPointer ref = symboltable->lookUp(var_name);
+	assert(ref);
+	if(ref->getTypeLocation()->isArray())
+	{
+		SymbolInfoPointer expr = sip -> getNextSymbolInfo() -> getNextSymbolInfo();
 
+		Code * code = expr -> getTypeLocation() -> getCode(); /// dx e expr ache
+
+		int idx = ref->getTypeLocation()->getBasedIndex();
+
+		if(idx == -1)
+		{
+			code = combine(code , Comment("get array element from memory"));
+			code = combine(code ,"SAL DX , 1");
+			code = combine(code ,"MOV BX , DX");
+			code = combine(code ,"MOV DX , PTR WORD " + var_name + "[BX]");
+		}
+		else 
+		{
+			code = combine(code , Comment("get array element from stack"));
+			code = combine(code , "PUSH BP");
+				code = combine(code , "SAL DX , 1");
+				code = combine(code , "ADD DX , "+to_string(idx));
+				code = combine(code , "ADD BP , DX");
+				code = combine(code , "MOV DX , PTR WORD [BP]");
+			code = combine(code , "POP BP");
+		}
+
+		sip -> getTypeLocation() -> setCode(code);
+
+	}
+	else 
+	{
+		sip -> getTypeLocation() -> setCode(
+			new Code("MOV DX , "+getSingleVariableAddress(ref))
+		);
+	}
+
+}
 
 Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = false)
 {
@@ -317,8 +362,8 @@ Code* add_variable_declaration(SymbolInfoPointer sip,bool is_from_function = fal
 					{
 						
 						code = combine(code , new Code("SUB SP , "+to_string(var_size*2)));
-						new_symbol -> getTypeLocation()->setBasedIndex(symboltable->getBaseIndex());
 						symboltable->addBaseIndex(var_size*-2);
+						new_symbol -> getTypeLocation()->setBasedIndex(symboltable->getBaseIndex());
 					}
 				}
 			}
@@ -381,25 +426,25 @@ void add_func_definition(SymbolInfoPointer returnType  , SymbolInfoPointer funcN
 
 ReturnType getVariableType(string varName )
 {
-	SymbolInfoPointer sip = symboltable->lookUp(varName);
-	if(sip == nullptr)
+	SymbolInfoPointer ref = symboltable->lookUp(varName);
+	if(ref == nullptr)
 	{
 		yyerror("Undeclared variable "+varName);
 		return Error;
 	}
-	else if(sip->getTypeLocation()-> isArray())
+	else if(ref->getTypeLocation()-> isArray())
 	{
 		yyerror("Type mismatch, "+varName+" is an array");
-		return getReturnTypeFromSIP(sip);
+		return getReturnTypeFromSIP(ref);
 	}
-	else if(sip->getTypeLocation()-> isFunction())
+	else if(ref->getTypeLocation()-> isFunction())
 	{
 		yyerror("Parameters not used in Function : "+ varName);
 		return Error;
 	}
 	else 
 	{
-		return getReturnTypeFromSIP(sip);
+		return getReturnTypeFromSIP(ref);
 	}
 }
 ReturnType getArrayType(string varName)

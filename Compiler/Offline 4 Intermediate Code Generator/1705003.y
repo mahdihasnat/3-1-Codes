@@ -118,7 +118,7 @@ start :  program
 
 		for(pair<string,int > id_sz : globals)
 		{
-			code=combine(code , new Code(id_sz.first + " DW "+to_string(id_sz.second)+" DUP 0000H"));
+			code=combine(code , new Code(id_sz.first + " DW "+to_string(id_sz.second)+" DUP (0000H)"));
 		}
 		code = combine(code , new Code(".CODE"));
 
@@ -589,7 +589,7 @@ statement :  var_declaration
 		$$ = $1;
 		print($$);
 	}
-	|  PRINTLN LPAREN variable RPAREN SEMICOLON
+	|  PRINTLN LPAREN ID RPAREN SEMICOLON
 	{
 		logRule("statement : PRINTLN LPAREN ID RPAREN SEMICOLON");
 
@@ -602,20 +602,35 @@ statement :  var_declaration
 		$$ = $1;
 		print($$);
 
-		Code * code = $3 -> getTypeLocation() -> getCode();
 
-		code = combine(
-			code ,
-			"PUSH DX"
-		);
-		code = combine(
-			code ,
-			"CALL PRINTLN"
-		);
+		if(noerror())
+		{
 
-		$$ -> getTypeLocation() -> setCode(
-			code
-		);
+			string var_name = $3 -> getName();
+
+			SymbolInfoPointer ref = symboltable -> lookUp(var_name);
+
+			Code * code = nullptr;
+
+			code = combine(
+				code ,
+				"MOV DX , "+getSingleVariableAddress(ref)
+			);
+			
+			code = combine(
+				code ,
+				"PUSH DX"
+			);
+
+			code = combine(
+				code ,
+				"CALL PRINTLN"
+			);
+
+			$$ -> getTypeLocation() -> setCode(
+				code
+			);
+		}
 
 	}
 	|  RETURN expression SEMICOLON
@@ -671,15 +686,6 @@ variable :  ID
 		$$ = $1;
 		print($$);
 
-		if(noerror())
-		{
-			SymbolInfoPointer ref = symboltable->lookUp(var_name);
-			assert(ref);
-			$$ -> getTypeLocation() -> setCode(
-				new Code("MOV DX , "+getSingleVariableAddress(ref))
-			);
-		}
-
 	}
 	|  ID LTHIRD expression RTHIRD
 	{
@@ -702,36 +708,6 @@ variable :  ID
 		$$ = $1;
 		print($$);
 
-		if(noerror())
-		{
-			Code * code = $3 -> getTypeLocation() -> getCode(); /// dx e expr ache
-			SymbolInfoPointer ref = symboltable -> lookUp(array_name);
-			
-			assert(ref);
-
-			int idx = ref->getTypeLocation()->getBasedIndex();
-
-			if(idx == -1)
-			{
-				code = combine(code , Comment("get array element from memory"));
-				code = combine(code ,"SAL DX , 1");
-				code = combine(code ,"MOV BX , DX");
-				code = combine(code ,"MOV DX , PTR WORD " + array_name + "[BX]");
-			}
-			else 
-			{
-				code = combine(code , Comment("get array element from stack"));
-				code = combine(code , "PUSH BP");
-					code = combine(code , "SAL DX , 1");
-					code = combine(code , "NEG DX");
-					code = combine(code , "ADD DX , "+to_string(idx));
-					code = combine(code , "ADD BP , DX");
-					code = combine(code , "MOV DX , PTR WORD [BP]");
-				code = combine(code , "POP BP");
-			}
-
-			$$ -> getTypeLocation() -> setCode(code);
-		}
 
 	}
 	;
@@ -767,21 +743,60 @@ expression :  logic_expression
 		{
 			Code * code = nullptr;
 
-			code = combine(
-				code ,
-				$3 -> getTypeLocation()->getCode()
-			);
-
 			string var_name = $1 -> getName();
 			SymbolInfoPointer ref = symboltable->lookUp(var_name);
 			assert(ref);
 			
 			if(ref -> getTypeLocation() -> isArray())
 			{
-				assert(0);// todo : implemented
+				
+				SymbolInfoPointer expr = $1 -> getNextSymbolInfo() -> getNextSymbolInfo();
+
+				code = combine(
+					code , 
+					expr -> getTypeLocation() -> getCode() /// dx e expr ache
+				);
+				
+
+				code = combine(code , "PUSH DX");
+					code = combine(
+						code , 
+						$3 -> getTypeLocation() -> getCode()
+					);
+				code = combine(code , "POP AX"); 
+				// ax -> index , dx -> value
+				code = combine(code , "XCHG AX ,DX");
+				// dx -> index , ax -> value
+
+				int idx = ref->getTypeLocation()->getBasedIndex();
+
+				if(idx == -1)
+				{
+					code = combine(code , Comment("set  element to memory array"));
+					code = combine(code ,"SAL DX , 1");
+					code = combine(code ,"MOV BX , DX");
+					code = combine(code ,"MOV PTR WORD " + var_name + "[BX] , AX" );
+					code = combine(code ,"MOV DX , AX");
+				}
+				else 
+				{
+					code = combine(code , Comment("put element to stack array"));
+					code = combine(code , "PUSH BP");
+						code = combine(code , "SAL DX , 1");
+						code = combine(code , "ADD DX , "+to_string(idx));
+						code = combine(code , "ADD BP , DX");
+						code = combine(code , "MOV PTR WORD [BP] , AX");
+						code = combine(code , "MOV DX , AX");
+					code = combine(code , "POP BP");
+				}
+
 			}
 			else 
 			{
+				code = combine(
+					code ,
+					$3 -> getTypeLocation()->getCode()
+				);
 				code = combine(code , "MOV "+getSingleVariableAddress(ref)+" , DX" );
 			}
 			
@@ -1200,6 +1215,10 @@ factor :  variable
 		logRule("factor : variable");
 		$$ = $1;
 		print($$);
+		
+		if(noerror())
+			readFromVariable($$);
+
 	}
 	|  ID LPAREN argument_list RPAREN
 	{
