@@ -1373,6 +1373,11 @@ factor :  variable
 			SymbolInfoPointer ref = symboltable->lookUp(var_name);
 			assert(ref);
 
+			int changeAmount = 1;
+			if(resultType == Int) changeAmount = 1;
+			else if(resultType == Float) changeAmount = FIXED_POINT_MULTIPLIER;
+			else assert(0);
+
 			if (ref->getTypeLocation()->isArray())
 			{
 				SymbolInfoPointer expr = sip->getNextSymbolInfo()->getNextSymbolInfo();
@@ -1391,7 +1396,7 @@ factor :  variable
 					code = combine(code, "MOV BX , DX");
 					code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
 					code = combine(code, "MOV AX , DX");
-					code = combine(code, "INC AX ");
+					code = combine(code, "ADD AX , " +to_string(changeAmount) );
 					code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
 				}
 				else
@@ -1403,7 +1408,7 @@ factor :  variable
 						code = combine(code, "ADD BP , DX");
 						code = combine(code, "MOV DX , PTR WORD [BP]");
 						code = combine(code, "MOV AX , DX");
-						code = combine(code, "INC AX ");
+						code = combine(code, "ADD AX , " +to_string(changeAmount) );
 						code = combine(code, "MOV PTR WORD [BP] , AX");
 					code = combine(code, "POP BP");
 				}
@@ -1413,7 +1418,7 @@ factor :  variable
 				
 				code = combine(code, "MOV DX , " + getSingleVariableAddress(ref));
 				code = combine(code, "MOV AX , DX");
-				code = combine(code, "INC AX ");
+				code = combine(code, "ADD AX , " +to_string(changeAmount) );
 				code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , AX");
 			}
 			
@@ -1463,6 +1468,11 @@ factor :  variable
 			SymbolInfoPointer ref = symboltable->lookUp(var_name);
 			assert(ref);
 
+			int changeAmount = 1;
+			if(resultType == Int) changeAmount = 1;
+			else if(resultType == Float) changeAmount = FIXED_POINT_MULTIPLIER;
+			else assert(0);
+
 			if (ref->getTypeLocation()->isArray())
 			{
 				SymbolInfoPointer expr = sip->getNextSymbolInfo()->getNextSymbolInfo();
@@ -1481,7 +1491,7 @@ factor :  variable
 					code = combine(code, "MOV BX , DX");
 					code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
 					code = combine(code, "MOV AX , DX");
-					code = combine(code, "DEC AX ");
+					code = combine(code, "SUB AX , " +to_string(changeAmount) );
 					code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
 				}
 				else
@@ -1493,7 +1503,7 @@ factor :  variable
 						code = combine(code, "ADD BP , DX");
 						code = combine(code, "MOV DX , PTR WORD [BP]");
 						code = combine(code, "MOV AX , DX");
-						code = combine(code, "DEC AX ");
+						code = combine(code, "SUB AX , " +to_string(changeAmount) );
 						code = combine(code, "MOV PTR WORD [BP] , AX");
 					code = combine(code, "POP BP");
 				}
@@ -1503,7 +1513,7 @@ factor :  variable
 				
 				code = combine(code, "MOV DX , " + getSingleVariableAddress(ref));
 				code = combine(code, "MOV AX , DX");
-				code = combine(code, "DEC AX ");
+				code = combine(code, "SUB AX , " +to_string(changeAmount) );
 				code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , AX");
 			}
 			
