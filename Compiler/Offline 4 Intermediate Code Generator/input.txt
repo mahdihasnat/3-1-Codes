@@ -4,16 +4,10 @@ int mema[5];
 int main()
 {
 	
-	
 	int y;
-	//for(x=0;x<20;x = x + 1) t[x] = x*x;
-	for(x=0;x<20;x = x + 1) 
-	{
-		
-		for(y=0;y<x;y=y+1)
-			println(x);
-	}
-	x = 12 * 12;
-	println(x);
-	
+	int z[30];
+	y=3;println(y);
+	z[3] = 4; y=z[3]; println(y);
+	mema[3] = 5 ; y=mema[3]; println(y);
+	x=6;println(x);
 }

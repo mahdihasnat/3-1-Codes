@@ -49,470 +49,574 @@ Line 4: type_specifier : INT
 
 int 
 
+Line 7: type_specifier : INT
+
+int 
+
+Line 7: declaration_list : ID
+
+y
+
+Line 7: var_declaration : type_specifier declaration_list SEMICOLON
+
+int y;
+
+
+Line 7: statement : var_declaration
+
+int y;
+
+
+Line 7: statements : statement
+
+int y;
+
+
 Line 8: type_specifier : INT
 
 int 
 
-Line 8: declaration_list : ID
+Line 8: declaration_list : ID LTHIRD CONST_INT RTHIRD
 
-y
+z[30]
 
 Line 8: var_declaration : type_specifier declaration_list SEMICOLON
 
-int y;
+int z[30];
 
 
 Line 8: statement : var_declaration
 
+int z[30];
+
+
+Line 8: statements : statements statement
+
 int y;
+int z[30];
 
 
-Line 8: statements : statement
+Line 9: variable : ID
+
+y
+
+Line 9: factor : CONST_INT
+
+3
+
+Line 9: unary_expression : factor
+
+3
+
+Line 9: term : unary_expression
+
+3
+
+Line 9: simple_expression : term
+
+3
+
+Line 9: rel_expression : simple_expression
+
+3
+
+Line 9: logic_expression : rel_expression
+
+3
+
+Line 9: expression : variable ASSIGNOP logic_expression
+
+y=3
+
+Line 9: expression_statement : expression SEMICOLON
+
+y=3;
+
+
+Line 9: statement : expression_statement
+
+y=3;
+
+
+Line 9: statements : statements statement
 
 int y;
+int z[30];
+y=3;
 
 
-Line 10: variable : ID
+Line 9: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
-x
+println(y);
+
+
+Line 9: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+
 
 Line 10: factor : CONST_INT
 
-0
+3
 
 Line 10: unary_expression : factor
 
-0
+3
 
 Line 10: term : unary_expression
 
-0
+3
 
 Line 10: simple_expression : term
 
-0
+3
 
 Line 10: rel_expression : simple_expression
 
-0
+3
 
 Line 10: logic_expression : rel_expression
 
-0
-
-Line 10: expression : variable ASSIGNOP logic_expression
-
-x=0
-
-Line 10: expression_statement : expression SEMICOLON
-
-x=0;
-
-
-Line 10: variable : ID
-
-x
-
-Line 10: factor : variable
-
-x
-
-Line 10: unary_expression : factor
-
-x
-
-Line 10: term : unary_expression
-
-x
-
-Line 10: simple_expression : term
-
-x
-
-Line 10: factor : CONST_INT
-
-20
-
-Line 10: unary_expression : factor
-
-20
-
-Line 10: term : unary_expression
-
-20
-
-Line 10: simple_expression : term
-
-20
-
-Line 10: rel_expression : simple_expression RELOP simple_expression
-
-x<20
-
-Line 10: logic_expression : rel_expression
-
-x<20
+3
 
 Line 10: expression : logic expression
 
-x<20
+3
 
-Line 10: expression_statement : expression SEMICOLON
+Line 10: variable : ID LTHIRD expression RTHIRD
 
-x<20;
-
-
-Line 10: variable : ID
-
-x
-
-Line 10: variable : ID
-
-x
-
-Line 10: factor : variable
-
-x
-
-Line 10: unary_expression : factor
-
-x
-
-Line 10: term : unary_expression
-
-x
-
-Line 10: simple_expression : term
-
-x
+z[3]
 
 Line 10: factor : CONST_INT
 
-1
+4
 
 Line 10: unary_expression : factor
 
-1
+4
 
 Line 10: term : unary_expression
 
-1
+4
 
-Line 10: simple_expression : simple_expression ADDOP term
+Line 10: simple_expression : term
 
-x+1
+4
 
 Line 10: rel_expression : simple_expression
 
-x+1
+4
 
 Line 10: logic_expression : rel_expression
 
-x+1
+4
 
 Line 10: expression : variable ASSIGNOP logic_expression
 
-x=x+1
+z[3]=4
 
-Line 13: variable : ID
+Line 10: expression_statement : expression SEMICOLON
 
-y
-
-Line 13: factor : CONST_INT
-
-0
-
-Line 13: unary_expression : factor
-
-0
-
-Line 13: term : unary_expression
-
-0
-
-Line 13: simple_expression : term
-
-0
-
-Line 13: rel_expression : simple_expression
-
-0
-
-Line 13: logic_expression : rel_expression
-
-0
-
-Line 13: expression : variable ASSIGNOP logic_expression
-
-y=0
-
-Line 13: expression_statement : expression SEMICOLON
-
-y=0;
+z[3]=4;
 
 
-Line 13: variable : ID
+Line 10: statement : expression_statement
+
+z[3]=4;
+
+
+Line 10: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+
+
+Line 10: variable : ID
 
 y
 
-Line 13: factor : variable
+Line 10: factor : CONST_INT
+
+3
+
+Line 10: unary_expression : factor
+
+3
+
+Line 10: term : unary_expression
+
+3
+
+Line 10: simple_expression : term
+
+3
+
+Line 10: rel_expression : simple_expression
+
+3
+
+Line 10: logic_expression : rel_expression
+
+3
+
+Line 10: expression : logic expression
+
+3
+
+Line 10: variable : ID LTHIRD expression RTHIRD
+
+z[3]
+
+Line 10: factor : variable
+
+z[3]
+
+Line 10: unary_expression : factor
+
+z[3]
+
+Line 10: term : unary_expression
+
+z[3]
+
+Line 10: simple_expression : term
+
+z[3]
+
+Line 10: rel_expression : simple_expression
+
+z[3]
+
+Line 10: logic_expression : rel_expression
+
+z[3]
+
+Line 10: expression : variable ASSIGNOP logic_expression
+
+y=z[3]
+
+Line 10: expression_statement : expression SEMICOLON
+
+y=z[3];
+
+
+Line 10: statement : expression_statement
+
+y=z[3];
+
+
+Line 10: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+
+
+Line 10: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(y);
+
+
+Line 10: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+println(y);
+
+
+Line 11: factor : CONST_INT
+
+3
+
+Line 11: unary_expression : factor
+
+3
+
+Line 11: term : unary_expression
+
+3
+
+Line 11: simple_expression : term
+
+3
+
+Line 11: rel_expression : simple_expression
+
+3
+
+Line 11: logic_expression : rel_expression
+
+3
+
+Line 11: expression : logic expression
+
+3
+
+Line 11: variable : ID LTHIRD expression RTHIRD
+
+mema[3]
+
+Line 11: factor : CONST_INT
+
+5
+
+Line 11: unary_expression : factor
+
+5
+
+Line 11: term : unary_expression
+
+5
+
+Line 11: simple_expression : term
+
+5
+
+Line 11: rel_expression : simple_expression
+
+5
+
+Line 11: logic_expression : rel_expression
+
+5
+
+Line 11: expression : variable ASSIGNOP logic_expression
+
+mema[3]=5
+
+Line 11: expression_statement : expression SEMICOLON
+
+mema[3]=5;
+
+
+Line 11: statement : expression_statement
+
+mema[3]=5;
+
+
+Line 11: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+println(y);
+mema[3]=5;
+
+
+Line 11: variable : ID
 
 y
 
-Line 13: unary_expression : factor
+Line 11: factor : CONST_INT
 
-y
+3
 
-Line 13: term : unary_expression
+Line 11: unary_expression : factor
 
-y
+3
 
-Line 13: simple_expression : term
+Line 11: term : unary_expression
 
-y
+3
 
-Line 13: variable : ID
+Line 11: simple_expression : term
+
+3
+
+Line 11: rel_expression : simple_expression
+
+3
+
+Line 11: logic_expression : rel_expression
+
+3
+
+Line 11: expression : logic expression
+
+3
+
+Line 11: variable : ID LTHIRD expression RTHIRD
+
+mema[3]
+
+Line 11: factor : variable
+
+mema[3]
+
+Line 11: unary_expression : factor
+
+mema[3]
+
+Line 11: term : unary_expression
+
+mema[3]
+
+Line 11: simple_expression : term
+
+mema[3]
+
+Line 11: rel_expression : simple_expression
+
+mema[3]
+
+Line 11: logic_expression : rel_expression
+
+mema[3]
+
+Line 11: expression : variable ASSIGNOP logic_expression
+
+y=mema[3]
+
+Line 11: expression_statement : expression SEMICOLON
+
+y=mema[3];
+
+
+Line 11: statement : expression_statement
+
+y=mema[3];
+
+
+Line 11: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+println(y);
+mema[3]=5;
+y=mema[3];
+
+
+Line 11: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(y);
+
+
+Line 11: statements : statements statement
+
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+println(y);
+mema[3]=5;
+y=mema[3];
+println(y);
+
+
+Line 12: variable : ID
 
 x
 
-Line 13: factor : variable
+Line 12: factor : CONST_INT
 
-x
+6
 
-Line 13: unary_expression : factor
+Line 12: unary_expression : factor
 
-x
+6
 
-Line 13: term : unary_expression
+Line 12: term : unary_expression
 
-x
+6
 
-Line 13: simple_expression : term
+Line 12: simple_expression : term
 
-x
+6
 
-Line 13: rel_expression : simple_expression RELOP simple_expression
+Line 12: rel_expression : simple_expression
 
-y<x
+6
 
-Line 13: logic_expression : rel_expression
+Line 12: logic_expression : rel_expression
 
-y<x
+6
 
-Line 13: expression : logic expression
+Line 12: expression : variable ASSIGNOP logic_expression
 
-y<x
+x=6
 
-Line 13: expression_statement : expression SEMICOLON
+Line 12: expression_statement : expression SEMICOLON
 
-y<x;
+x=6;
 
 
-Line 13: variable : ID
+Line 12: statement : expression_statement
 
-y
+x=6;
 
-Line 13: variable : ID
 
-y
+Line 12: statements : statements statement
 
-Line 13: factor : variable
+int y;
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+println(y);
+mema[3]=5;
+y=mema[3];
+println(y);
+x=6;
 
-y
 
-Line 13: unary_expression : factor
-
-y
-
-Line 13: term : unary_expression
-
-y
-
-Line 13: simple_expression : term
-
-y
-
-Line 13: factor : CONST_INT
-
-1
-
-Line 13: unary_expression : factor
-
-1
-
-Line 13: term : unary_expression
-
-1
-
-Line 13: simple_expression : simple_expression ADDOP term
-
-y+1
-
-Line 13: rel_expression : simple_expression
-
-y+1
-
-Line 13: logic_expression : rel_expression
-
-y+1
-
-Line 13: expression : variable ASSIGNOP logic_expression
-
-y=y+1
-
-Line 14: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 12: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
 println(x);
 
 
-Line 14: statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement
-
-for(y=0;y<x;y=y+1)println(x);
-
-
-Line 14: statements : statement
-
-for(y=0;y<x;y=y+1)println(x);
-
-
-Line 15: compound_statement : LCURL statements RCURL
-
-{
-  for(y=0;  y<x;  y=y+1)println(x);
-}
-
-
-
-
-
-ScopeTable # 1.1.1
-
-
-
-ScopeTable # 1.1
- 1 --> < y , ID{disp = -2} > 
-
-
-
-ScopeTable # 1
- 0 --> < x , ID{disp = -1} > 
- 1 --> < main , ID{disp = -1} > 
- 26 --> < mema , ID{disp = -1} > 
-
-
-Line 15: statement : compound_statement
-
-{
-  for(y=0;  y<x;  y=y+1)println(x);
-}
-
-
-
-Line 15: statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement
-
-for(x=0;x<20;x=x+1){
-  for(y=0;  y<x;  y=y+1)println(x);
-}
-
-
-
-Line 15: statements : statements statement
+Line 12: statements : statements statement
 
 int y;
-for(x=0;x<20;x=x+1){
-  for(y=0;  y<x;  y=y+1)println(x);
-}
-
-
-
-Line 16: variable : ID
-
-x
-
-Line 16: factor : CONST_INT
-
-12
-
-Line 16: unary_expression : factor
-
-12
-
-Line 16: term : unary_expression
-
-12
-
-Line 16: factor : CONST_INT
-
-12
-
-Line 16: unary_expression : factor
-
-12
-
-Line 16: term : term MULOP unary_expression
-
-12*12
-
-Line 16: simple_expression : term
-
-12*12
-
-Line 16: rel_expression : simple_expression
-
-12*12
-
-Line 16: logic_expression : rel_expression
-
-12*12
-
-Line 16: expression : variable ASSIGNOP logic_expression
-
-x=12*12
-
-Line 16: expression_statement : expression SEMICOLON
-
-x=12*12;
-
-
-Line 16: statement : expression_statement
-
-x=12*12;
-
-
-Line 16: statements : statements statement
-
-int y;
-for(x=0;x<20;x=x+1){
-  for(y=0;  y<x;  y=y+1)println(x);
-}
-
-x=12*12;
-
-
-Line 17: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
+int z[30];
+y=3;
+println(y);
+z[3]=4;
+y=z[3];
+println(y);
+mema[3]=5;
+y=mema[3];
+println(y);
+x=6;
 println(x);
 
 
-Line 17: statements : statements statement
-
-int y;
-for(x=0;x<20;x=x+1){
-  for(y=0;  y<x;  y=y+1)println(x);
-}
-
-x=12*12;
-println(x);
-
-
-Line 19: compound_statement : LCURL statements RCURL
+Line 13: compound_statement : LCURL statements RCURL
 
 {
   int y;
-  for(x=0;  x<20;  x=x+1){
-    for(y=0;    y<x;    y=y+1)println(x);
-  }
-  x=12*12;
+  int z[30];
+  y=3;
+  println(y);
+  z[3]=4;
+  y=z[3];
+  println(y);
+  mema[3]=5;
+  y=mema[3];
+  println(y);
+  x=6;
   println(x);
 }
 
@@ -522,6 +626,7 @@ Line 19: compound_statement : LCURL statements RCURL
 
 ScopeTable # 1.1
  1 --> < y , ID{disp = -2} > 
+ 2 --> < z , ID{disp = -62} > 
 
 
 
@@ -531,48 +636,66 @@ ScopeTable # 1
  26 --> < mema , ID{disp = -1} > 
 
 
-Line 19: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 13: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
   int y;
-  for(x=0;  x<20;  x=x+1){
-    for(y=0;    y<x;    y=y+1)println(x);
-  }
-  x=12*12;
+  int z[30];
+  y=3;
+  println(y);
+  z[3]=4;
+  y=z[3];
+  println(y);
+  mema[3]=5;
+  y=mema[3];
+  println(y);
+  x=6;
   println(x);
 }
 
 
 
-Line 19: unit : func_definition
+Line 13: unit : func_definition
 
 int main(){
   int y;
-  for(x=0;  x<20;  x=x+1){
-    for(y=0;    y<x;    y=y+1)println(x);
-  }
-  x=12*12;
+  int z[30];
+  y=3;
+  println(y);
+  z[3]=4;
+  y=z[3];
+  println(y);
+  mema[3]=5;
+  y=mema[3];
+  println(y);
+  x=6;
   println(x);
 }
 
 
 
-Line 19: program : program unit
+Line 13: program : program unit
 
 int x;
 int mema[5];
 int main(){
   int y;
-  for(x=0;  x<20;  x=x+1){
-    for(y=0;    y<x;    y=y+1)println(x);
-  }
-  x=12*12;
+  int z[30];
+  y=3;
+  println(y);
+  z[3]=4;
+  y=z[3];
+  println(y);
+  mema[3]=5;
+  y=mema[3];
+  println(y);
+  x=6;
   println(x);
 }
 
 
 
-Line 19: start : program
+Line 13: start : program
 
 
 
@@ -583,6 +706,6 @@ ScopeTable # 1
 
 
 
-Total lines: 19
+Total lines: 13
 Total errors: 0
 

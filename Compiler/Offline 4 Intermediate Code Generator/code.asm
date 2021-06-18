@@ -88,100 +88,77 @@ println ENDP
 main PROC
 PUSH BP
 MOV BP , SP
-;Line 19: DATA SEGMENT INITIALIZATION
+;Line 13: DATA SEGMENT INITIALIZATION
 MOV AX, @DATA
 MOV DS, AX
 SUB SP , 2
-;Line 15: start of for loop
-;Line 10: integar = 0
-MOV DX , 0
-MOV x , DX
-for_body_6:
-;>>
-	;Line 10: Relational operator checking
-	MOV DX , x
-	PUSH DX
-	;Line 10: integar = 20
-	MOV DX , 20
-	POP AX
-	CMP AX , DX
-	JL relop_is_ok_0
-	MOV DX , 0
-	JMP relop_end_1
-	relop_is_ok_0:
-	MOV DX , 1
-	relop_end_1:
-	CMP DX , 0
-	JZ for_end_7
-	;>>
-		;Line 15: start of for loop statement
-		;Line 14: start of for loop
-		;Line 13: integar = 0
-		MOV DX , 0
-		MOV -2[BP] , DX
-		for_body_4:
-		;>>
-			;Line 13: Relational operator checking
-			MOV DX , -2[BP]
-			PUSH DX
-			MOV DX , x
-			POP AX
-			CMP AX , DX
-			JL relop_is_ok_2
-			MOV DX , 0
-			JMP relop_end_3
-			relop_is_ok_2:
-			MOV DX , 1
-			relop_end_3:
-			CMP DX , 0
-			JZ for_end_5
-			;>>
-				;Line 14: start of for loop statement
-				MOV DX , x
-				PUSH DX
-				CALL PRINTLN
-				;<<
-			;Line 14: start of for loop step
-			MOV DX , -2[BP]
-			PUSH DX
-			;Line 13: integar = 1
-			MOV DX , 1
-			POP AX
-			ADD AX , DX
-			MOV DX , AX
-			MOV -2[BP] , DX
-			JMP for_body_4
-			;<<
-		for_end_5:
-		;<<
-	;Line 15: start of for loop step
-	MOV DX , x
-	PUSH DX
-	;Line 10: integar = 1
-	MOV DX , 1
-	POP AX
-	ADD AX , DX
-	MOV DX , AX
-	MOV x , DX
-	JMP for_body_6
-	;<<
-for_end_7:
-;Line 16: integar = 12
-MOV DX , 12
+SUB SP , 60
+;Line 9: integar = 3
+MOV DX , 3
+MOV -2[BP] , DX
+MOV DX , -2[BP]
 PUSH DX
-;Line 16: integar = 12
-MOV DX , 12
+CALL PRINTLN
+;Line 10: integar = 3
+MOV DX , 3
+PUSH DX
+;Line 10: integar = 4
+MOV DX , 4
 POP AX
-IMUL DX
+XCHG AX ,DX
+;Line 10: put element to stack array
+PUSH BP
+SAL DX , 1
+ADD DX , -62
+ADD BP , DX
+MOV PTR WORD [BP] , AX
 MOV DX , AX
+POP BP
+;Line 10: integar = 3
+MOV DX , 3
+;Line 10: get array element from stack
+PUSH BP
+SAL DX , 1
+ADD DX , -62
+ADD BP , DX
+MOV DX , PTR WORD [BP]
+POP BP
+MOV -2[BP] , DX
+MOV DX , -2[BP]
+PUSH DX
+CALL PRINTLN
+;Line 11: integar = 3
+MOV DX , 3
+PUSH DX
+;Line 11: integar = 5
+MOV DX , 5
+POP AX
+XCHG AX ,DX
+;Line 11: set  element to memory array
+SAL DX , 1
+MOV BX , DX
+MOV PTR WORD mema[BX] , AX
+MOV DX , AX
+;Line 11: integar = 3
+MOV DX , 3
+;Line 11: get array element from memory
+SAL DX , 1
+MOV BX , DX
+MOV DX , PTR WORD mema[BX]
+MOV -2[BP] , DX
+MOV DX , -2[BP]
+PUSH DX
+CALL PRINTLN
+;Line 12: integar = 6
+MOV DX , 6
 MOV x , DX
 MOV DX , x
 PUSH DX
 CALL PRINTLN
-ADD SP , 2
+ADD SP , 62
 main_exit:
 POP BP
-;Line 19: EXIT 0
+;Line 13: EXIT 0
 MOV AH, 4CH
 INT 21H
 RET 0
