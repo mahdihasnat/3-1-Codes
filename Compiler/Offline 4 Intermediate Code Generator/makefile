@@ -26,8 +26,8 @@ a.out: l.o y.o
 	${CC} ${CPPFLAGS} y.o l.o -lfl ReturnType.cpp Code.cpp
 
 run:
-#	valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.txt 
-	./a.out input.txt 
+#	valgrind --leak-check=full -s --show-leak-kinds=all ./a.out input.cpp 
+	./a.out input.cpp
 
 clean: 
 	rm -f *.out

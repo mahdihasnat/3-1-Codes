@@ -18,7 +18,7 @@ extern char *yytext;
 extern int error_count;
 extern SymbolTable<Info> *symboltable;
 extern vector<pair<string, int>> globals;
-
+extern string currentFuncName;
 extern ofstream logstream;
 extern ofstream errorstream;
 
@@ -560,6 +560,7 @@ void add_func_definition(SymbolInfoPointer returnType, SymbolInfoPointer funcNam
 {
 	add_func_declaration(returnType, funcName, parameters);
 	add_func_parameters(parameters);
+	currentFuncName = funcName -> getName();
 }
 
 ReturnType getVariableType(string varName)

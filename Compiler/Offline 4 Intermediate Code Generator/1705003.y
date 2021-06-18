@@ -26,6 +26,7 @@ ofstream logstream ;
 ofstream errorstream;
 int error_count = 0;
 vector< pair< string , int > > globals;
+string currentFuncName = "";
 
 #define FIXED_POINT_MULTIPLIER 100
 #define gTL getTypeLocation
@@ -279,6 +280,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 			$$ -> getTypeLocation()->setCode(code);
 		}
+		currentFuncName = "";
 
 	}
 	|  type_specifier ID LPAREN RPAREN {add_func_definition($1 , $2 , nullptr);} compound_statement
@@ -336,6 +338,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 			$$ -> getTypeLocation()->setCode(code);
 		}
+		currentFuncName = "";
 	}
 	;
 
@@ -715,6 +718,33 @@ statement :  var_declaration
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
+
+		/// https://www.youtube.com/watch?v=z2_2cFityc4
+		if(noerror())
+		{
+			// func()
+			// {
+			// 	int 
+			// 	{
+			// 		int 
+			// 		return 
+			// 	}
+			// }
+			Code * code = nullptr;
+
+			code = combine(
+				code ,
+				$2 -> gTL() -> getCode()
+			);
+
+			int current_stack_offset = symboltable -> getBaseIndex();
+
+			code = combine(code, "SUB SP , "+ to_string(current_stack_offset) );
+			code = combine(code, "JMP "+currentFuncName + "_exit");
+
+			$$ -> gTL() -> setCode( code );
+
+		}
 	}
 	| func_declaration
 	{
