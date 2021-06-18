@@ -605,6 +605,18 @@ statement :  var_declaration
 		$4 -> push_back( $5 );
 		$$ = $1;
 		print($$);
+		
+		if(noerror())
+		{
+			$$ -> gTL() -> setCode(
+				conditionImplementation(
+					$3->gTL() -> getCode(),
+					$5->gTL() -> getCode(),
+					nullptr 
+				)
+			);
+		}
+
 	}
 	|  IF LPAREN expression RPAREN statement ELSE statement
 	{
@@ -617,6 +629,18 @@ statement :  var_declaration
 		$6 -> push_back( $7 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			$$ -> gTL() -> setCode(
+				conditionImplementation(
+					$3->gTL() -> getCode(),
+					$5->gTL() -> getCode(),
+					$7->gTL() -> getCode()
+				)
+			);
+		}
+
 	}
 	|  WHILE LPAREN expression RPAREN statement
 	{

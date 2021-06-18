@@ -3,11 +3,12 @@ int x;
 int mema[5];
 int main()
 {
-	
-	int y;
-	int z[30];
-	y=3;println(y);
-	z[3] = 4; y=z[3]; println(y);
-	mema[3] = 5 ; y=mema[3]; println(y);
-	x=6;println(x);
+	int i;
+	for( i=0;i<5 ; i = i+1)
+		mema[i]=i+1;
+	x=10;
+	if( x == 2)
+		x=mema[2];
+	else x = mema[4];
+	println(x);
 }

@@ -88,77 +88,108 @@ println ENDP
 main PROC
 PUSH BP
 MOV BP , SP
-;Line 13: DATA SEGMENT INITIALIZATION
+;Line 14: DATA SEGMENT INITIALIZATION
 MOV AX, @DATA
 MOV DS, AX
 SUB SP , 2
-SUB SP , 60
-;Line 9: integar = 3
-MOV DX , 3
+;Line 8: start of for loop
+;Line 7: integar = 0
+MOV DX , 0
 MOV -2[BP] , DX
-MOV DX , -2[BP]
-PUSH DX
-CALL PRINTLN
-;Line 10: integar = 3
-MOV DX , 3
-PUSH DX
-;Line 10: integar = 4
-MOV DX , 4
-POP AX
-XCHG AX ,DX
-;Line 10: put element to stack array
-PUSH BP
-SAL DX , 1
-ADD DX , -62
-ADD BP , DX
-MOV PTR WORD [BP] , AX
-MOV DX , AX
-POP BP
-;Line 10: integar = 3
-MOV DX , 3
-;Line 10: get array element from stack
-PUSH BP
-SAL DX , 1
-ADD DX , -62
-ADD BP , DX
-MOV DX , PTR WORD [BP]
-POP BP
-MOV -2[BP] , DX
-MOV DX , -2[BP]
-PUSH DX
-CALL PRINTLN
-;Line 11: integar = 3
-MOV DX , 3
-PUSH DX
-;Line 11: integar = 5
-MOV DX , 5
-POP AX
-XCHG AX ,DX
-;Line 11: set  element to memory array
-SAL DX , 1
-MOV BX , DX
-MOV PTR WORD mema[BX] , AX
-MOV DX , AX
-;Line 11: integar = 3
-MOV DX , 3
-;Line 11: get array element from memory
-SAL DX , 1
-MOV BX , DX
-MOV DX , PTR WORD mema[BX]
-MOV -2[BP] , DX
-MOV DX , -2[BP]
-PUSH DX
-CALL PRINTLN
-;Line 12: integar = 6
-MOV DX , 6
+for_body_2:
+;>>
+	;Line 7: Relational operator checking
+	MOV DX , -2[BP]
+	PUSH DX
+	;Line 7: integar = 5
+	MOV DX , 5
+	POP AX
+	CMP AX , DX
+	JL relop_is_ok_0
+	MOV DX , 0
+	JMP relop_end_1
+	relop_is_ok_0:
+	MOV DX , 1
+	relop_end_1:
+	CMP DX , 0
+	JZ for_end_3
+	;>>
+		;Line 8: start of for loop statement
+		MOV DX , -2[BP]
+		PUSH DX
+		MOV DX , -2[BP]
+		PUSH DX
+		;Line 8: integar = 1
+		MOV DX , 1
+		POP AX
+		ADD AX , DX
+		MOV DX , AX
+		POP AX
+		XCHG AX ,DX
+		;Line 8: set  element to memory array
+		SAL DX , 1
+		MOV BX , DX
+		MOV PTR WORD mema[BX] , AX
+		MOV DX , AX
+		;<<
+	;Line 8: start of for loop step
+	MOV DX , -2[BP]
+	PUSH DX
+	;Line 7: integar = 1
+	MOV DX , 1
+	POP AX
+	ADD AX , DX
+	MOV DX , AX
+	MOV -2[BP] , DX
+	JMP for_body_2
+	;<<
+for_end_3:
+;Line 9: integar = 10
+MOV DX , 10
 MOV x , DX
+;Line 10: Relational operator checking
+MOV DX , x
+PUSH DX
+;Line 10: integar = 2
+MOV DX , 2
+POP AX
+CMP AX , DX
+JE relop_is_ok_4
+MOV DX , 0
+JMP relop_end_5
+relop_is_ok_4:
+MOV DX , 1
+relop_end_5:
+CMP DX , 0
+JZ if_false6
+;>>
+	;Line 11: integar = 2
+	MOV DX , 2
+	;Line 11: get array element from memory
+	SAL DX , 1
+	MOV BX , DX
+	MOV DX , PTR WORD mema[BX]
+	MOV x , DX
+	JMP if_end6
+	;<<
+if_false6:
+;>>
+	;Line 12: integar = 4
+	MOV DX , 4
+	;Line 12: get array element from memory
+	SAL DX , 1
+	MOV BX , DX
+	MOV DX , PTR WORD mema[BX]
+	MOV x , DX
+	;<<
+if_end6:
 MOV DX , x
 PUSH DX
 CALL PRINTLN
-ADD SP , 62
+ADD SP , 2
 main_exit:
 POP BP
-;Line 13: EXIT 0
+;Line 14: EXIT 0
 MOV AH, 4CH
 INT 21H
 RET 0

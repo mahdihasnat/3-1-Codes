@@ -48,10 +48,14 @@ string Comment(string comment)
 {
 	return ";Line " + to_string(yylineno) + ": " + comment;
 }
+int counter = 0;
 string newLabel(string prefix)
 {
-	static int counter = 0;
 	return prefix + "_" + to_string(counter++);
+}
+int newLabelCounter()
+{
+	return counter++;
 }
 
 Code *loadLibrary()
@@ -267,6 +271,36 @@ Code *loopImplementation(
 
 	code = combine(code, ";<<");
 	code = combine(code, label_end + ":");
+
+	return code;
+}
+
+Code *conditionImplementation(Code *expression, Code *true_statement, Code *false_statement)
+{
+	// expr
+	// if false go false_statement
+	// true_statement
+	// jmp end
+	// false_statement
+	// end
+
+	int suffix_counter = newLabelCounter();
+	string label_false = "if_false" +to_string(suffix_counter);
+	string label_end = "if_end" +to_string(suffix_counter);
+
+	Code *code = nullptr;
+	code = combine(code, expression);
+	code = combine(code, "CMP DX , 0");
+	code = combine(code, "JZ "+label_false);
+	code = combine(code , ";>>");
+		code = combine(code, true_statement);
+		code = combine(code, "JMP "+label_end);
+	code = combine(code , ";<<");
+	code = combine(code, label_false+":");
+	code = combine(code , ";>>");
+		code = combine(code, false_statement);
+	code = combine(code , ";<<");
+	code = combine(code, label_end+":");
 
 	return code;
 }
