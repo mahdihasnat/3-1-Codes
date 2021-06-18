@@ -27,22 +27,22 @@ int
 
 Line 3: declaration_list : ID LTHIRD CONST_INT RTHIRD
 
-mema[5]
+mema[10]
 
 Line 3: var_declaration : type_specifier declaration_list SEMICOLON
 
-int mema[5];
+int mema[10];
 
 
 Line 3: unit : var_declaration
 
-int mema[5];
+int mema[10];
 
 
 Line 3: program : program unit
 
 int x;
-int mema[5];
+int mema[10];
 
 
 Line 4: type_specifier : INT
@@ -78,163 +78,452 @@ i
 
 Line 8: factor : CONST_INT
 
-1
+0
 
 Line 8: unary_expression : factor
 
-1
-
-Line 8: unary_expression : ADDOP unary_expression
-
--1
+0
 
 Line 8: term : unary_expression
 
--1
+0
 
 Line 8: simple_expression : term
 
--1
+0
 
 Line 8: rel_expression : simple_expression
 
--1
+0
 
 Line 8: logic_expression : rel_expression
 
--1
+0
 
 Line 8: expression : variable ASSIGNOP logic_expression
 
-i=-1
+i=0
 
 Line 8: expression_statement : expression SEMICOLON
 
-i=-1;
+i=0;
 
 
 Line 8: statement : expression_statement
 
-i=-1;
+i=0;
 
 
 Line 8: statements : statements statement
 
 int i;
-i=-1;
+i=0;
 
 
-Line 9: factor : CONST_INT
-
-1
-
-Line 9: unary_expression : factor
+Line 10: factor : CONST_INT
 
 1
 
-Line 9: term : unary_expression
+Line 10: unary_expression : factor
 
 1
 
-Line 9: simple_expression : term
+Line 10: term : unary_expression
 
 1
 
-Line 9: rel_expression : simple_expression
+Line 10: simple_expression : term
 
 1
 
-Line 9: logic_expression : rel_expression
+Line 10: rel_expression : simple_expression
 
 1
 
-Line 9: expression : logic expression
+Line 10: logic_expression : rel_expression
 
 1
 
-Line 11: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 10: expression : logic expression
 
-println(i);
+1
+
+Line 13: type_specifier : INT
+
+int 
+
+Line 13: declaration_list : ID
+
+z
+
+Line 13: var_declaration : type_specifier declaration_list SEMICOLON
+
+int z;
 
 
-Line 11: statements : statement
+Line 13: statement : var_declaration
 
-println(i);
+int z;
 
 
-Line 12: variable : ID
+Line 13: statements : statement
+
+int z;
+
+
+Line 14: variable : ID
+
+z
+
+Line 14: variable : ID
 
 i
 
-Line 12: variable : ID
+Line 14: factor : variable DECOP
 
-i
+i--
 
-Line 12: factor : variable
+Line 14: unary_expression : factor
 
-i
+i--
 
-Line 12: unary_expression : factor
+Line 14: term : unary_expression
 
-i
+i--
 
-Line 12: term : unary_expression
+Line 14: simple_expression : term
 
-i
+i--
 
-Line 12: simple_expression : term
+Line 14: rel_expression : simple_expression
 
-i
+i--
 
-Line 12: factor : CONST_INT
+Line 14: logic_expression : rel_expression
 
-1
+i--
 
-Line 12: unary_expression : factor
+Line 14: expression : variable ASSIGNOP logic_expression
 
-1
+z=i--
 
-Line 12: term : unary_expression
+Line 14: expression_statement : expression SEMICOLON
 
-1
-
-Line 12: simple_expression : simple_expression ADDOP term
-
-i-1
-
-Line 12: rel_expression : simple_expression
-
-i-1
-
-Line 12: logic_expression : rel_expression
-
-i-1
-
-Line 12: expression : variable ASSIGNOP logic_expression
-
-i=i-1
-
-Line 12: expression_statement : expression SEMICOLON
-
-i=i-1;
+z=i--;
 
 
-Line 12: statement : expression_statement
+Line 14: statement : expression_statement
 
-i=i-1;
-
-
-Line 12: statements : statements statement
-
-println(i);
-i=i-1;
+z=i--;
 
 
-Line 13: compound_statement : LCURL statements RCURL
+Line 14: statements : statements statement
+
+int z;
+z=i--;
+
+
+Line 15: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(z);
+
+
+Line 15: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+
+
+Line 16: variable : ID
+
+x
+
+Line 16: factor : variable DECOP
+
+x--
+
+Line 16: unary_expression : factor
+
+x--
+
+Line 16: term : unary_expression
+
+x--
+
+Line 16: simple_expression : term
+
+x--
+
+Line 16: rel_expression : simple_expression
+
+x--
+
+Line 16: logic_expression : rel_expression
+
+x--
+
+Line 16: expression : logic expression
+
+x--
+
+Line 16: expression_statement : expression SEMICOLON
+
+x--;
+
+
+Line 16: statement : expression_statement
+
+x--;
+
+
+Line 16: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+x--;
+
+
+Line 17: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 17: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+x--;
+println(x);
+
+
+Line 18: type_specifier : INT
+
+int 
+
+Line 18: declaration_list : ID
+
+j
+
+Line 18: var_declaration : type_specifier declaration_list SEMICOLON
+
+int j;
+
+
+Line 18: statement : var_declaration
+
+int j;
+
+
+Line 18: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+x--;
+println(x);
+int j;
+
+
+Line 19: factor : CONST_INT
+
+5
+
+Line 19: unary_expression : factor
+
+5
+
+Line 19: term : unary_expression
+
+5
+
+Line 19: simple_expression : term
+
+5
+
+Line 19: rel_expression : simple_expression
+
+5
+
+Line 19: logic_expression : rel_expression
+
+5
+
+Line 19: expression : logic expression
+
+5
+
+Line 19: variable : ID LTHIRD expression RTHIRD
+
+mema[5]
+
+Line 19: factor : variable DECOP
+
+mema[5]--
+
+Line 19: unary_expression : factor
+
+mema[5]--
+
+Line 19: term : unary_expression
+
+mema[5]--
+
+Line 19: simple_expression : term
+
+mema[5]--
+
+Line 19: rel_expression : simple_expression
+
+mema[5]--
+
+Line 19: logic_expression : rel_expression
+
+mema[5]--
+
+Line 19: expression : logic expression
+
+mema[5]--
+
+Line 19: expression_statement : expression SEMICOLON
+
+mema[5]--;
+
+
+Line 19: statement : expression_statement
+
+mema[5]--;
+
+
+Line 19: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+x--;
+println(x);
+int j;
+mema[5]--;
+
+
+Line 20: variable : ID
+
+j
+
+Line 20: factor : CONST_INT
+
+5
+
+Line 20: unary_expression : factor
+
+5
+
+Line 20: term : unary_expression
+
+5
+
+Line 20: simple_expression : term
+
+5
+
+Line 20: rel_expression : simple_expression
+
+5
+
+Line 20: logic_expression : rel_expression
+
+5
+
+Line 20: expression : logic expression
+
+5
+
+Line 20: variable : ID LTHIRD expression RTHIRD
+
+mema[5]
+
+Line 20: factor : variable
+
+mema[5]
+
+Line 20: unary_expression : factor
+
+mema[5]
+
+Line 20: term : unary_expression
+
+mema[5]
+
+Line 20: simple_expression : term
+
+mema[5]
+
+Line 20: rel_expression : simple_expression
+
+mema[5]
+
+Line 20: logic_expression : rel_expression
+
+mema[5]
+
+Line 20: expression : variable ASSIGNOP logic_expression
+
+j=mema[5]
+
+Line 20: expression_statement : expression SEMICOLON
+
+j=mema[5];
+
+
+Line 20: statement : expression_statement
+
+j=mema[5];
+
+
+Line 20: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+x--;
+println(x);
+int j;
+mema[5]--;
+j=mema[5];
+
+
+Line 21: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(j);
+
+
+Line 21: statements : statements statement
+
+int z;
+z=i--;
+println(z);
+x--;
+println(x);
+int j;
+mema[5]--;
+j=mema[5];
+println(j);
+
+
+Line 22: compound_statement : LCURL statements RCURL
 
 {
-  println(i);
-  i=i-1;
+  int z;
+  z=i--;
+  println(z);
+  x--;
+  println(x);
+  int j;
+  mema[5]--;
+  j=mema[5];
+  println(j);
 }
 
 
@@ -242,6 +531,8 @@ Line 13: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.1.1
+ 2 --> < z , ID{disp = -4} > 
+ 16 --> < j , ID{disp = -6} > 
 
 
 
@@ -256,60 +547,95 @@ ScopeTable # 1
  26 --> < mema , ID{disp = -1} > 
 
 
-Line 13: statement : compound_statement
+Line 22: statement : compound_statement
 
 {
-  println(i);
-  i=i-1;
+  int z;
+  z=i--;
+  println(z);
+  x--;
+  println(x);
+  int j;
+  mema[5]--;
+  j=mema[5];
+  println(j);
 }
 
 
 
-Line 13: statement : WHILE LPAREN expression RPAREN statement
+Line 22: statement : WHILE LPAREN expression RPAREN statement
 
 while (1){
-  println(i);
-  i=i-1;
+  int z;
+  z=i--;
+  println(z);
+  x--;
+  println(x);
+  int j;
+  mema[5]--;
+  j=mema[5];
+  println(j);
 }
 
 
 
-Line 13: statements : statements statement
+Line 22: statements : statements statement
 
 int i;
-i=-1;
+i=0;
 while (1){
-  println(i);
-  i=i-1;
+  int z;
+  z=i--;
+  println(z);
+  x--;
+  println(x);
+  int j;
+  mema[5]--;
+  j=mema[5];
+  println(j);
 }
 
 
 
-Line 15: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 24: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
 println(x);
 
 
-Line 15: statements : statements statement
+Line 24: statements : statements statement
 
 int i;
-i=-1;
+i=0;
 while (1){
-  println(i);
-  i=i-1;
+  int z;
+  z=i--;
+  println(z);
+  x--;
+  println(x);
+  int j;
+  mema[5]--;
+  j=mema[5];
+  println(j);
 }
 
 println(x);
 
 
-Line 16: compound_statement : LCURL statements RCURL
+Line 25: compound_statement : LCURL statements RCURL
 
 {
   int i;
-  i=-1;
+  i=0;
   while (1){
-    println(i);
-    i=i-1;
+    int z;
+    z=i--;
+    println(z);
+    x--;
+    println(x);
+    int j;
+    mema[5]--;
+    j=mema[5];
+    println(j);
   }
   println(x);
 }
@@ -329,51 +655,72 @@ ScopeTable # 1
  26 --> < mema , ID{disp = -1} > 
 
 
-Line 16: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 25: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
   int i;
-  i=-1;
+  i=0;
   while (1){
-    println(i);
-    i=i-1;
+    int z;
+    z=i--;
+    println(z);
+    x--;
+    println(x);
+    int j;
+    mema[5]--;
+    j=mema[5];
+    println(j);
   }
   println(x);
 }
 
 
 
-Line 16: unit : func_definition
+Line 25: unit : func_definition
 
 int main(){
   int i;
-  i=-1;
+  i=0;
   while (1){
-    println(i);
-    i=i-1;
+    int z;
+    z=i--;
+    println(z);
+    x--;
+    println(x);
+    int j;
+    mema[5]--;
+    j=mema[5];
+    println(j);
   }
   println(x);
 }
 
 
 
-Line 16: program : program unit
+Line 25: program : program unit
 
 int x;
-int mema[5];
+int mema[10];
 int main(){
   int i;
-  i=-1;
+  i=0;
   while (1){
-    println(i);
-    i=i-1;
+    int z;
+    z=i--;
+    println(z);
+    x--;
+    println(x);
+    int j;
+    mema[5]--;
+    j=mema[5];
+    println(j);
   }
   println(x);
 }
 
 
 
-Line 16: start : program
+Line 25: start : program
 
 
 
@@ -384,6 +731,6 @@ ScopeTable # 1
 
 
 
-Total lines: 16
+Total lines: 25
 Total errors: 0
 

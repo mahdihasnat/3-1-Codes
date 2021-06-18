@@ -1346,6 +1346,65 @@ factor :  variable
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code *code = nullptr;
+			SymbolInfoPointer sip = $1;
+
+			string var_name = sip->getName();
+			SymbolInfoPointer ref = symboltable->lookUp(var_name);
+			assert(ref);
+
+			if (ref->getTypeLocation()->isArray())
+			{
+				SymbolInfoPointer expr = sip->getNextSymbolInfo()->getNextSymbolInfo();
+
+				code = combine(
+					code,
+					expr->getTypeLocation()->getCode() /// dx e expr ache
+				);
+
+				int idx = ref->getTypeLocation()->getBasedIndex();
+
+				if (idx == -1)
+				{
+					code = combine(code, Comment("set  element to memory array"));
+					code = combine(code, "SAL DX , 1"); 
+					code = combine(code, "MOV BX , DX");
+					code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
+					code = combine(code, "MOV AX , DX");
+					code = combine(code, "INC AX ");
+					code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
+				}
+				else
+				{
+					code = combine(code, Comment("put element to stack array"));
+					code = combine(code, "PUSH BP");
+						code = combine(code, "SAL DX , 1");
+						code = combine(code, "ADD DX , " + to_string(idx));
+						code = combine(code, "ADD BP , DX");
+						code = combine(code, "MOV DX , PTR WORD [BP]");
+						code = combine(code, "MOV AX , DX");
+						code = combine(code, "INC AX ");
+						code = combine(code, "MOV PTR WORD [BP] , AX");
+					code = combine(code, "POP BP");
+				}
+			}
+			else
+			{
+				
+				code = combine(code, "MOV DX , " + getSingleVariableAddress(ref));
+				code = combine(code, "MOV AX , DX");
+				code = combine(code, "INC AX ");
+				code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , AX");
+			}
+			
+			$$ -> gTL()->setCode(
+				code
+			);
+		}
+
 	}
 	|  variable DECOP
 	{
@@ -1377,6 +1436,65 @@ factor :  variable
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			Code *code = nullptr;
+			SymbolInfoPointer sip = $1;
+
+			string var_name = sip->getName();
+			SymbolInfoPointer ref = symboltable->lookUp(var_name);
+			assert(ref);
+
+			if (ref->getTypeLocation()->isArray())
+			{
+				SymbolInfoPointer expr = sip->getNextSymbolInfo()->getNextSymbolInfo();
+
+				code = combine(
+					code,
+					expr->getTypeLocation()->getCode() /// dx e expr ache
+				);
+
+				int idx = ref->getTypeLocation()->getBasedIndex();
+
+				if (idx == -1)
+				{
+					code = combine(code, Comment("set  element to memory array"));
+					code = combine(code, "SAL DX , 1"); 
+					code = combine(code, "MOV BX , DX");
+					code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
+					code = combine(code, "MOV AX , DX");
+					code = combine(code, "DEC AX ");
+					code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
+				}
+				else
+				{
+					code = combine(code, Comment("put element to stack array"));
+					code = combine(code, "PUSH BP");
+						code = combine(code, "SAL DX , 1");
+						code = combine(code, "ADD DX , " + to_string(idx));
+						code = combine(code, "ADD BP , DX");
+						code = combine(code, "MOV DX , PTR WORD [BP]");
+						code = combine(code, "MOV AX , DX");
+						code = combine(code, "DEC AX ");
+						code = combine(code, "MOV PTR WORD [BP] , AX");
+					code = combine(code, "POP BP");
+				}
+			}
+			else
+			{
+				
+				code = combine(code, "MOV DX , " + getSingleVariableAddress(ref));
+				code = combine(code, "MOV AX , DX");
+				code = combine(code, "DEC AX ");
+				code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , AX");
+			}
+			
+			$$ -> gTL()->setCode(
+				code
+			);
+		}
+
 	}
 	;
 

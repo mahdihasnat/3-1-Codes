@@ -3,7 +3,7 @@
 .DATA
 FIXED_POINT_MULTIPLIER DW 64H
 x DW 1 DUP (0000H)
-mema DW 5 DUP (0000H)
+mema DW 10 DUP (0000H)
 .CODE
 println PROC
     ;print word variable stored in stack
@@ -88,36 +88,61 @@ println ENDP
 main PROC
 PUSH BP
 MOV BP , SP
-;Line 16: DATA SEGMENT INITIALIZATION
+;Line 25: DATA SEGMENT INITIALIZATION
 MOV AX, @DATA
 MOV DS, AX
 SUB SP , 2
-;Line 8: integar = 1
-MOV DX , 1
-NEG DX
+;Line 8: integar = 0
+MOV DX , 0
 MOV -2[BP] , DX
-;Line 13: start of for loop
+;Line 22: start of for loop
 for_body_0:
 ;>>
-	;Line 9: integar = 1
+	;Line 10: integar = 1
 	MOV DX , 1
 	CMP DX , 0
 	JZ for_end_1
 	;>>
-		;Line 13: start of for loop statement
+		;Line 22: start of for loop statement
+		SUB SP , 2
 		MOV DX , -2[BP]
+		MOV AX , DX
+		DEC AX 
+		MOV -2[BP] , AX
+		MOV -4[BP] , DX
+		MOV DX , -4[BP]
 		PUSH DX
 		CALL PRINTLN
-		MOV DX , -2[BP]
+		MOV DX , x
+		MOV AX , DX
+		DEC AX 
+		MOV x , AX
+		MOV DX , x
 		PUSH DX
-		;Line 12: integar = 1
-		MOV DX , 1
-		POP AX
-		SUB AX , DX
-		MOV DX , AX
-		MOV -2[BP] , DX
+		CALL PRINTLN
+		SUB SP , 2
+		;Line 19: integar = 5
+		MOV DX , 5
+		;Line 19: set  element to memory array
+		SAL DX , 1
+		MOV BX , DX
+		MOV DX , PTR WORD mema[BX]
+		MOV AX , DX
+		DEC AX 
+		MOV PTR WORD mema[BX] , AX
+		;Line 20: integar = 5
+		MOV DX , 5
+		;Line 20: get array element from memory
+		SAL DX , 1
+		MOV BX , DX
+		MOV DX , PTR WORD mema[BX]
+		MOV -6[BP] , DX
+		MOV DX , -6[BP]
+		PUSH DX
+		CALL PRINTLN
+		ADD SP , 4
 		;<<
-	;Line 13: start of for loop step
+	;Line 22: start of for loop step
 	JMP for_body_0
 	;<<
 for_end_1:
@@ -127,7 +152,7 @@ CALL PRINTLN
 ADD SP , 2
 main_exit:
 POP BP
-;Line 16: EXIT 0
+;Line 25: EXIT 0
 MOV AH, 4CH
 INT 21H
 RET 0
