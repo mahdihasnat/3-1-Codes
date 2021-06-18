@@ -110,7 +110,7 @@ start :  program
 		
 		
 		Code *code  = new Code(".MODEL SMALL");
-		code = combine(code , new Code(".STACK 100H"));
+		code = combine(code , new Code(".STACK 1000H"));
 
 		code = combine(code , new Code(".DATA"));
 
@@ -135,7 +135,8 @@ start :  program
 		ofstream codestream ;
 		codestream.open("code.asm" , ios::trunc);
 		
-		codestream<<(*code);
+		// codestream<<(*code);
+		code->write(codestream);
 
 		delete $$;
 	}
@@ -545,6 +546,25 @@ statement :  var_declaration
 		$6 -> push_back( $7 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			
+
+			Code * code_init = $3 -> gTL() -> getCode();
+			Code * code_check = $4 -> gTL() -> getCode();
+			Code * code_statement = $7 -> gTL() -> getCode();
+			Code * code_step = $5 -> gTL() -> getCode();
+
+			$$ -> gTL() -> setCode(
+				loopImplementation(
+					code_init,
+					code_check,
+					code_step,
+					code_statement
+				)
+			);
+		}
 	}
 	|  FOR LPAREN expression_statement expression_statement RPAREN statement
 	{
@@ -556,6 +576,25 @@ statement :  var_declaration
 		$5 -> push_back( $6 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+
+			Code * code_init = $3 -> gTL() -> getCode();
+			Code * code_check = $4 -> gTL() -> getCode();
+			Code * code_statement = $6 -> gTL() -> getCode();
+			Code * code_step = nullptr;
+
+			$$ -> gTL() -> setCode(
+				loopImplementation(
+					code_init,
+					code_check,
+					code_step,
+					code_statement
+				)
+			);
+		}
+
 	}
 	|  IF LPAREN expression RPAREN statement %prec SINGLE_IF
 	{
@@ -665,6 +704,12 @@ expression_statement :  SEMICOLON
 
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			$1 -> gTL()->setCode( new Code("MOV DX , 1"));
+		}
+
 	}
 	|  expression SEMICOLON
 	{
@@ -941,12 +986,15 @@ rel_expression :  simple_expression
 
 			code = combine(code , "CMP AX , DX");
 
-			string ok_label = newLabel("relop_is_ok");
+			string label_ok = newLabel("relop_is_ok");
+			string label_end = newLabel("relop_end");
 
-			code = combine(code , opcode + " " + ok_label);
+			code = combine(code , opcode + " " + label_ok);
 			code = combine(code , "MOV DX , 0");
-			code = combine(code , ok_label + ":");
+			code = combine(code , "JMP " + label_end);
+			code = combine(code , label_ok + ":");
 			code = combine(code , "MOV DX , 1");
+			code = combine(code , label_end + ":");
 
 			$$ -> getTypeLocation()-> setCode(code);
 		}	

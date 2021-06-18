@@ -225,6 +225,48 @@ string getSingleVariableAddress(SymbolInfoPointer ref)
 	}
 }
 
+Code * loopImplementation(
+	Code * code_init ,
+	Code * code_check,
+	Code * code_step ,
+	Code * code_statement 
+)
+{
+	string label_loop = newLabel("for_body");
+	string label_end = newLabel("for_end");
+
+	// init
+	// loop:
+	// 		check
+	// 		statement
+	// 		step
+	//		goto loop
+
+
+
+	Code * code = nullptr;
+	code = combine(code , Comment("start of for loop"));
+	
+	code = combine(code , code_init);
+	code = combine(code , label_loop + ":");
+	code = combine(code , ";>>");
+	code = combine(code , code_check);
+	code = combine(code , "CMP DX , 0");
+	code = combine(code , "JZ "+label_end);
+	code = combine(code , ";>>");
+	code = combine(code , Comment("start of for loop statement"));
+	code = combine(code , code_statement);
+	code = combine(code , ";<<");
+	code = combine(code , Comment("start of for loop step"));
+	code = combine(code , code_step);
+
+	code = combine(code ,"JMP "+label_loop);
+	
+	code = combine(code , ";<<");
+	code = combine(code , label_end + ":");
+
+	return code;
+}	
 void readFromVariable(SymbolInfoPointer sip)
 {
 	// variable : ID 		

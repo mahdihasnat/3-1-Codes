@@ -22,6 +22,16 @@ public:
 		this->last_code->next_code = new_next_code;
 		this->last_code = new_next_code->last_code;
 	}
+	void write(ostream &os, int indentation = 0)
+	{
+		os<<string(indentation , '\t')<<this->code<<"\n";
+		if(this->code ==";>>")	indentation++;
+		else if(this->code ==";<<")	indentation--;
+		if(this->next_code)
+		{
+			this->next_code->write(os ,indentation);
+		}
+	}
 
 	friend ostream& operator<<(ostream &os,const Code & c)
 	{

@@ -1,5 +1,5 @@
 .MODEL SMALL
-.STACK 100H
+.STACK 1000H
 .DATA
 FIXED_POINT_MULTIPLIER DW 64H
 x DW 1 DUP (0000H)
@@ -88,167 +88,100 @@ println ENDP
 main PROC
 PUSH BP
 MOV BP , SP
-;Line 17: DATA SEGMENT INITIALIZATION
+;Line 19: DATA SEGMENT INITIALIZATION
 MOV AX, @DATA
 MOV DS, AX
-SUB SP , 20
-;Line 7: integar = 0
+SUB SP , 2
+;Line 15: start of for loop
+;Line 10: integar = 0
 MOV DX , 0
+MOV x , DX
+for_body_6:
+;>>
+	;Line 10: Relational operator checking
+	MOV DX , x
+	PUSH DX
+	;Line 10: integar = 20
+	MOV DX , 20
+	POP AX
+	CMP AX , DX
+	JL relop_is_ok_0
+	MOV DX , 0
+	JMP relop_end_1
+	relop_is_ok_0:
+	MOV DX , 1
+	relop_end_1:
+	CMP DX , 0
+	JZ for_end_7
+	;>>
+		;Line 15: start of for loop statement
+		;Line 14: start of for loop
+		;Line 13: integar = 0
+		MOV DX , 0
+		MOV -2[BP] , DX
+		for_body_4:
+		;>>
+			;Line 13: Relational operator checking
+			MOV DX , -2[BP]
+			PUSH DX
+			MOV DX , x
+			POP AX
+			CMP AX , DX
+			JL relop_is_ok_2
+			MOV DX , 0
+			JMP relop_end_3
+			relop_is_ok_2:
+			MOV DX , 1
+			relop_end_3:
+			CMP DX , 0
+			JZ for_end_5
+			;>>
+				;Line 14: start of for loop statement
+				MOV DX , x
+				PUSH DX
+				CALL PRINTLN
+				;<<
+			;Line 14: start of for loop step
+			MOV DX , -2[BP]
+			PUSH DX
+			;Line 13: integar = 1
+			MOV DX , 1
+			POP AX
+			ADD AX , DX
+			MOV DX , AX
+			MOV -2[BP] , DX
+			JMP for_body_4
+			;<<
+		for_end_5:
+		;<<
+	;Line 15: start of for loop step
+	MOV DX , x
+	PUSH DX
+	;Line 10: integar = 1
+	MOV DX , 1
+	POP AX
+	ADD AX , DX
+	MOV DX , AX
+	MOV x , DX
+	JMP for_body_6
+	;<<
+for_end_7:
+;Line 16: integar = 12
+MOV DX , 12
 PUSH DX
-;Line 7: integar = 1
-MOV DX , 1
-PUSH DX
-;Line 7: integar = 2
-MOV DX , 2
+;Line 16: integar = 12
+MOV DX , 12
 POP AX
-ADD AX , DX
+IMUL DX
 MOV DX , AX
-POP AX
-XCHG AX ,DX
-;Line 7: put element to stack array
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV PTR WORD [BP] , AX
-MOV DX , AX
-POP BP
-;Line 8: integar = 9
-MOV DX , 9
-PUSH DX
-;Line 8: integar = 0
-MOV DX , 0
-;Line 8: get array element from stack
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV DX , PTR WORD [BP]
-POP BP
-PUSH DX
-;Line 8: integar = 100
-MOV DX , 100
-POP AX
-ADD AX , DX
-MOV DX , AX
-POP AX
-XCHG AX ,DX
-;Line 8: put element to stack array
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV PTR WORD [BP] , AX
-MOV DX , AX
-POP BP
-;Line 9: integar = 1
-MOV DX , 1
-PUSH DX
-;Line 9: integar = 3
-MOV DX , 3
-POP AX
-XCHG AX ,DX
-;Line 9: put element to stack array
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV PTR WORD [BP] , AX
-MOV DX , AX
-POP BP
-;Line 10: integar = 4
-MOV DX , 4
-PUSH DX
-;Line 10: integar = 10
-MOV DX , 10
-POP AX
-XCHG AX ,DX
-;Line 10: put element to stack array
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV PTR WORD [BP] , AX
-MOV DX , AX
-POP BP
-;Line 11: integar = 2
-MOV DX , 2
-PUSH DX
-;Line 11: integar = 500
-MOV DX , 500
-POP AX
-XCHG AX ,DX
-;Line 11: set  element to memory array
-SAL DX , 1
-MOV BX , DX
-MOV PTR WORD mema[BX] , AX
-MOV DX , AX
-;Line 12: integar = 0
-MOV DX , 0
-;Line 12: get array element from stack
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV DX , PTR WORD [BP]
-POP BP
 MOV x , DX
 MOV DX , x
 PUSH DX
 CALL PRINTLN
-;Line 13: integar = 9
-MOV DX , 9
-;Line 13: get array element from stack
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV DX , PTR WORD [BP]
-POP BP
-MOV x , DX
-MOV DX , x
-PUSH DX
-CALL PRINTLN
-;Line 14: integar = 1
-MOV DX , 1
-;Line 14: get array element from stack
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV DX , PTR WORD [BP]
-POP BP
-MOV x , DX
-MOV DX , x
-PUSH DX
-CALL PRINTLN
-;Line 15: integar = 4
-MOV DX , 4
-;Line 15: get array element from stack
-PUSH BP
-SAL DX , 1
-ADD DX , -20
-ADD BP , DX
-MOV DX , PTR WORD [BP]
-POP BP
-MOV x , DX
-MOV DX , x
-PUSH DX
-CALL PRINTLN
-;Line 16: integar = 2
-MOV DX , 2
-;Line 16: get array element from memory
-SAL DX , 1
-MOV BX , DX
-MOV DX , PTR WORD mema[BX]
-MOV x , DX
-MOV DX , x
-PUSH DX
-CALL PRINTLN
-ADD SP , 20
+ADD SP , 2
 main_exit:
 POP BP
-;Line 17: EXIT 0
+;Line 19: EXIT 0
 MOV AH, 4CH
 INT 21H
 RET 0
