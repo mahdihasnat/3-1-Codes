@@ -651,6 +651,18 @@ statement :  var_declaration
 		$4 -> push_back( $5 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			$$ -> gTL() -> setCode(
+				loopImplementation(
+					nullptr,
+					$3 -> gTL()->getCode(),
+					nullptr,
+					$5-> gTL()->getCode()
+				)
+			);
+		}
 	}
 	|  PRINTLN LPAREN ID RPAREN SEMICOLON
 	{
