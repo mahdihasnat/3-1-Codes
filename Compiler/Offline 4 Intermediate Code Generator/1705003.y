@@ -242,6 +242,8 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
 
 			code = combine(code , new Code(funcName + " PROC"));
+			
+			code = combine(code , ";>>");
 			// number of push concerned add_variable_declaration::current_base_pointer
 			code = combine(code , new Code("PUSH BP"));
 			code = combine(code , new Code("MOV BP , SP"));
@@ -249,6 +251,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 			if(funcName == "main")
 			{
+				DBG(*(code));
 				code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
 				code = combine(code , "MOV AX, @DATA");
 				code = combine(code , "MOV DS, AX");
@@ -276,7 +279,9 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 			code = combine(code , "RET " + to_string(parameter_size));
 
+			code = combine(code , ";<<");
 			code = combine(code , new Code(funcName + " ENDP"));
+			
 
 			$$ -> getTypeLocation()->setCode(code);
 		}

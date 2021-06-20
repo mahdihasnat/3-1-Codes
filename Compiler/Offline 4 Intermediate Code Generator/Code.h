@@ -44,5 +44,6 @@ public:
 
 Code * combine(Code *x,Code * y);
 Code * combine(Code *x,string instruction);
-
+void Delete(Code * &x);
+void Detach(Code * &x);
 #endif 
