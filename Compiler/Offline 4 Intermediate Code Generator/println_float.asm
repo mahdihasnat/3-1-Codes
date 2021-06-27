@@ -1,4 +1,4 @@
-println PROC
+println_float PROC
     ;print word variable stored in stack
 
     ;    IF NUMBER < 0
@@ -13,7 +13,7 @@ println PROC
     
 
     CMP bX , 0
-    JGE println_positive_number ; IF variable >=0 THEN NO PRINTING
+    JGE println_positive_number_float ; IF variable >=0 THEN NO PRINTING
 
         
         MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
@@ -22,7 +22,7 @@ println PROC
         
         NEG bx
 
-	println_positive_number:
+	println_positive_number_float:
 
 
 	mov ax,bx
@@ -36,36 +36,61 @@ println PROC
 
     MOV CX , 0 ; CX = COUNTER
 
-    MORE_TO_PRINT:
+    MORE_TO_PRINT_float:
         ;CWD  ; CONVERT WORD AX TO DOUBLE WORD DX:AX
         MOV DX , 0 ; SINCE NUMBER IS POSITIVE NOW SO WE CAN SET DX = 0 , IT WILL HELP FOR CASE AX = -(2^15)
         
         DIV bx ;QUOTIENT IN AX , REMINDER IN DX
+        
 
-        PUSH DX ; PUSH  DX = REMINDER
+        add dx , '0'
+        PUSH DX ; PUSH dl where DX = REMINDER
         INC CX ; CNT++
-
+           
+        ; 987654.21
+        
+        ; if cx == 2 
+           ;push .
+        
+           
+        cmp cx , 2
+        
+        
+        jne println_float_check_decmalpoint_end
+            
+            mov DX , '.'
+            push DX
+            inc cx
+           
+        println_float_check_decmalpoint_end:                       
+        
+        cmp cx , 4
+        
+        jl MORE_TO_PRINT_float
+        
         CMP AX , 0000H
-        JNE MORE_TO_PRINT ;AX != 0
+        JNE MORE_TO_PRINT_float ;AX != 0
+        
+        
+        
 
     ;   WHILE( CNT --)
     ;        PRINT( STACK.TOP())
     ;        STACK.POP()
 
-    JCXZ println_exit ;IF CX IS ZERO THEN NOTING TO PRINT , THIS CASE WONT ARISE THOUGH
+    JCXZ println_float_exit ;IF CX IS ZERO THEN NOTING TO PRINT , THIS CASE WONT ARISE THOUGH
 
-    println_print_digits:
+    println_float_print_digits:
 
 
             MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
             POP DX
-            ADD DL, '0'
             INT 21H
 
 
-        LOOP println_print_digits
+        LOOP println_float_print_digits
 
-    println_exit:
+    println_float_exit:
 
     MOV AH, 02H ; AG <- 02 , MODE TO PRINT CHARACTER FROM DL
     MOV DL, 0DH
@@ -77,4 +102,4 @@ println PROC
 
     RET 2
     
-println ENDP
+println_float ENDP

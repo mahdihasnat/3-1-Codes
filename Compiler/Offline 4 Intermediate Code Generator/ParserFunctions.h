@@ -60,7 +60,7 @@ int newLabelCounter()
 
 Code *loadLibrary()
 {
-	string fileName = "println.asm";
+	string fileName = "println_int.asm";
 	Code *code = nullptr;
 	ifstream in(fileName);
 	string line;
@@ -69,6 +69,16 @@ Code *loadLibrary()
 	{
 		code = combine(code, line);
 	}
+	in.close();
+
+	in.open("println_float.asm");
+
+	while (getline(in, line))
+	{
+		code = combine(code, line);
+	}
+	in.close();
+
 	return code;
 }
 

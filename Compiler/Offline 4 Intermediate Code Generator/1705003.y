@@ -705,9 +705,24 @@ statement :  var_declaration
 				"PUSH CX"
 			);
 
+			string printFunc ="";
+
+			switch (ref->getTypeLocation()->getReturnType())
+			{
+			case Int:
+				printFunc = "println_int";
+				break;
+			case Float:
+				printFunc = "println_float";
+				break;
+			default:
+				assert(0);
+				break;
+			}
+
 			code = combine(
 				code ,
-				"CALL PRINTLN"
+				"CALL "+printFunc
 			);
 
 			$$ -> getTypeLocation() -> setCode(
