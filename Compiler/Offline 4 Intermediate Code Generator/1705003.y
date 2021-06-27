@@ -111,17 +111,17 @@ start :  program
 		
 		
 		Code *code  = new Code(".MODEL SMALL");
-		code = combine(code , new Code(".STACK 1000H"));
+		code = combine(code , ".STACK 1000H");
 
-		code = combine(code , new Code(".DATA"));
+		code = combine(code , ".DATA");
 
 		code = combine(code , "FIXED_POINT_MULTIPLIER DW 64H");
 
 		for(pair<string,int > id_sz : globals)
 		{
-			code=combine(code , new Code(id_sz.first + " DW "+to_string(id_sz.second)+" DUP (0000H)"));
+			code=combine(code , id_sz.first + " DW "+to_string(id_sz.second)+" DUP (0000H)");
 		}
-		code = combine(code , new Code(".CODE"));
+		code = combine(code , ".CODE");
 
 		code = combine(code , loadLibrary());
 
@@ -129,7 +129,7 @@ start :  program
 
 		code = combine(
 			code ,
-			new Code("END main")
+			"END main"
 		);
 
 
@@ -241,12 +241,12 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			assert(ref);
 			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
 
-			code = combine(code , new Code(funcName + " PROC"));
+			code = combine(code , funcName + " PROC");
 			
 			code = combine(code , ";>>");
 			// number of push concerned add_variable_declaration::current_base_pointer
-			code = combine(code , new Code("PUSH BP"));
-			code = combine(code , new Code("MOV BP , SP"));
+			code = combine(code , "PUSH BP");
+			code = combine(code , "MOV BP , SP");
 
 
 			if(funcName == "main")
@@ -280,7 +280,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			code = combine(code , "RET " + to_string(parameter_size));
 
 			code = combine(code , ";<<");
-			code = combine(code , new Code(funcName + " ENDP"));
+			code = combine(code , funcName + " ENDP");
 			
 
 			$$ -> getTypeLocation()->setCode(code);
@@ -307,10 +307,10 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 			assert(ref);
 			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
 
-			code = combine(code , new Code(funcName + " PROC"));
+			code = combine(code , funcName + " PROC");
 
-			code = combine(code , new Code("PUSH BP"));
-			code = combine(code , new Code("MOV BP , SP"));
+			code = combine(code , "PUSH BP");
+			code = combine(code , "MOV BP , SP");
 
 
 			if(funcName == "main")
@@ -339,7 +339,7 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 			code = combine(code , "RET " + to_string(parameter_size));
 
-			code = combine(code , new Code(funcName + " ENDP"));
+			code = combine(code , funcName + " ENDP");
 
 			$$ -> getTypeLocation()->setCode(code);
 		}
@@ -1344,7 +1344,7 @@ factor :  variable
 		$$ -> getTypeLocation()->setCode(
 			combine(
 				new Code(Comment("integar = "+ num_str) ) ,
-				new Code("MOV DX , " + num_str  ) 
+				"MOV DX , " + num_str   
 			)
 		);
 	}
@@ -1362,7 +1362,7 @@ factor :  variable
 		$$ -> getTypeLocation()->setCode(
 			combine(
 				new Code(Comment("float number = "+ $$ -> getName()) ) ,
-				new Code("MOV DX , " + to_string(num)  ) 
+				"MOV DX , " + to_string(num)
 			)
 		);
 		

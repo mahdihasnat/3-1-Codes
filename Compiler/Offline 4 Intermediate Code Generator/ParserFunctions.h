@@ -505,7 +505,7 @@ Code *add_variable_declaration(SymbolInfoPointer sip, bool is_from_function = fa
 					else
 					{
 
-						code = combine(code, new Code("SUB SP , " + to_string(var_size * 2)));
+						code = combine(code, "SUB SP , " + to_string(var_size * 2));
 						symboltable->addBaseIndex(var_size * -2);
 						new_symbol->getTypeLocation()->setBasedIndex(symboltable->getBaseIndex());
 					}
