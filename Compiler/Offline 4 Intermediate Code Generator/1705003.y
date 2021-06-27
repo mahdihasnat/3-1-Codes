@@ -697,12 +697,12 @@ statement :  var_declaration
 
 			code = combine(
 				code ,
-				"MOV DX , "+getSingleVariableAddress(ref)
+				"MOV CX , "+getSingleVariableAddress(ref)
 			);
 			
 			code = combine(
 				code ,
-				"PUSH DX"
+				"PUSH CX"
 			);
 
 			code = combine(
@@ -778,7 +778,7 @@ expression_statement :  SEMICOLON
 
 		if(noerror())
 		{
-			$1 -> gTL()->setCode( new Code("MOV DX , 1"));
+			$1 -> gTL()->setCode( new Code("MOV CX , 1"));
 		}
 
 	}
@@ -905,8 +905,7 @@ logic_expression :  rel_expression
 			{
 				string end_label = newLabel("after_and");
 				code = combine(code , $1 -> getTypeLocation() -> getCode());
-				code = combine(code ,"CMP DX , 0");
-				code = combine(code ,"JZ "+end_label );
+				code = combine(code ,"JCXZ "+end_label );
 				code = combine(code , $3 -> getTypeLocation() -> getCode());
 				code = combine(code , end_label + ":");
 			}
@@ -914,7 +913,7 @@ logic_expression :  rel_expression
 			{
 				string end_label = newLabel("after_or");
 				code = combine(code , $1 -> getTypeLocation() -> getCode());
-				code = combine(code ,"CMP DX , 0");
+				code = combine(code ,"CMP CX , 0");
 				code = combine(code ,"JNZ "+end_label );
 				code = combine(code , $3 -> getTypeLocation() -> getCode());
 				code = combine(code , end_label + ":");
@@ -965,17 +964,18 @@ rel_expression :  simple_expression
 				code ,
 				$1 -> getTypeLocation()->getCode()
 			);
+			// cx = simple expr
 			bool to_float = type1 ==Float or type2 == Float;
 			
 			if(to_float and type1 != Float)
 			{
 				code = combine(code , Comment("Int to float"));
-				code = combine(code , "MOV AX , DX");
+				code = combine(code , "MOV AX , CX");
 				code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
-				code = combine(code , "MOV DX , AX");
+				code = combine(code , "MOV CX , AX");
 			}
 
-			code = combine(code , "PUSH DX");
+			code = combine(code , "PUSH CX");
 				//inside push
 				code = combine(
 					code ,
@@ -984,12 +984,14 @@ rel_expression :  simple_expression
 				if(to_float and type2 != Float)
 				{
 					code = combine(code , Comment("Int to float"));
-					code = combine(code , "MOV AX , DX");
+					code = combine(code , "MOV AX , CX");
 					code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
-					code = combine(code , "MOV DX , AX");
+					code = combine(code , "MOV CX , AX");
 				}
 
 			code = combine(code , "POP AX");
+
+			// ax = arg1 , cx = arg2
 
 			string op = $2 -> getName();
 			string opcode = "";
@@ -1002,16 +1004,18 @@ rel_expression :  simple_expression
 			else if(op == "!=") opcode ="JNE";
 			else assert(0);
 
-			code = combine(code , "CMP AX , DX");
+			code = combine(code , "CMP AX , CX");
 
-			string label_ok = newLabel("relop_is_ok");
-			string label_end = newLabel("relop_end");
+
+			int labelCounter = newLabelCounter();
+			string label_ok = "relop_is_ok" + to_string(labelCounter);
+			string label_end = "relop_end"+ to_string(labelCounter);
 
 			code = combine(code , opcode + " " + label_ok);
-			code = combine(code , "MOV DX , 0");
+			code = combine(code , "MOV CX , 0");
 			code = combine(code , "JMP " + label_end);
 			code = combine(code , label_ok + ":");
-			code = combine(code , "MOV DX , 1");
+			code = combine(code , "MOV CX , 1");
 			code = combine(code , label_end + ":");
 
 			$$ -> getTypeLocation()-> setCode(code);
@@ -1029,7 +1033,10 @@ simple_expression :  term
 	{
 		logRule("simple_expression : simple_expression ADDOP term");
 
-		$1 -> getTypeLocation() -> setReturnType( combineArithmaticType(getReturnTypeFromSIP($1) , getReturnTypeFromSIP($3)) );
+		ReturnType type1 = getReturnTypeFromSIP($1);
+		ReturnType type2 = getReturnTypeFromSIP($3);
+
+		$1 -> getTypeLocation() -> setReturnType( combineArithmaticType(type1 , type2) );
 
 		$1 -> push_back( $2 );
 		$2 -> push_back( $3 );
@@ -1047,13 +1054,36 @@ simple_expression :  term
 			else assert(0);
 			
 			code = combine(code , $1 -> getTypeLocation() -> getCode());
-			code = combine(code ,"PUSH DX");
+			code = combine(code ,"PUSH CX");
 				code = combine(code , $3 -> getTypeLocation() -> getCode());
 			code = combine(code ,"POP AX");
 			
-			code = combine(code , opcode + " AX , DX");
-			code = combine(code , "MOV DX , AX");
+			// ax = simple expr , cx = term
 
+			if((type1 == Int xor type2 == Int))
+			{
+				
+				if(type2 == Int)
+				{
+					code = combine(code , "XCHG AX , CX");
+				}
+				// ax -> int
+				// cx -> float
+				
+				code = combine(code , "IMUL FIXED_POINT_MULTIPLIER");
+				// dx:ax = ax * FIXED_POINT_MULTIPLIER
+
+				// swap back 
+				if(type2 == Int)
+				{
+					code = combine(code , "XCHG AX , CX");
+				}
+
+			}
+
+			code = combine(code , opcode + " AX , CX");
+			code = combine(code , "MOV CX , AX");
+	
 			$$ -> getTypeLocation()-> setCode(code);
 		}
 	}
@@ -1098,27 +1128,31 @@ term :  unary_expression
 		{
 			Code * code  = nullptr;
 			string op = $2 -> getName();
-			string opcode = "";
 			
 			
+			code = combine(code , ";>>");
+			code = combine(code , Comment(op));
+
 			code = combine(code , $1 -> getTypeLocation() -> getCode());
-			code = combine(code ,"PUSH DX");
+			code = combine(code ,"PUSH CX");
 				code = combine(code , $3 -> getTypeLocation() -> getCode());
 			code = combine(code ,"POP AX");
+
+			// ax = term , cx = unary
 			
 			if(op == "*")
 			{
-				code = combine(code , "IMUL DX");
+				code = combine(code , "IMUL CX");
 				if(type1 == Float and type2 == Float)
 				{
 					code = combine(code , "IDIV " + to_string(FIXED_POINT_MULTIPLIER));
 				}
-				code = combine(code , "MOV DX , AX");
+				code = combine(code , "MOV CX , AX");
 			}
 			else if(op == "/")
 			{
 				
-				code = combine(code , "MOV BX , DX");
+				// ax = term ,cx = unary , term/unary
 				switch (type1)
 				{
 				case Int:
@@ -1154,20 +1188,20 @@ term :  unary_expression
 					assert(0);
 					break;
 				}
-				code = combine(code , "IDIV BX");
-				code = combine(code , "MOV DX , AX");
+				code = combine(code , "IDIV CX");
+				code = combine(code , "MOV CX , AX");
 				
 			}
 			else if(op == "%")
 			{
-
-				code = combine(code , "MOV BX , DX");
 				code = combine(code , "CWD");
-				code = combine(code , "IDIV BX");
+				code = combine(code , "IDIV CX");
+				code = combine(code , "MOV CX , DX");
 
 			}
 			else assert(0);
 			
+			code = combine(code , ";<<");
 
 			$$ -> getTypeLocation()-> setCode(code);
 		}
@@ -1206,7 +1240,7 @@ unary_expression :  ADDOP unary_expression
 			code = combine(code , $2 -> getTypeLocation() -> getCode());
 			
 			if(op == "+")	;
-			else if(op == "-")	code = combine(code , "NEG DX");
+			else if(op == "-")	code = combine(code , "NEG CX");
 			else assert(0);
 
 			$$ -> getTypeLocation()-> setCode(code);
@@ -1251,15 +1285,16 @@ unary_expression :  ADDOP unary_expression
 
 			code = combine(code , $2 -> getTypeLocation() -> getCode());
 			
-			string label_end = newLabel("not_end");
-			string label_one = newLabel("not_one");
 
-			code = combine(code , "CMP DX , 0");
-			code = combine(code , "JZ "+label_one);
-			code = combine(code , "MOV DX , 0");
+			int labelCounter = newLabelCounter();
+			string label_end = "not_end" + to_string(labelCounter);
+			string label_one = "not_one" + to_string(labelCounter);
+
+			code = combine(code , "JCXZ "+label_one);
+			code = combine(code , "MOV CX , 0");
 			code = combine(code , "JMP "+label_end);
 			code = combine(code , label_one + ":");
-			code = combine(code , "MOV DX , 1");
+			code = combine(code , "MOV CX , 1");
 			code = combine(code , label_end + ":");
 
 
@@ -1325,10 +1360,12 @@ factor :  variable
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
-
-		$$ -> getTypeLocation() -> setCode(
-			$2 -> getTypeLocation()->getCode()
-		);
+		if(noerror())
+		{
+			$$ -> getTypeLocation() -> setCode(
+				$2 -> getTypeLocation()->getCode()
+			);
+		}
 	}
 	|  CONST_INT
 	{
@@ -1339,14 +1376,19 @@ factor :  variable
 		$$ = $1;
 		print($$);
 
-		string num_str = $$ -> getName();
+		
 
-		$$ -> getTypeLocation()->setCode(
-			combine(
-				new Code(Comment("integar = "+ num_str) ) ,
-				"MOV DX , " + num_str   
-			)
-		);
+		if(noerror())
+		{	
+			string num_str = $$ -> getName();
+
+			$$ -> getTypeLocation()->setCode(
+				combine(
+					new Code(Comment("integar = "+ num_str) ) ,
+					"MOV CX , " + num_str   
+				)
+			);
+		}
 	}
 	|  CONST_FLOAT
 	{
@@ -1357,14 +1399,17 @@ factor :  variable
 		$$ = $1;
 		print($$);
 
-		int num = stof( $$ -> getName() ) * FIXED_POINT_MULTIPLIER;
-		
-		$$ -> getTypeLocation()->setCode(
-			combine(
-				new Code(Comment("float number = "+ $$ -> getName()) ) ,
-				"MOV DX , " + to_string(num)
-			)
-		);
+		if(noerror())
+		{
+			int num = stof( $$ -> getName() ) * FIXED_POINT_MULTIPLIER;
+			
+			$$ -> getTypeLocation()->setCode(
+				combine(
+					new Code(Comment("float number = "+ $$ -> getName()) ) ,
+					"MOV CX , " + to_string(num)
+				)
+			);
+		}
 		
 	}
 	|  variable INCOP
@@ -1419,7 +1464,7 @@ factor :  variable
 
 				code = combine(
 					code,
-					expr->getTypeLocation()->getCode() /// dx e expr ache
+					expr->getTypeLocation()->getCode() /// CX e expr ache
 				);
 
 				int idx = ref->getTypeLocation()->getBasedIndex();
@@ -1427,10 +1472,10 @@ factor :  variable
 				if (idx == -1)
 				{
 					code = combine(code, Comment("set  element to memory array"));
-					code = combine(code, "SAL DX , 1"); 
-					code = combine(code, "MOV BX , DX");
-					code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
-					code = combine(code, "MOV AX , DX");
+					code = combine(code, "SAL CX , 1"); 
+					code = combine(code, "MOV BX , CX");
+					code = combine(code, "MOV CX , PTR WORD " + var_name + "[BX]");
+					code = combine(code, "MOV AX , CX");
 					code = combine(code, "ADD AX , " +to_string(changeAmount) );
 					code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
 				}
@@ -1438,11 +1483,11 @@ factor :  variable
 				{
 					code = combine(code, Comment("put element to stack array"));
 					code = combine(code, "PUSH BP");
-						code = combine(code, "SAL DX , 1");
-						code = combine(code, "ADD DX , " + to_string(idx));
-						code = combine(code, "ADD BP , DX");
-						code = combine(code, "MOV DX , PTR WORD [BP]");
-						code = combine(code, "MOV AX , DX");
+						code = combine(code, "SAL CX , 1");
+						code = combine(code, "ADD CX , " + to_string(idx));
+						code = combine(code, "ADD BP , CX");
+						code = combine(code, "MOV CX , PTR WORD [BP]");
+						code = combine(code, "MOV AX , CX");
 						code = combine(code, "ADD AX , " +to_string(changeAmount) );
 						code = combine(code, "MOV PTR WORD [BP] , AX");
 					code = combine(code, "POP BP");
@@ -1451,8 +1496,8 @@ factor :  variable
 			else
 			{
 				
-				code = combine(code, "MOV DX , " + getSingleVariableAddress(ref));
-				code = combine(code, "MOV AX , DX");
+				code = combine(code, "MOV CX , " + getSingleVariableAddress(ref));
+				code = combine(code, "MOV AX , CX");
 				code = combine(code, "ADD AX , " +to_string(changeAmount) );
 				code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , AX");
 			}
@@ -1514,7 +1559,7 @@ factor :  variable
 
 				code = combine(
 					code,
-					expr->getTypeLocation()->getCode() /// dx e expr ache
+					expr->getTypeLocation()->getCode() /// CX e expr ache
 				);
 
 				int idx = ref->getTypeLocation()->getBasedIndex();
@@ -1522,10 +1567,10 @@ factor :  variable
 				if (idx == -1)
 				{
 					code = combine(code, Comment("set  element to memory array"));
-					code = combine(code, "SAL DX , 1"); 
-					code = combine(code, "MOV BX , DX");
-					code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
-					code = combine(code, "MOV AX , DX");
+					code = combine(code, "SAL CX , 1"); 
+					code = combine(code, "MOV BX , CX");
+					code = combine(code, "MOV CX , PTR WORD " + var_name + "[BX]");
+					code = combine(code, "MOV AX , CX");
 					code = combine(code, "SUB AX , " +to_string(changeAmount) );
 					code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
 				}
@@ -1533,11 +1578,11 @@ factor :  variable
 				{
 					code = combine(code, Comment("put element to stack array"));
 					code = combine(code, "PUSH BP");
-						code = combine(code, "SAL DX , 1");
-						code = combine(code, "ADD DX , " + to_string(idx));
-						code = combine(code, "ADD BP , DX");
-						code = combine(code, "MOV DX , PTR WORD [BP]");
-						code = combine(code, "MOV AX , DX");
+						code = combine(code, "SAL CX , 1");
+						code = combine(code, "ADD CX , " + to_string(idx));
+						code = combine(code, "ADD BP , CX");
+						code = combine(code, "MOV CX , PTR WORD [BP]");
+						code = combine(code, "MOV AX , CX");
 						code = combine(code, "SUB AX , " +to_string(changeAmount) );
 						code = combine(code, "MOV PTR WORD [BP] , AX");
 					code = combine(code, "POP BP");
@@ -1546,8 +1591,8 @@ factor :  variable
 			else
 			{
 				
-				code = combine(code, "MOV DX , " + getSingleVariableAddress(ref));
-				code = combine(code, "MOV AX , DX");
+				code = combine(code, "MOV CX , " + getSingleVariableAddress(ref));
+				code = combine(code, "MOV AX , CX");
 				code = combine(code, "SUB AX , " +to_string(changeAmount) );
 				code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , AX");
 			}
@@ -1595,7 +1640,7 @@ arguments :  arguments COMMA logic_expression
 				combine(
 					combine(
 						$3 -> gTL()->getCode(),
-						"PUSH DX"
+						"PUSH CX"
 					),
 					$1 -> gTL()->getCode() 
 				)
@@ -1615,7 +1660,7 @@ arguments :  arguments COMMA logic_expression
 			$$ -> gTL() -> setCode(
 				combine(
 					$1 -> gTL()->getCode(),
-					"PUSH DX"
+					"PUSH CX"
 				)
 			);
 		}
@@ -1637,7 +1682,7 @@ arguments :  arguments COMMA logic_expression
 			$$ -> gTL() -> setCode(
 				combine(
 					$2 -> gTL()->getCode(),
-					"PUSH DX"
+					"PUSH CX"
 				)
 			);
 		}

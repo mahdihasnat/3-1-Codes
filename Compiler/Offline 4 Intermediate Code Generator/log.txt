@@ -1,196 +1,31 @@
-Line 2: type_specifier : INT
+Line 4: type_specifier : INT
 
 int 
 
-Line 2: type_specifier : INT
+Line 6: type_specifier : INT
 
 int 
 
-Line 2: parameter_list : type_specifier ID
-
-int x
-
-Line 2: type_specifier : INT
-
-int 
-
-Line 2: parameter_list : parameter_list COMMA type_specifier ID
-
-int x,int y
-
-Line 2: func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
-
-int bar(int x,int y);
-
-
-Line 2: unit : func_declaration
-
-int bar(int x,int y);
-
-
-Line 2: program : unit
-
-int bar(int x,int y);
-
-
-Line 3: type_specifier : INT
-
-int 
-
-Line 3: type_specifier : INT
-
-int 
-
-Line 3: parameter_list : type_specifier ID
-
-int x
-
-Line 3: type_specifier : INT
-
-int 
-
-Line 3: parameter_list : parameter_list COMMA type_specifier ID
-
-int x,int y
-
-Line 5: variable : ID
+Line 6: declaration_list : ID
 
 x
 
-Line 5: factor : variable
+Line 6: var_declaration : type_specifier declaration_list SEMICOLON
 
-x
+int x;
 
-Line 5: unary_expression : factor
 
-x
+Line 6: statement : var_declaration
 
-Line 5: term : unary_expression
+int x;
 
-x
 
-Line 5: simple_expression : term
+Line 6: statements : statement
 
-x
-
-Line 5: factor : CONST_INT
-
-0
-
-Line 5: unary_expression : factor
-
-0
-
-Line 5: term : unary_expression
-
-0
-
-Line 5: simple_expression : term
-
-0
-
-Line 5: rel_expression : simple_expression RELOP simple_expression
-
-x==0
-
-Line 5: variable : ID
-
-y
-
-Line 5: factor : variable
-
-y
-
-Line 5: unary_expression : factor
-
-y
-
-Line 5: term : unary_expression
-
-y
-
-Line 5: simple_expression : term
-
-y
-
-Line 5: factor : CONST_INT
-
-0
-
-Line 5: unary_expression : factor
-
-0
-
-Line 5: term : unary_expression
-
-0
-
-Line 5: simple_expression : term
-
-0
-
-Line 5: rel_expression : simple_expression RELOP simple_expression
-
-y==0
-
-Line 5: logic_expression : rel_expression LOGICOP rel_expression
-
-x==0||y==0
-
-Line 5: expression : logic expression
-
-x==0||y==0
-
-Line 6: factor : CONST_INT
-
-1
-
-Line 6: unary_expression : factor
-
-1
-
-Line 6: term : unary_expression
-
-1
-
-Line 6: simple_expression : term
-
-1
-
-Line 6: rel_expression : simple_expression
-
-1
-
-Line 6: logic_expression : rel_expression
-
-1
-
-Line 6: expression : logic expression
-
-1
-
-Line 6: statement : RETURN expression SEMICOLON
-
-return 1;
+int x;
 
 
 Line 7: variable : ID
-
-x
-
-Line 7: factor : variable
-
-x
-
-Line 7: unary_expression : factor
-
-x
-
-Line 7: term : unary_expression
-
-x
-
-Line 7: simple_expression : term
 
 x
 
@@ -206,211 +41,102 @@ Line 7: term : unary_expression
 
 1
 
-Line 7: simple_expression : simple_expression ADDOP term
-
-x-1
-
-Line 7: rel_expression : simple_expression
-
-x-1
-
-Line 7: logic_expression : rel_expression
-
-x-1
-
-Line 7: arguments : logic_expression
-
-x-1
-
-Line 7: variable : ID
-
-y
-
-Line 7: factor : variable
-
-y
-
-Line 7: unary_expression : factor
-
-y
-
-Line 7: term : unary_expression
-
-y
-
 Line 7: simple_expression : term
-
-y
-
-Line 7: rel_expression : simple_expression
-
-y
-
-Line 7: logic_expression : rel_expression
-
-y
-
-Line 7: arguments : arguments COMMA logic_expression
-
-x-1,y
-
-Line 7: argument_list : arguments
-
-x-1,y
-
-Line 7: factor : ID LPAREN argument_list RPAREN
-
-foo(x-1,y)
-
-Line 7: unary_expression : factor
-
-foo(x-1,y)
-
-Line 7: term : unary_expression
-
-foo(x-1,y)
-
-Line 7: simple_expression : term
-
-foo(x-1,y)
-
-Line 7: variable : ID
-
-x
-
-Line 7: factor : variable
-
-x
-
-Line 7: unary_expression : factor
-
-x
-
-Line 7: term : unary_expression
-
-x
-
-Line 7: simple_expression : term
-
-x
-
-Line 7: rel_expression : simple_expression
-
-x
-
-Line 7: logic_expression : rel_expression
-
-x
-
-Line 7: arguments : logic_expression
-
-x
-
-Line 7: variable : ID
-
-y
-
-Line 7: factor : variable
-
-y
-
-Line 7: unary_expression : factor
-
-y
-
-Line 7: term : unary_expression
-
-y
-
-Line 7: simple_expression : term
-
-y
-
-Line 7: factor : CONST_INT
 
 1
 
-Line 7: unary_expression : factor
+Line 7: rel_expression : simple_expression
 
 1
 
-Line 7: term : unary_expression
+Line 7: logic_expression : rel_expression
 
 1
 
-Line 7: simple_expression : simple_expression ADDOP term
+Line 7: expression : variable ASSIGNOP logic_expression
 
-y-1
+x=1
 
-Line 7: rel_expression : simple_expression
+Line 7: expression_statement : expression SEMICOLON
 
-y-1
-
-Line 7: logic_expression : rel_expression
-
-y-1
-
-Line 7: arguments : arguments COMMA logic_expression
-
-x,y-1
-
-Line 7: argument_list : arguments
-
-x,y-1
-
-Line 7: factor : ID LPAREN argument_list RPAREN
-
-bar(x,y-1)
-
-Line 7: unary_expression : factor
-
-bar(x,y-1)
-
-Line 7: term : unary_expression
-
-bar(x,y-1)
-
-Line 7: simple_expression : simple_expression ADDOP term
-
-foo(x-1,y)+bar(x,y-1)
-
-Line 7: rel_expression : simple_expression
-
-foo(x-1,y)+bar(x,y-1)
-
-Line 7: logic_expression : rel_expression
-
-foo(x-1,y)+bar(x,y-1)
-
-Line 7: expression : logic expression
-
-foo(x-1,y)+bar(x,y-1)
-
-Line 7: statement : RETURN expression SEMICOLON
-
-return foo(x-1,y)+bar(x,y-1);
+x=1;
 
 
-Line 7: statement : IF LPAREN expression RPAREN statement ELSE statement
+Line 7: statement : expression_statement
 
-if (x==0||y==0)return 1;
-else
-return foo(x-1,y)+bar(x,y-1);
+x=1;
 
 
-Line 7: statements : statement
+Line 7: statements : statements statement
 
-if (x==0||y==0)return 1;
-else
-return foo(x-1,y)+bar(x,y-1);
+int x;
+x=1;
 
 
-Line 8: compound_statement : LCURL statements RCURL
+Line 8: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 8: statements : statements statement
+
+int x;
+x=1;
+println(x);
+
+
+Line 9: variable : ID
+
+x
+
+Line 9: factor : variable
+
+x
+
+Line 9: unary_expression : factor
+
+x
+
+Line 9: term : unary_expression
+
+x
+
+Line 9: simple_expression : term
+
+x
+
+Line 9: rel_expression : simple_expression
+
+x
+
+Line 9: logic_expression : rel_expression
+
+x
+
+Line 9: expression : logic expression
+
+x
+
+Line 9: statement : RETURN expression SEMICOLON
+
+return x;
+
+
+Line 9: statements : statements statement
+
+int x;
+x=1;
+println(x);
+return x;
+
+
+Line 10: compound_statement : LCURL statements RCURL
 
 {
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1);
+  int x;
+  x=1;
+  println(x);
+  return x;
 }
 
 
@@ -418,441 +144,449 @@ Line 8: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.1
- 0 --> < x , ID{disp = 4} > 
- 1 --> < y , ID{disp = 6} > 
+ 0 --> < x , ID{disp = -2} > 
 
 
 
 ScopeTable # 1
- 9 --> < bar , ID{disp = -1} > 
  24 --> < foo , ID{disp = -1} > 
 
 
-Line 8: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+Line 10: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
-int foo(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1);
+int foo(){
+  int x;
+  x=1;
+  println(x);
+  return x;
 }
 
 
 
-Line 8: unit : func_definition
+Line 10: unit : func_definition
 
-int foo(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1);
+int foo(){
+  int x;
+  x=1;
+  println(x);
+  return x;
 }
 
 
 
-Line 8: program : program unit
+Line 10: program : unit
 
-int bar(int x,int y);
-int foo(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1);
+int foo(){
+  int x;
+  x=1;
+  println(x);
+  return x;
 }
 
 
 
-Line 10: type_specifier : INT
+Line 12: type_specifier : VOID
+
+void 
+
+Line 15: type_specifier : INT
 
 int 
 
-Line 10: type_specifier : INT
+Line 15: declaration_list : ID
 
-int 
+ok
 
-Line 10: parameter_list : type_specifier ID
+Line 15: var_declaration : type_specifier declaration_list SEMICOLON
 
-int x
+int ok;
 
-Line 10: type_specifier : INT
 
-int 
+Line 15: statement : var_declaration
 
-Line 10: parameter_list : parameter_list COMMA type_specifier ID
+int ok;
 
-int x,int y
 
-Line 12: variable : ID
+Line 15: statements : statement
 
-x
+int ok;
 
-Line 12: factor : variable
 
-x
+Line 16: variable : ID
 
-Line 12: unary_expression : factor
+ok
 
-x
+Line 16: factor : CONST_INT
 
-Line 12: term : unary_expression
+2
 
-x
+Line 16: unary_expression : factor
 
-Line 12: simple_expression : term
+2
 
-x
+Line 16: term : unary_expression
 
-Line 12: factor : CONST_INT
+2
 
-0
+Line 16: simple_expression : term
 
-Line 12: unary_expression : factor
+2
 
-0
+Line 16: rel_expression : simple_expression
 
-Line 12: term : unary_expression
+2
 
-0
+Line 16: logic_expression : rel_expression
 
-Line 12: simple_expression : term
+2
 
-0
+Line 16: expression : variable ASSIGNOP logic_expression
 
-Line 12: rel_expression : simple_expression RELOP simple_expression
+ok=2
 
-x==0
+Line 16: expression_statement : expression SEMICOLON
 
-Line 12: variable : ID
+ok=2;
 
-y
 
-Line 12: factor : variable
+Line 16: statement : expression_statement
 
-y
+ok=2;
 
-Line 12: unary_expression : factor
 
-y
+Line 16: statements : statements statement
 
-Line 12: term : unary_expression
+int ok;
+ok=2;
 
-y
 
-Line 12: simple_expression : term
-
-y
-
-Line 12: factor : CONST_INT
+Line 17: factor : CONST_INT
 
 0
 
-Line 12: unary_expression : factor
+Line 17: unary_expression : factor
 
 0
 
-Line 12: term : unary_expression
+Line 17: term : unary_expression
 
 0
 
-Line 12: simple_expression : term
+Line 17: simple_expression : term
 
 0
 
-Line 12: rel_expression : simple_expression RELOP simple_expression
+Line 17: rel_expression : simple_expression
 
-y==0
+0
 
-Line 12: logic_expression : rel_expression LOGICOP rel_expression
+Line 17: argument_list :
 
-x==0||y==0
 
-Line 12: expression : logic expression
 
-x==0||y==0
+Line 17: factor : ID LPAREN argument_list RPAREN
 
-Line 13: factor : CONST_INT
+foo()
 
-1
+Line 17: unary_expression : factor
 
-Line 13: unary_expression : factor
+foo()
 
-1
+Line 17: term : unary_expression
 
-Line 13: term : unary_expression
+foo()
 
-1
+Line 17: simple_expression : term
 
-Line 13: simple_expression : term
+foo()
 
-1
+Line 17: rel_expression : simple_expression
 
-Line 13: rel_expression : simple_expression
+foo()
 
-1
+Line 17: logic_expression : rel_expression LOGICOP rel_expression
 
-Line 13: logic_expression : rel_expression
+0&&foo()
 
-1
+Line 17: expression : logic expression
 
-Line 13: expression : logic expression
+0&&foo()
 
-1
+Line 19: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
-Line 13: statement : RETURN expression SEMICOLON
+println(ok);
 
-return 1;
 
+Line 19: statements : statement
 
-Line 14: variable : ID
+println(ok);
 
-x
 
-Line 14: factor : variable
-
-x
-
-Line 14: unary_expression : factor
-
-x
-
-Line 14: term : unary_expression
-
-x
-
-Line 14: simple_expression : term
-
-x
-
-Line 14: factor : CONST_INT
-
-1
-
-Line 14: unary_expression : factor
-
-1
-
-Line 14: term : unary_expression
-
-1
-
-Line 14: simple_expression : simple_expression ADDOP term
-
-x-1
-
-Line 14: rel_expression : simple_expression
-
-x-1
-
-Line 14: logic_expression : rel_expression
-
-x-1
-
-Line 14: arguments : logic_expression
-
-x-1
-
-Line 14: variable : ID
-
-y
-
-Line 14: factor : variable
-
-y
-
-Line 14: unary_expression : factor
-
-y
-
-Line 14: term : unary_expression
-
-y
-
-Line 14: simple_expression : term
-
-y
-
-Line 14: rel_expression : simple_expression
-
-y
-
-Line 14: logic_expression : rel_expression
-
-y
-
-Line 14: arguments : arguments COMMA logic_expression
-
-x-1,y
-
-Line 14: argument_list : arguments
-
-x-1,y
-
-Line 14: factor : ID LPAREN argument_list RPAREN
-
-foo(x-1,y)
-
-Line 14: unary_expression : factor
-
-foo(x-1,y)
-
-Line 14: term : unary_expression
-
-foo(x-1,y)
-
-Line 14: simple_expression : term
-
-foo(x-1,y)
-
-Line 14: variable : ID
-
-x
-
-Line 14: factor : variable
-
-x
-
-Line 14: unary_expression : factor
-
-x
-
-Line 14: term : unary_expression
-
-x
-
-Line 14: simple_expression : term
-
-x
-
-Line 14: rel_expression : simple_expression
-
-x
-
-Line 14: logic_expression : rel_expression
-
-x
-
-Line 14: arguments : logic_expression
-
-x
-
-Line 14: variable : ID
-
-y
-
-Line 14: factor : variable
-
-y
-
-Line 14: unary_expression : factor
-
-y
-
-Line 14: term : unary_expression
-
-y
-
-Line 14: simple_expression : term
-
-y
-
-Line 14: factor : CONST_INT
-
-1
-
-Line 14: unary_expression : factor
-
-1
-
-Line 14: term : unary_expression
-
-1
-
-Line 14: simple_expression : simple_expression ADDOP term
-
-y-1
-
-Line 14: rel_expression : simple_expression
-
-y-1
-
-Line 14: logic_expression : rel_expression
-
-y-1
-
-Line 14: arguments : arguments COMMA logic_expression
-
-x,y-1
-
-Line 14: argument_list : arguments
-
-x,y-1
-
-Line 14: factor : ID LPAREN argument_list RPAREN
-
-bar(x,y-1)
-
-Line 14: unary_expression : factor
-
-bar(x,y-1)
-
-Line 14: term : unary_expression
-
-bar(x,y-1)
-
-Line 14: simple_expression : simple_expression ADDOP term
-
-foo(x-1,y)+bar(x,y-1)
-
-Line 14: factor : CONST_INT
-
-1
-
-Line 14: unary_expression : factor
-
-1
-
-Line 14: term : unary_expression
-
-1
-
-Line 14: simple_expression : simple_expression ADDOP term
-
-foo(x-1,y)+bar(x,y-1)+1
-
-Line 14: rel_expression : simple_expression
-
-foo(x-1,y)+bar(x,y-1)+1
-
-Line 14: logic_expression : rel_expression
-
-foo(x-1,y)+bar(x,y-1)+1
-
-Line 14: expression : logic expression
-
-foo(x-1,y)+bar(x,y-1)+1
-
-Line 14: statement : RETURN expression SEMICOLON
-
-return foo(x-1,y)+bar(x,y-1)+1;
-
-
-Line 14: statement : IF LPAREN expression RPAREN statement ELSE statement
-
-if (x==0||y==0)return 1;
-else
-return foo(x-1,y)+bar(x,y-1)+1;
-
-
-Line 14: statements : statement
-
-if (x==0||y==0)return 1;
-else
-return foo(x-1,y)+bar(x,y-1)+1;
-
-
-Line 15: compound_statement : LCURL statements RCURL
+Line 20: compound_statement : LCURL statements RCURL
 
 {
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1)+1;
+  println(ok);
+}
+
+
+
+
+
+ScopeTable # 1.2.1
+
+
+
+ScopeTable # 1.2
+ 8 --> < ok , ID{disp = -2} > 
+
+
+
+ScopeTable # 1
+ 1 --> < main , ID{disp = -1} > 
+ 24 --> < foo , ID{disp = -1} > 
+
+
+Line 20: statement : compound_statement
+
+{
+  println(ok);
+}
+
+
+
+Line 22: statement : IF LPAREN expression RPAREN statement
+
+if (0&&foo()){
+  println(ok);
+}
+
+
+
+Line 22: statements : statements statement
+
+int ok;
+ok=2;
+if (0&&foo()){
+  println(ok);
+}
+
+
+
+Line 22: type_specifier : INT
+
+int 
+
+Line 22: declaration_list : ID
+
+ok2
+
+Line 22: var_declaration : type_specifier declaration_list SEMICOLON
+
+int ok2;
+
+
+Line 22: statement : var_declaration
+
+int ok2;
+
+
+Line 22: statements : statements statement
+
+int ok;
+ok=2;
+if (0&&foo()){
+  println(ok);
+}
+
+int ok2;
+
+
+Line 23: variable : ID
+
+ok2
+
+Line 23: factor : CONST_INT
+
+4
+
+Line 23: unary_expression : factor
+
+4
+
+Line 23: term : unary_expression
+
+4
+
+Line 23: simple_expression : term
+
+4
+
+Line 23: rel_expression : simple_expression
+
+4
+
+Line 23: logic_expression : rel_expression
+
+4
+
+Line 23: expression : variable ASSIGNOP logic_expression
+
+ok2=4
+
+Line 23: expression_statement : expression SEMICOLON
+
+ok2=4;
+
+
+Line 23: statement : expression_statement
+
+ok2=4;
+
+
+Line 23: statements : statements statement
+
+int ok;
+ok=2;
+if (0&&foo()){
+  println(ok);
+}
+
+int ok2;
+ok2=4;
+
+
+Line 24: factor : CONST_INT
+
+1
+
+Line 24: unary_expression : factor
+
+1
+
+Line 24: term : unary_expression
+
+1
+
+Line 24: simple_expression : term
+
+1
+
+Line 24: rel_expression : simple_expression
+
+1
+
+Line 24: argument_list :
+
+
+
+Line 24: factor : ID LPAREN argument_list RPAREN
+
+foo()
+
+Line 24: unary_expression : factor
+
+foo()
+
+Line 24: term : unary_expression
+
+foo()
+
+Line 24: simple_expression : term
+
+foo()
+
+Line 24: rel_expression : simple_expression
+
+foo()
+
+Line 24: logic_expression : rel_expression LOGICOP rel_expression
+
+1||foo()
+
+Line 24: expression : logic expression
+
+1||foo()
+
+Line 26: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(ok2);
+
+
+Line 26: statements : statement
+
+println(ok2);
+
+
+Line 27: compound_statement : LCURL statements RCURL
+
+{
+  println(ok2);
+}
+
+
+
+
+
+ScopeTable # 1.2.2
+
+
+
+ScopeTable # 1.2
+ 8 --> < ok , ID{disp = -2} > 
+ 28 --> < ok2 , ID{disp = -4} > 
+
+
+
+ScopeTable # 1
+ 1 --> < main , ID{disp = -1} > 
+ 24 --> < foo , ID{disp = -1} > 
+
+
+Line 27: statement : compound_statement
+
+{
+  println(ok2);
+}
+
+
+
+Line 30: statement : IF LPAREN expression RPAREN statement
+
+if (1||foo()){
+  println(ok2);
+}
+
+
+
+Line 30: statements : statements statement
+
+int ok;
+ok=2;
+if (0&&foo()){
+  println(ok);
+}
+
+int ok2;
+ok2=4;
+if (1||foo()){
+  println(ok2);
+}
+
+
+
+Line 30: compound_statement : LCURL statements RCURL
+
+{
+  int ok;
+  ok=2;
+  if (0&&foo()){
+    println(ok);
+  }
+  int ok2;
+  ok2=4;
+  if (1||foo()){
+    println(ok2);
+  }
 }
 
 
@@ -860,277 +594,84 @@ Line 15: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.2
- 0 --> < x , ID{disp = 4} > 
- 1 --> < y , ID{disp = 6} > 
-
-
-
-ScopeTable # 1
- 9 --> < bar , ID{disp = -1} > 
- 24 --> < foo , ID{disp = -1} > 
-
-
-Line 15: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
-
-int bar(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1)+1;
-}
-
-
-
-Line 15: unit : func_definition
-
-int bar(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1)+1;
-}
-
-
-
-Line 15: program : program unit
-
-int bar(int x,int y);
-int foo(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1);
-}
-
-int bar(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1)+1;
-}
-
-
-
-Line 17: type_specifier : INT
-
-int 
-
-Line 18: type_specifier : INT
-
-int 
-
-Line 18: declaration_list : ID
-
-x
-
-Line 18: var_declaration : type_specifier declaration_list SEMICOLON
-
-int x;
-
-
-Line 18: statement : var_declaration
-
-int x;
-
-
-Line 18: statements : statement
-
-int x;
-
-
-Line 19: variable : ID
-
-x
-
-Line 19: factor : CONST_INT
-
-2
-
-Line 19: unary_expression : factor
-
-2
-
-Line 19: term : unary_expression
-
-2
-
-Line 19: simple_expression : term
-
-2
-
-Line 19: rel_expression : simple_expression
-
-2
-
-Line 19: logic_expression : rel_expression
-
-2
-
-Line 19: arguments : logic_expression
-
-2
-
-Line 19: factor : CONST_INT
-
-4
-
-Line 19: unary_expression : factor
-
-4
-
-Line 19: term : unary_expression
-
-4
-
-Line 19: simple_expression : term
-
-4
-
-Line 19: rel_expression : simple_expression
-
-4
-
-Line 19: logic_expression : rel_expression
-
-4
-
-Line 19: arguments : arguments COMMA logic_expression
-
-2,4
-
-Line 19: argument_list : arguments
-
-2,4
-
-Line 19: factor : ID LPAREN argument_list RPAREN
-
-foo(2,4)
-
-Line 19: unary_expression : factor
-
-foo(2,4)
-
-Line 19: term : unary_expression
-
-foo(2,4)
-
-Line 19: simple_expression : term
-
-foo(2,4)
-
-Line 19: rel_expression : simple_expression
-
-foo(2,4)
-
-Line 19: logic_expression : rel_expression
-
-foo(2,4)
-
-Line 19: expression : variable ASSIGNOP logic_expression
-
-x=foo(2,4)
-
-Line 19: expression_statement : expression SEMICOLON
-
-x=foo(2,4);
-
-
-Line 19: statement : expression_statement
-
-x=foo(2,4);
-
-
-Line 19: statements : statements statement
-
-int x;
-x=foo(2,4);
-
-
-Line 20: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(x);
-
-
-Line 20: statements : statements statement
-
-int x;
-x=foo(2,4);
-println(x);
-
-
-Line 21: compound_statement : LCURL statements RCURL
-
-{
-  int x;
-  x=foo(2,4);
-  println(x);
-}
-
-
-
-
-
-ScopeTable # 1.3
- 0 --> < x , ID{disp = -2} > 
+ 8 --> < ok , ID{disp = -2} > 
+ 28 --> < ok2 , ID{disp = -4} > 
 
 
 
 ScopeTable # 1
  1 --> < main , ID{disp = -1} > 
- 9 --> < bar , ID{disp = -1} > 
  24 --> < foo , ID{disp = -1} > 
 
 
-Line 21: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 30: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
-int main(){
+void main(){
+  int ok;
+  ok=2;
+  if (0&&foo()){
+    println(ok);
+  }
+  int ok2;
+  ok2=4;
+  if (1||foo()){
+    println(ok2);
+  }
+}
+
+
+
+Line 30: unit : func_definition
+
+void main(){
+  int ok;
+  ok=2;
+  if (0&&foo()){
+    println(ok);
+  }
+  int ok2;
+  ok2=4;
+  if (1||foo()){
+    println(ok2);
+  }
+}
+
+
+
+Line 30: program : program unit
+
+int foo(){
   int x;
-  x=foo(2,4);
+  x=1;
   println(x);
+  return x;
+}
+
+void main(){
+  int ok;
+  ok=2;
+  if (0&&foo()){
+    println(ok);
+  }
+  int ok2;
+  ok2=4;
+  if (1||foo()){
+    println(ok2);
+  }
 }
 
 
 
-Line 21: unit : func_definition
-
-int main(){
-  int x;
-  x=foo(2,4);
-  println(x);
-}
-
-
-
-Line 21: program : program unit
-
-int bar(int x,int y);
-int foo(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1);
-}
-
-int bar(int x,int y){
-  if (x==0||y==0)return 1;
-  else
-  return foo(x-1,y)+bar(x,y-1)+1;
-}
-
-int main(){
-  int x;
-  x=foo(2,4);
-  println(x);
-}
-
-
-
-Line 22: start : program
+Line 30: start : program
 
 
 
 ScopeTable # 1
  1 --> < main , ID{disp = -1} > 
- 9 --> < bar , ID{disp = -1} > 
  24 --> < foo , ID{disp = -1} > 
 
 
 
-Total lines: 22
+Total lines: 30
 Total errors: 0
 

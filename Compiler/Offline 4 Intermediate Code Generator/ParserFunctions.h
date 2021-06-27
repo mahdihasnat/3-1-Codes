@@ -241,8 +241,9 @@ Code *loopImplementation(
 	Code *code_step,
 	Code *code_statement)
 {
-	string label_loop = newLabel("for_body");
-	string label_end = newLabel("for_end");
+	int labelCounter = newLabelCounter();
+	string label_loop = "for_loop" + to_string(labelCounter);
+	string label_end = "for_end" + to_string(labelCounter);
 
 	// init
 	// loop:
@@ -257,17 +258,16 @@ Code *loopImplementation(
 	code = combine(code, code_init);
 	code = combine(code, label_loop + ":");
 	code = combine(code, ";>>");
-	code = combine(code, code_check);
-	code = combine(code, "CMP DX , 0");
-	code = combine(code, "JZ " + label_end);
-	code = combine(code, ";>>");
-	code = combine(code, Comment("start of for loop statement"));
-	code = combine(code, code_statement);
-	code = combine(code, ";<<");
-	code = combine(code, Comment("start of for loop step"));
-	code = combine(code, code_step);
+		code = combine(code, code_check);
+		code = combine(code, "JCXZ " + label_end);
+		code = combine(code, ";>>");
+			code = combine(code, Comment("start of for loop statement"));
+			code = combine(code, code_statement);
+		code = combine(code, ";<<");
+		code = combine(code, Comment("start of for loop step"));
+		code = combine(code, code_step);
 
-	code = combine(code, "JMP " + label_loop);
+		code = combine(code, "JMP " + label_loop);
 
 	code = combine(code, ";<<");
 	code = combine(code, label_end + ":");
@@ -290,8 +290,7 @@ Code *conditionImplementation(Code *expression, Code *true_statement, Code *fals
 
 	Code *code = nullptr;
 	code = combine(code, expression);
-	code = combine(code, "CMP DX , 0");
-	code = combine(code, "JZ "+label_false);
+	code = combine(code, "JCXZ "+label_false);
 	code = combine(code , ";>>");
 		code = combine(code, true_statement);
 		code = combine(code, "JMP "+label_end);
@@ -305,7 +304,7 @@ Code *conditionImplementation(Code *expression, Code *true_statement, Code *fals
 	return code;
 }
 
-Code *writeToVariable(SymbolInfoPointer sip, Code *value)
+Code *writeToVariable(SymbolInfoPointer sip, Code *valueCode)
 {
 	// variable : ID
 	//  		| ID LTHIRD expression RTHIRD
@@ -329,45 +328,47 @@ Code *writeToVariable(SymbolInfoPointer sip, Code *value)
 
 		code = combine(
 			code,
-			expr->getTypeLocation()->getCode() /// dx e expr ache
+			expr->getTypeLocation()->getCode() /// cx e expr ache
 		);
 
-		code = combine(code, "PUSH DX");
-		code = combine(
-			code,
-			value);
+		code = combine(code, "PUSH CX");
+		code = combine(code, valueCode); // value to be assigned is in cx
 		code = combine(code, "POP AX");
-		// ax -> index , dx -> value
-		code = combine(code, "XCHG AX ,DX");
-		// dx -> index , ax -> value
+		// ax -> index , cx -> value
+		code = combine(code, "XCHG AX ,CX");
+		// cx -> index , ax -> value
 
 		int idx = ref->getTypeLocation()->getBasedIndex();
 
+		code = combine(code , Comment("Cx -> index , ax -> value"));
+		code = combine(code , ";>>");
 		if (idx == -1)
 		{
 			code = combine(code, Comment("set  element to memory array"));
-			code = combine(code, "SAL DX , 1");
-			code = combine(code, "MOV BX , DX");
+			code = combine(code, "SAL CX , 1");
+			code = combine(code, "MOV BX , CX");
 			code = combine(code, "MOV PTR WORD " + var_name + "[BX] , AX");
-			code = combine(code, "MOV DX , AX");
+			code = combine(code, "MOV CX , AX");
 		}
 		else
 		{
 			code = combine(code, Comment("put element to stack array"));
 			code = combine(code, "PUSH BP");
-			code = combine(code, "SAL DX , 1");
-			code = combine(code, "ADD DX , " + to_string(idx));
-			code = combine(code, "ADD BP , DX");
-			code = combine(code, "MOV PTR WORD [BP] , AX");
-			code = combine(code, "MOV DX , AX");
+				code = combine(code, "SAL CX , 1");
+				code = combine(code, "ADD CX , " + to_string(idx));
+				code = combine(code, "ADD BP , CX");
+				code = combine(code, "MOV PTR WORD [BP] , AX");
+				code = combine(code, "MOV CX , AX");
 			code = combine(code, "POP BP");
 		}
+		code = combine(code , ";<<");
 	}
 	else
 	{
-		code = combine(code, value);
-		code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , DX");
+		code = combine(code, valueCode);
+		code = combine(code, "MOV " + getSingleVariableAddress(ref) + " , CX");
 	}
+	code = combine(code , Comment("CX = assigned value"));
 	return code;
 }
 
@@ -384,25 +385,25 @@ void readFromVariable(SymbolInfoPointer sip)
 	{
 		SymbolInfoPointer expr = sip->getNextSymbolInfo()->getNextSymbolInfo();
 
-		Code *code = expr->getTypeLocation()->getCode(); /// dx e expr ache
+		Code *code = expr->getTypeLocation()->getCode(); /// cx e expr ache
 
 		int idx = ref->getTypeLocation()->getBasedIndex();
 
 		if (idx == -1)
 		{
 			code = combine(code, Comment("get array element from memory"));
-			code = combine(code, "SAL DX , 1");
-			code = combine(code, "MOV BX , DX");
-			code = combine(code, "MOV DX , PTR WORD " + var_name + "[BX]");
+			code = combine(code, "SAL CX , 1");
+			code = combine(code, "MOV BX , CX");
+			code = combine(code, "MOV CX , PTR WORD " + var_name + "[BX]");
 		}
 		else
 		{
 			code = combine(code, Comment("get array element from stack"));
 			code = combine(code, "PUSH BP");
-			code = combine(code, "SAL DX , 1");
-			code = combine(code, "ADD DX , " + to_string(idx));
-			code = combine(code, "ADD BP , DX");
-			code = combine(code, "MOV DX , PTR WORD [BP]");
+				code = combine(code, "SAL CX , 1");
+				code = combine(code, "ADD CX , " + to_string(idx));
+				code = combine(code, "ADD BP , CX");
+				code = combine(code, "MOV CX , PTR WORD [BP]");
 			code = combine(code, "POP BP");
 		}
 
@@ -411,7 +412,7 @@ void readFromVariable(SymbolInfoPointer sip)
 	else
 	{
 		sip->getTypeLocation()->setCode(
-			new Code("MOV DX , " + getSingleVariableAddress(ref)));
+			new Code("MOV CX , " + getSingleVariableAddress(ref)));
 	}
 }
 
