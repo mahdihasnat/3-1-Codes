@@ -236,53 +236,8 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 		if(noerror())
 		{
-			Code * code = nullptr;
-			SymbolInfoPointer ref = symboltable->lookUp(funcName);
-			assert(ref);
-			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
-
-			code = combine(code , funcName + " PROC");
-			
-			code = combine(code , ";>>");
-			// number of push concerned add_variable_declaration::current_base_pointer
-			code = combine(code , "PUSH BP");
-			code = combine(code , "MOV BP , SP");
-
-
-			if(funcName == "main")
-			{
-				DBG(*(code));
-				code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
-				code = combine(code , "MOV AX, @DATA");
-				code = combine(code , "MOV DS, AX");
-			}
-			
-
-			
-			
-
-			code = combine(
-				code,
-				$7 -> getTypeLocation()->getCode()
-			);
-			
-			code = combine(code , funcName +"_exit:");
-			
-			code = combine(code , "POP BP");
-
-			if(funcName == "main")
-			{
-				code = combine(code , Comment("EXIT 0"));
-				code = combine(code , "MOV AH, 4CH");
-				code = combine(code , "INT 21H");
-			}
-
-			code = combine(code , "RET " + to_string(parameter_size));
-
-			code = combine(code , ";<<");
-			code = combine(code , funcName + " ENDP");
-			
-
+			SymbolInfoPointer compoundStatement = $7;
+			Code * code = functionCode(funcName , compoundStatement);
 			$$ -> getTypeLocation()->setCode(code);
 		}
 		currentFuncName = "";
@@ -302,45 +257,8 @@ func_definition :  type_specifier ID LPAREN parameter_list RPAREN {add_func_defi
 
 		if(noerror())
 		{
-			Code * code = nullptr;
-			SymbolInfoPointer ref = symboltable->lookUp(funcName);
-			assert(ref);
-			int parameter_size = ref->getTypeLocation()->getParametersLocation()->size() * 2;
-
-			code = combine(code , funcName + " PROC");
-
-			code = combine(code , "PUSH BP");
-			code = combine(code , "MOV BP , SP");
-
-
-			if(funcName == "main")
-			{
-				code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
-				code = combine(code , "MOV AX, @DATA");
-				code = combine(code , "MOV DS, AX");
-			}
-			
-
-			code = combine(
-				code,
-				$6 -> getTypeLocation()->getCode()
-			);
-			
-			code = combine(code , funcName +"_exit:");
-			
-			code = combine(code , "POP BP");
-
-			if(funcName == "main")
-			{
-				code = combine(code , Comment("EXIT 0"));
-				code = combine(code , "MOV AH, 4CH");
-				code = combine(code , "INT 21H");
-			}
-
-			code = combine(code , "RET " + to_string(parameter_size));
-
-			code = combine(code , funcName + " ENDP");
-
+			SymbolInfoPointer compoundStatement = $6;
+			Code * code = functionCode(funcName , compoundStatement);
 			$$ -> getTypeLocation()->setCode(code);
 		}
 		currentFuncName = "";
