@@ -124,7 +124,7 @@ public:
 		// 		os<<" ,"<<x;
 		// 	os<<")";
 		// }
-		os<<"{disp = "<<i.basedIndex<<"}";
+		//os<<"{disp = "<<i.basedIndex<<"}";
 		return os;
 	}
 };

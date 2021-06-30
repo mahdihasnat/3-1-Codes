@@ -443,7 +443,6 @@ Code * functionCode(string funcName , SymbolInfoPointer compoundStatement)
 
 	if(funcName == "main")
 	{
-		DBG(*(code));
 		code = combine(code , Comment("DATA SEGMENT INITIALIZATION"));
 		code = combine(code , "MOV AX, @DATA");
 		code = combine(code , "MOV DS, AX");

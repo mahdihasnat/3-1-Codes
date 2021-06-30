@@ -109,35 +109,40 @@ start :  program
 		//print($$);
 		DBG(error_count);
 		
-		
-		Code *code  = new Code(".MODEL SMALL");
-		code = combine(code , ".STACK 1000H");
-
-		code = combine(code , ".DATA");
-
-		code = combine(code , "FIXED_POINT_MULTIPLIER DW 64H");
-
-		for(pair<string,int > id_sz : globals)
+		if(noerror())
 		{
-			code=combine(code , id_sz.first + " DW "+to_string(id_sz.second)+" DUP (0000H)");
+			
+			Code *code  = new Code(".MODEL SMALL");
+			code = combine(code , ".STACK 1000H");
+
+			code = combine(code , ".DATA");
+
+			code = combine(code , "FIXED_POINT_MULTIPLIER DW 64H");
+
+			for(pair<string,int > id_sz : globals)
+			{
+				code=combine(code , id_sz.first + " DW "+to_string(id_sz.second)+" DUP (0000H)");
+			}
+			code = combine(code , ".CODE");
+
+			code = combine(code , loadLibrary());
+
+			code = combine(code ,  $$ -> getTypeLocation()-> getCode());
+
+			code = combine(
+				code ,
+				"END main"
+			);
+
+
+			ofstream codestream ;
+			codestream.open("code.asm" , ios::trunc);
+			
+			// codestream<<(*code);
+			code->write(codestream);
+
+
 		}
-		code = combine(code , ".CODE");
-
-		code = combine(code , loadLibrary());
-
-		code = combine(code ,  $$ -> getTypeLocation()-> getCode());
-
-		code = combine(
-			code ,
-			"END main"
-		);
-
-
-		ofstream codestream ;
-		codestream.open("code.asm" , ios::trunc);
-		
-		// codestream<<(*code);
-		code->write(codestream);
 
 		delete $$;
 	}
@@ -149,14 +154,6 @@ program :  program unit
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
-
-		$$ -> getTypeLocation()->setCode( 
-			combine(
-				$1 -> getTypeLocation()->getCode(),
-				$2 -> getTypeLocation()->getCode()
-			)
-		 );
-
 	}
 	|  unit
 	{
@@ -311,13 +308,18 @@ compound_statement :  LCURL{enterScope();} statements RCURL
 		$$ = $1;
 		print($$);
 		
-		Code * code = nullptr;
-		
-		code = combine(code , $3 -> getTypeLocation() -> getCode());
-		code = combine(code ,exitScope());
+		if(noerror())
+		{
+			
+			Code * code = nullptr;
+			
+			code = combine(code , $3 -> getTypeLocation() -> getCode());
+			code = combine(code ,exitScope());
 
-		$$ -> getTypeLocation()->setCode(code);
+			$$ -> getTypeLocation()->setCode(code);
 
+		}
+			
 	}
 	|  LCURL{enterScope();} RCURL
 	{
@@ -326,11 +328,15 @@ compound_statement :  LCURL{enterScope();} statements RCURL
 		$$ = $1;
 		print($$);
 
-		Code * code = nullptr;
+		if(noerror())
+		{
+			
+			Code * code = nullptr;
 
-		code = combine(code ,exitScope());
+			code = combine(code ,exitScope());
 
-		$$ -> getTypeLocation()->setCode(code);
+			$$ -> getTypeLocation()->setCode(code);
+		}
 
 	}
 	;
@@ -342,7 +348,12 @@ var_declaration :  type_specifier declaration_list SEMICOLON
 		$2 -> push_back( $3 );
 		$$ = $1;
 		print($$);
-		$$-> getTypeLocation()-> setCode( add_variable_declaration($$) );
+		
+		if(noerror())
+		{
+			
+			$$-> getTypeLocation()-> setCode( add_variable_declaration($$) );
+		}
 	}
 	| type_specifier error SEMICOLON 
 	{
@@ -428,12 +439,16 @@ statements :  statement
 		$$ = $1;
 		print($$);
 
-		$$-> getTypeLocation()->setCode(
-			combine(
-				$1 -> getTypeLocation()->getCode() , 
-				$2 -> getTypeLocation()->getCode() 
-			)
-		);
+		if(noerror())
+		{
+			$$-> getTypeLocation()->setCode(
+				combine(
+					$1 -> getTypeLocation()->getCode(),
+					$2 -> getTypeLocation()->getCode()
+				)
+			);
+			
+		}
 	}
 	| statements error
 	{

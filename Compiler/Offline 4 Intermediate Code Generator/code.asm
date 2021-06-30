@@ -189,88 +189,90 @@ println_float PROC
     
 println_float ENDP
 main PROC
-PUSH BP
-MOV BP , SP
-;Line 9: DATA SEGMENT INITIALIZATION
-MOV AX, @DATA
-MOV DS, AX
-SUB SP , 2
-SUB SP , 2
 ;>>
-	;Line 5: /
-	;Line 5: integar = 10
-	MOV CX , 10
+	PUSH BP
+	MOV BP , SP
+	;Line 11: DATA SEGMENT INITIALIZATION
+	MOV AX, @DATA
+	MOV DS, AX
+	SUB SP , 2
+	SUB SP , 2
+	;>>
+		;Line 7: /
+		;Line 7: integar = 10
+		MOV CX , 10
+		PUSH CX
+		;Line 7: integar = 7
+		MOV CX , 7
+		POP AX
+		CWD
+		IDIV CX
+		MOV CX , AX
+		;<<
+	MOV -2[BP] , CX
+	;Line 7: CX = assigned value
+	MOV CX , -2[BP]
 	PUSH CX
-	;Line 5: integar = 7
-	MOV CX , 7
-	POP AX
-	CWD
-	IDIV CX
-	MOV CX , AX
-	;<<
-MOV -2[BP] , CX
-;Line 5: CX = assigned value
-MOV CX , -2[BP]
-PUSH CX
-CALL println_int
-;>>
-	;Line 6: /
-	;Line 6: integar = 10
-	MOV CX , 10
+	CALL println_int
+	;>>
+		;Line 8: /
+		;Line 8: integar = 10
+		MOV CX , 10
+		PUSH CX
+		;Line 8: float number = 7.00
+		MOV CX , 700
+		POP AX
+		IMUL FIXED_POINT_MULTIPLIER
+		IMUL FIXED_POINT_MULTIPLIER
+		IDIV CX
+		MOV CX , AX
+		;<<
+	MOV -4[BP] , CX
+	;Line 8: CX = assigned value
+	MOV CX , -4[BP]
 	PUSH CX
-	;Line 6: float number = 7.00
-	MOV CX , 700
-	POP AX
-	IMUL FIXED_POINT_MULTIPLIER
-	IMUL FIXED_POINT_MULTIPLIER
-	IDIV CX
-	MOV CX , AX
-	;<<
-MOV -4[BP] , CX
-;Line 6: CX = assigned value
-MOV CX , -4[BP]
-PUSH CX
-CALL println_float
-;>>
-	;Line 7: /
-	;Line 7: float number = 10.00
-	MOV CX , 1000
+	CALL println_float
+	;>>
+		;Line 9: /
+		;Line 9: float number = 10.00
+		MOV CX , 1000
+		PUSH CX
+		;Line 9: integar = 7
+		MOV CX , 7
+		POP AX
+		CWD
+		IDIV CX
+		MOV CX , AX
+		;<<
+	MOV -4[BP] , CX
+	;Line 9: CX = assigned value
+	MOV CX , -4[BP]
 	PUSH CX
-	;Line 7: integar = 7
-	MOV CX , 7
-	POP AX
-	CWD
-	IDIV CX
-	MOV CX , AX
-	;<<
-MOV -4[BP] , CX
-;Line 7: CX = assigned value
-MOV CX , -4[BP]
-PUSH CX
-CALL println_float
-;>>
-	;Line 8: /
-	;Line 8: float number = 10.00
-	MOV CX , 1000
+	CALL println_float
+	;>>
+		;Line 10: /
+		;Line 10: float number = 10.00
+		MOV CX , 1000
+		PUSH CX
+		;Line 10: float number = 7.00
+		MOV CX , 700
+		POP AX
+		IMUL FIXED_POINT_MULTIPLIER
+		IDIV CX
+		MOV CX , AX
+		;<<
+	MOV -4[BP] , CX
+	;Line 10: CX = assigned value
+	MOV CX , -4[BP]
 	PUSH CX
-	;Line 8: float number = 7.00
-	MOV CX , 700
-	POP AX
-	IMUL FIXED_POINT_MULTIPLIER
-	IDIV CX
-	MOV CX , AX
+	CALL println_float
+	ADD SP , 4
+	main_exit:
+	POP BP
+	;Line 11: EXIT 0
+	MOV AH, 4CH
+	INT 21H
+	RET 0
 	;<<
-MOV -4[BP] , CX
-;Line 8: CX = assigned value
-MOV CX , -4[BP]
-PUSH CX
-CALL println_float
-ADD SP , 4
-main_exit:
-POP BP
-;Line 9: EXIT 0
-MOV AH, 4CH
-INT 21H
-RET 0
 main ENDP
 END main

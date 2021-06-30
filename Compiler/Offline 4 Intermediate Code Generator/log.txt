@@ -1,221 +1,69 @@
-Line 1: type_specifier : INT
-
-int 
-
 Line 3: type_specifier : INT
 
 int 
 
-Line 3: declaration_list : ID
+Line 5: type_specifier : INT
+
+int 
+
+Line 5: declaration_list : ID
 
 i
 
-Line 3: var_declaration : type_specifier declaration_list SEMICOLON
+Line 5: var_declaration : type_specifier declaration_list SEMICOLON
 
 int i;
 
 
-Line 3: statement : var_declaration
+Line 5: statement : var_declaration
 
 int i;
 
 
-Line 3: statements : statement
+Line 5: statements : statement
 
 int i;
 
 
-Line 4: type_specifier : FLOAT
+Line 6: type_specifier : FLOAT
 
 float 
 
-Line 4: declaration_list : ID
+Line 6: declaration_list : ID
 
 f
 
-Line 4: var_declaration : type_specifier declaration_list SEMICOLON
+Line 6: var_declaration : type_specifier declaration_list SEMICOLON
 
 float f;
 
 
-Line 4: statement : var_declaration
+Line 6: statement : var_declaration
 
 float f;
-
-
-Line 4: statements : statements statement
-
-int i;
-float f;
-
-
-Line 5: variable : ID
-
-i
-
-Line 5: factor : CONST_INT
-
-10
-
-Line 5: unary_expression : factor
-
-10
-
-Line 5: term : unary_expression
-
-10
-
-Line 5: factor : CONST_INT
-
-7
-
-Line 5: unary_expression : factor
-
-7
-
-Line 5: term : term MULOP unary_expression
-
-10/7
-
-Line 5: simple_expression : term
-
-10/7
-
-Line 5: rel_expression : simple_expression
-
-10/7
-
-Line 5: logic_expression : rel_expression
-
-10/7
-
-Line 5: expression : variable ASSIGNOP logic_expression
-
-i=10/7
-
-Line 5: expression_statement : expression SEMICOLON
-
-i=10/7;
-
-
-Line 5: statement : expression_statement
-
-i=10/7;
-
-
-Line 5: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-
-
-Line 5: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(i);
-
-
-Line 5: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-
-
-Line 6: variable : ID
-
-f
-
-Line 6: factor : CONST_INT
-
-10
-
-Line 6: unary_expression : factor
-
-10
-
-Line 6: term : unary_expression
-
-10
-
-Line 6: factor : CONST_FLOAT
-
-7.00
-
-Line 6: unary_expression : factor
-
-7.00
-
-Line 6: term : term MULOP unary_expression
-
-10/7.00
-
-Line 6: simple_expression : term
-
-10/7.00
-
-Line 6: rel_expression : simple_expression
-
-10/7.00
-
-Line 6: logic_expression : rel_expression
-
-10/7.00
-
-Line 6: expression : variable ASSIGNOP logic_expression
-
-f=10/7.00
-
-Line 6: expression_statement : expression SEMICOLON
-
-f=10/7.00;
-
-
-Line 6: statement : expression_statement
-
-f=10/7.00;
 
 
 Line 6: statements : statements statement
 
 int i;
 float f;
-i=10/7;
-println(i);
-f=10/7.00;
-
-
-Line 6: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(f);
-
-
-Line 6: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-println(f);
 
 
 Line 7: variable : ID
 
-f
+i
 
-Line 7: factor : CONST_FLOAT
+Line 7: factor : CONST_INT
 
-10.00
+10
 
 Line 7: unary_expression : factor
 
-10.00
+10
 
 Line 7: term : unary_expression
 
-10.00
+10
 
 Line 7: factor : CONST_INT
 
@@ -227,32 +75,32 @@ Line 7: unary_expression : factor
 
 Line 7: term : term MULOP unary_expression
 
-10.00/7
+10/7
 
 Line 7: simple_expression : term
 
-10.00/7
+10/7
 
 Line 7: rel_expression : simple_expression
 
-10.00/7
+10/7
 
 Line 7: logic_expression : rel_expression
 
-10.00/7
+10/7
 
 Line 7: expression : variable ASSIGNOP logic_expression
 
-f=10.00/7
+i=10/7
 
 Line 7: expression_statement : expression SEMICOLON
 
-f=10.00/7;
+i=10/7;
 
 
 Line 7: statement : expression_statement
 
-f=10.00/7;
+i=10/7;
 
 
 Line 7: statements : statements statement
@@ -260,15 +108,11 @@ Line 7: statements : statements statement
 int i;
 float f;
 i=10/7;
-println(i);
-f=10/7.00;
-println(f);
-f=10.00/7;
 
 
 Line 7: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
-println(f);
+println(i);
 
 
 Line 7: statements : statements statement
@@ -277,27 +121,23 @@ int i;
 float f;
 i=10/7;
 println(i);
-f=10/7.00;
-println(f);
-f=10.00/7;
-println(f);
 
 
 Line 8: variable : ID
 
 f
 
-Line 8: factor : CONST_FLOAT
+Line 8: factor : CONST_INT
 
-10.00
+10
 
 Line 8: unary_expression : factor
 
-10.00
+10
 
 Line 8: term : unary_expression
 
-10.00
+10
 
 Line 8: factor : CONST_FLOAT
 
@@ -309,32 +149,32 @@ Line 8: unary_expression : factor
 
 Line 8: term : term MULOP unary_expression
 
-10.00/7.00
+10/7.00
 
 Line 8: simple_expression : term
 
-10.00/7.00
+10/7.00
 
 Line 8: rel_expression : simple_expression
 
-10.00/7.00
+10/7.00
 
 Line 8: logic_expression : rel_expression
 
-10.00/7.00
+10/7.00
 
 Line 8: expression : variable ASSIGNOP logic_expression
 
-f=10.00/7.00
+f=10/7.00
 
 Line 8: expression_statement : expression SEMICOLON
 
-f=10.00/7.00;
+f=10/7.00;
 
 
 Line 8: statement : expression_statement
 
-f=10.00/7.00;
+f=10/7.00;
 
 
 Line 8: statements : statements statement
@@ -344,10 +184,6 @@ float f;
 i=10/7;
 println(i);
 f=10/7.00;
-println(f);
-f=10.00/7;
-println(f);
-f=10.00/7.00;
 
 
 Line 8: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
@@ -363,13 +199,177 @@ i=10/7;
 println(i);
 f=10/7.00;
 println(f);
+
+
+Line 9: variable : ID
+
+f
+
+Line 9: factor : CONST_FLOAT
+
+10.00
+
+Line 9: unary_expression : factor
+
+10.00
+
+Line 9: term : unary_expression
+
+10.00
+
+Line 9: factor : CONST_INT
+
+7
+
+Line 9: unary_expression : factor
+
+7
+
+Line 9: term : term MULOP unary_expression
+
+10.00/7
+
+Line 9: simple_expression : term
+
+10.00/7
+
+Line 9: rel_expression : simple_expression
+
+10.00/7
+
+Line 9: logic_expression : rel_expression
+
+10.00/7
+
+Line 9: expression : variable ASSIGNOP logic_expression
+
+f=10.00/7
+
+Line 9: expression_statement : expression SEMICOLON
+
+f=10.00/7;
+
+
+Line 9: statement : expression_statement
+
+f=10.00/7;
+
+
+Line 9: statements : statements statement
+
+int i;
+float f;
+i=10/7;
+println(i);
+f=10/7.00;
+println(f);
+f=10.00/7;
+
+
+Line 9: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(f);
+
+
+Line 9: statements : statements statement
+
+int i;
+float f;
+i=10/7;
+println(i);
+f=10/7.00;
+println(f);
+f=10.00/7;
+println(f);
+
+
+Line 10: variable : ID
+
+f
+
+Line 10: factor : CONST_FLOAT
+
+10.00
+
+Line 10: unary_expression : factor
+
+10.00
+
+Line 10: term : unary_expression
+
+10.00
+
+Line 10: factor : CONST_FLOAT
+
+7.00
+
+Line 10: unary_expression : factor
+
+7.00
+
+Line 10: term : term MULOP unary_expression
+
+10.00/7.00
+
+Line 10: simple_expression : term
+
+10.00/7.00
+
+Line 10: rel_expression : simple_expression
+
+10.00/7.00
+
+Line 10: logic_expression : rel_expression
+
+10.00/7.00
+
+Line 10: expression : variable ASSIGNOP logic_expression
+
+f=10.00/7.00
+
+Line 10: expression_statement : expression SEMICOLON
+
+f=10.00/7.00;
+
+
+Line 10: statement : expression_statement
+
+f=10.00/7.00;
+
+
+Line 10: statements : statements statement
+
+int i;
+float f;
+i=10/7;
+println(i);
+f=10/7.00;
+println(f);
+f=10.00/7;
+println(f);
+f=10.00/7.00;
+
+
+Line 10: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(f);
+
+
+Line 10: statements : statements statement
+
+int i;
+float f;
+i=10/7;
+println(i);
+f=10/7.00;
+println(f);
 f=10.00/7;
 println(f);
 f=10.00/7.00;
 println(f);
 
 
-Line 9: compound_statement : LCURL statements RCURL
+Line 11: compound_statement : LCURL statements RCURL
 
 {
   int i;
@@ -389,33 +389,16 @@ Line 9: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.1
- 12 --> < f , ID{disp = -4} > 
- 15 --> < i , ID{disp = -2} > 
+ 12 --> < f , ID > 
+ 15 --> < i , ID > 
 
 
 
 ScopeTable # 1
- 1 --> < main , ID{disp = -1} > 
+ 1 --> < main , ID > 
 
 
-Line 9: func_definition : type_specifier ID LPAREN RPAREN compound_statement
-
-int main(){
-  int i;
-  float f;
-  i=10/7;
-  println(i);
-  f=10/7.00;
-  println(f);
-  f=10.00/7;
-  println(f);
-  f=10.00/7.00;
-  println(f);
-}
-
-
-
-Line 9: unit : func_definition
+Line 11: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main(){
   int i;
@@ -432,7 +415,7 @@ int main(){
 
 
 
-Line 9: program : unit
+Line 11: unit : func_definition
 
 int main(){
   int i;
@@ -449,15 +432,32 @@ int main(){
 
 
 
-Line 9: start : program
+Line 11: program : unit
+
+int main(){
+  int i;
+  float f;
+  i=10/7;
+  println(i);
+  f=10/7.00;
+  println(f);
+  f=10.00/7;
+  println(f);
+  f=10.00/7.00;
+  println(f);
+}
+
+
+
+Line 11: start : program
 
 
 
 ScopeTable # 1
- 1 --> < main , ID{disp = -1} > 
+ 1 --> < main , ID > 
 
 
 
-Total lines: 9
+Total lines: 11
 Total errors: 0
 
