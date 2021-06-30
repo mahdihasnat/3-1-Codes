@@ -1,0 +1,4 @@
+https://latexdraw.com/how-to-plot-a-pie-chart-in-latex/
+
+https://latexdraw.com/bar-charts-in-latex-step-by-step-tikz-tutorial/
+
