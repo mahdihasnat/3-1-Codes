@@ -127,7 +127,7 @@ start :  program
 
 			code = combine(code , loadLibrary());
 
-			code = combine(code ,  $$ -> getTypeLocation()-> getCode());
+			code = combine(code ,  $1 -> getTypeLocation()-> getCode());
 
 			code = combine(
 				code ,
@@ -154,6 +154,16 @@ program :  program unit
 		$1 -> push_back( $2 );
 		$$ = $1;
 		print($$);
+
+		if(noerror())
+		{
+			$$ -> gTL() -> setCode(
+				combine(
+					$1 -> gTL() -> getCode(),
+					$2 -> gTL() -> getCode()
+				)
+			);
+		}
 	}
 	|  unit
 	{
