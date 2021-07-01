@@ -13,3 +13,4 @@
 - Removed redundant assignment like `x=x;`
 - Shortened Jump chain like `1 && ( 0 || 1)`
 - Removed uncalled procedure
+- Removed Unreachable code like `return 0; println(x);`

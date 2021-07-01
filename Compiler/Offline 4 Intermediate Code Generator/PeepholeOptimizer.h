@@ -271,6 +271,47 @@ void addCalledLabel(Code * code)
 		code = code -> getNext();
 	}
 }
+void removeUncalledLabel(Code * code)
+{
+	while(code)
+	{
+		Code * nxt = code -> getNext();
+		if(nxt == nullptr) break;
+		if(endsWith(nxt->getCode() , ":"))
+		{
+			string label = nxt->getCode();
+			label = label.substr(0,label.size()-1);
+			if( calledLabel.find(label) == calledLabel.end()) 
+				code -> removeSingleNext();
+			else code = nxt;
+		}
+		else code = nxt;
+	}
+}
+void removeUnReachableCode(Code * code)
+{
+	/// prev will never be null 
+	bool reachable = true;
+	Code * prev = nullptr;
+	while(code)
+	{
+		string opcode = code->getOpcode();
+		if(opcode == "JMP")
+			reachable = false;
+		else if(endsWith(opcode , ":"))
+			reachable = true;
+		else if(opcode[0] == ';') 
+			;
+		else if(reachable == false)
+		{
+			assert(prev);
+			prev->removeSingleNext();
+			code = prev;
+		}
+		prev = code;
+		code = code->getNext();
+	}
+}
 
 void optimize(Code * fullCode )
 {
@@ -295,6 +336,11 @@ void optimize(Code * fullCode )
 		if(calledLabel.find(procName) != calledLabel.end())
 		{
 			Code * procCode = labeledCode [procName];
+			if(procName != "println_int" and procName != "println_float")
+			{
+				removeUncalledLabel(procCode);
+				removeUnReachableCode(procCode);
+			}
 			procCode->getLastRecursive();
 			fullCode = combine(fullCode , procCode);
 		}
