@@ -14,13 +14,3 @@ Code * combine(Code *x,string instruction)
 	Code * y = new Code(instruction);
 	return combine(x,y);
 }
-void Delete(Code * &x)
-{
-	if(x)
-		delete x;
-	x=nullptr;
-}
-void Detach(Code * &x)
-{
-	x=nullptr;
-}

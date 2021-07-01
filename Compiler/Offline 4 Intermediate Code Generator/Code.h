@@ -17,6 +17,46 @@ public:
 		if(next_code)
 			delete next_code;
 	}
+	Code * getNext()
+	{
+		return next_code;
+	}
+	string getOpcode()
+	{
+		if(code=="") return "";
+		if(code[0] == ';') return ";";
+		string ret = "";
+		for(int i=0;i<code.size();i++)
+		{
+			if(code[i] == ' ') break;
+			ret+=code[i];
+		}
+		return ret;
+	}
+	string getCode()
+	{
+		return code;
+	}
+	void removeSingleNext()
+	{
+		assert(next_code != nullptr);
+		Code * new_next = next_code -> getNext();
+		next_code = new_next;
+	}
+	void setNext(Code * newNext)
+	{
+		next_code = newNext;
+	}
+
+	Code * getLastRecursive()
+	{
+		if(next_code)
+			last_code = next_code -> getLastRecursive();
+		else
+			last_code = this;
+		
+		return last_code;
+	}
 	void append(Code * new_next_code)
 	{
 		this->last_code->next_code = new_next_code;
@@ -29,7 +69,7 @@ public:
 		else if(this->code ==";<<")	indentation--;
 		if(this->next_code)
 		{
-			this->next_code->write(os ,indentation);
+			return this->next_code->write(os ,indentation);
 		}
 	}
 
@@ -44,6 +84,4 @@ public:
 
 Code * combine(Code *x,Code * y);
 Code * combine(Code *x,string instruction);
-void Delete(Code * &x);
-void Detach(Code * &x);
 #endif 

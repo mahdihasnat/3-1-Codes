@@ -1,387 +1,138 @@
-Line 3: type_specifier : INT
+Line 4: type_specifier : INT
 
 int 
 
-Line 5: type_specifier : INT
-
-int 
-
-Line 5: declaration_list : ID
-
-i
-
-Line 5: var_declaration : type_specifier declaration_list SEMICOLON
-
-int i;
-
-
-Line 5: statement : var_declaration
-
-int i;
-
-
-Line 5: statements : statement
-
-int i;
-
-
-Line 6: type_specifier : FLOAT
+Line 4: type_specifier : FLOAT
 
 float 
 
-Line 6: declaration_list : ID
+Line 4: declaration_list : ID
 
-f
+x
 
-Line 6: var_declaration : type_specifier declaration_list SEMICOLON
+Line 4: var_declaration : type_specifier declaration_list SEMICOLON
 
-float f;
+float x;
 
 
-Line 6: statement : var_declaration
+Line 4: statement : var_declaration
 
-float f;
+float x;
 
 
-Line 6: statements : statements statement
+Line 4: statements : statement
 
-int i;
-float f;
+float x;
 
 
-Line 7: variable : ID
+Line 4: variable : ID
 
-i
+x
 
-Line 7: factor : CONST_INT
+Line 4: factor : CONST_FLOAT
 
-10
+1.10
 
-Line 7: unary_expression : factor
+Line 4: unary_expression : factor
 
-10
+1.10
 
-Line 7: term : unary_expression
+Line 4: term : unary_expression
 
-10
+1.10
 
-Line 7: factor : CONST_INT
+Line 4: simple_expression : term
 
-7
+1.10
 
-Line 7: unary_expression : factor
+Line 4: rel_expression : simple_expression
 
-7
+1.10
 
-Line 7: term : term MULOP unary_expression
+Line 4: logic_expression : rel_expression
 
-10/7
+1.10
 
-Line 7: simple_expression : term
+Line 4: expression : variable ASSIGNOP logic_expression
 
-10/7
+x=1.10
 
-Line 7: rel_expression : simple_expression
+Line 4: expression_statement : expression SEMICOLON
 
-10/7
+x=1.10;
 
-Line 7: logic_expression : rel_expression
 
-10/7
+Line 4: statement : expression_statement
 
-Line 7: expression : variable ASSIGNOP logic_expression
+x=1.10;
 
-i=10/7
 
-Line 7: expression_statement : expression SEMICOLON
+Line 4: statements : statements statement
 
-i=10/7;
+float x;
+x=1.10;
 
 
-Line 7: statement : expression_statement
+Line 4: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
-i=10/7;
+println(x);
 
 
-Line 7: statements : statements statement
+Line 4: statements : statements statement
 
-int i;
-float f;
-i=10/7;
+float x;
+x=1.10;
+println(x);
 
 
-Line 7: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+Line 4: factor : CONST_INT
 
-println(i);
+1
 
+Line 4: unary_expression : factor
 
-Line 7: statements : statements statement
+1
 
-int i;
-float f;
-i=10/7;
-println(i);
+Line 4: term : unary_expression
 
+1
 
-Line 8: variable : ID
+Line 4: simple_expression : term
 
-f
+1
 
-Line 8: factor : CONST_INT
+Line 4: rel_expression : simple_expression
 
-10
+1
 
-Line 8: unary_expression : factor
+Line 4: logic_expression : rel_expression
 
-10
+1
 
-Line 8: term : unary_expression
+Line 4: expression : logic expression
 
-10
+1
 
-Line 8: factor : CONST_FLOAT
+Line 4: statement : RETURN expression SEMICOLON
 
-7.00
+return 1;
 
-Line 8: unary_expression : factor
 
-7.00
+Line 4: statements : statements statement
 
-Line 8: term : term MULOP unary_expression
+float x;
+x=1.10;
+println(x);
+return 1;
 
-10/7.00
 
-Line 8: simple_expression : term
-
-10/7.00
-
-Line 8: rel_expression : simple_expression
-
-10/7.00
-
-Line 8: logic_expression : rel_expression
-
-10/7.00
-
-Line 8: expression : variable ASSIGNOP logic_expression
-
-f=10/7.00
-
-Line 8: expression_statement : expression SEMICOLON
-
-f=10/7.00;
-
-
-Line 8: statement : expression_statement
-
-f=10/7.00;
-
-
-Line 8: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-
-
-Line 8: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(f);
-
-
-Line 8: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-println(f);
-
-
-Line 9: variable : ID
-
-f
-
-Line 9: factor : CONST_FLOAT
-
-10.00
-
-Line 9: unary_expression : factor
-
-10.00
-
-Line 9: term : unary_expression
-
-10.00
-
-Line 9: factor : CONST_INT
-
-7
-
-Line 9: unary_expression : factor
-
-7
-
-Line 9: term : term MULOP unary_expression
-
-10.00/7
-
-Line 9: simple_expression : term
-
-10.00/7
-
-Line 9: rel_expression : simple_expression
-
-10.00/7
-
-Line 9: logic_expression : rel_expression
-
-10.00/7
-
-Line 9: expression : variable ASSIGNOP logic_expression
-
-f=10.00/7
-
-Line 9: expression_statement : expression SEMICOLON
-
-f=10.00/7;
-
-
-Line 9: statement : expression_statement
-
-f=10.00/7;
-
-
-Line 9: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-println(f);
-f=10.00/7;
-
-
-Line 9: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(f);
-
-
-Line 9: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-println(f);
-f=10.00/7;
-println(f);
-
-
-Line 10: variable : ID
-
-f
-
-Line 10: factor : CONST_FLOAT
-
-10.00
-
-Line 10: unary_expression : factor
-
-10.00
-
-Line 10: term : unary_expression
-
-10.00
-
-Line 10: factor : CONST_FLOAT
-
-7.00
-
-Line 10: unary_expression : factor
-
-7.00
-
-Line 10: term : term MULOP unary_expression
-
-10.00/7.00
-
-Line 10: simple_expression : term
-
-10.00/7.00
-
-Line 10: rel_expression : simple_expression
-
-10.00/7.00
-
-Line 10: logic_expression : rel_expression
-
-10.00/7.00
-
-Line 10: expression : variable ASSIGNOP logic_expression
-
-f=10.00/7.00
-
-Line 10: expression_statement : expression SEMICOLON
-
-f=10.00/7.00;
-
-
-Line 10: statement : expression_statement
-
-f=10.00/7.00;
-
-
-Line 10: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-println(f);
-f=10.00/7;
-println(f);
-f=10.00/7.00;
-
-
-Line 10: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(f);
-
-
-Line 10: statements : statements statement
-
-int i;
-float f;
-i=10/7;
-println(i);
-f=10/7.00;
-println(f);
-f=10.00/7;
-println(f);
-f=10.00/7.00;
-println(f);
-
-
-Line 11: compound_statement : LCURL statements RCURL
+Line 4: compound_statement : LCURL statements RCURL
 
 {
-  int i;
-  float f;
-  i=10/7;
-  println(i);
-  f=10/7.00;
-  println(f);
-  f=10.00/7;
-  println(f);
-  f=10.00/7.00;
-  println(f);
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
 }
 
 
@@ -389,75 +140,1716 @@ Line 11: compound_statement : LCURL statements RCURL
 
 
 ScopeTable # 1.1
- 12 --> < f , ID > 
- 15 --> < i , ID > 
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1
+ 11 --> < one1 , ID > 
+
+
+Line 4: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+
+
+Line 4: unit : func_definition
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+
+
+Line 4: program : unit
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+
+
+Line 5: type_specifier : INT
+
+int 
+
+Line 5: type_specifier : FLOAT
+
+float 
+
+Line 5: declaration_list : ID
+
+x
+
+Line 5: var_declaration : type_specifier declaration_list SEMICOLON
+
+float x;
+
+
+Line 5: statement : var_declaration
+
+float x;
+
+
+Line 5: statements : statement
+
+float x;
+
+
+Line 5: variable : ID
+
+x
+
+Line 5: factor : CONST_FLOAT
+
+1.20
+
+Line 5: unary_expression : factor
+
+1.20
+
+Line 5: term : unary_expression
+
+1.20
+
+Line 5: simple_expression : term
+
+1.20
+
+Line 5: rel_expression : simple_expression
+
+1.20
+
+Line 5: logic_expression : rel_expression
+
+1.20
+
+Line 5: expression : variable ASSIGNOP logic_expression
+
+x=1.20
+
+Line 5: expression_statement : expression SEMICOLON
+
+x=1.20;
+
+
+Line 5: statement : expression_statement
+
+x=1.20;
+
+
+Line 5: statements : statements statement
+
+float x;
+x=1.20;
+
+
+Line 5: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 5: statements : statements statement
+
+float x;
+x=1.20;
+println(x);
+
+
+Line 5: factor : CONST_INT
+
+1
+
+Line 5: unary_expression : factor
+
+1
+
+Line 5: term : unary_expression
+
+1
+
+Line 5: simple_expression : term
+
+1
+
+Line 5: rel_expression : simple_expression
+
+1
+
+Line 5: logic_expression : rel_expression
+
+1
+
+Line 5: expression : logic expression
+
+1
+
+Line 5: statement : RETURN expression SEMICOLON
+
+return 1;
+
+
+Line 5: statements : statements statement
+
+float x;
+x=1.20;
+println(x);
+return 1;
+
+
+Line 5: compound_statement : LCURL statements RCURL
+
+{
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+
+
+
+
+ScopeTable # 1.2
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+
+
+Line 5: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+
+
+Line 5: unit : func_definition
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+
+
+Line 5: program : program unit
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+
+
+Line 6: type_specifier : INT
+
+int 
+
+Line 6: type_specifier : FLOAT
+
+float 
+
+Line 6: declaration_list : ID
+
+x
+
+Line 6: var_declaration : type_specifier declaration_list SEMICOLON
+
+float x;
+
+
+Line 6: statement : var_declaration
+
+float x;
+
+
+Line 6: statements : statement
+
+float x;
+
+
+Line 6: variable : ID
+
+x
+
+Line 6: factor : CONST_FLOAT
+
+1.30
+
+Line 6: unary_expression : factor
+
+1.30
+
+Line 6: term : unary_expression
+
+1.30
+
+Line 6: simple_expression : term
+
+1.30
+
+Line 6: rel_expression : simple_expression
+
+1.30
+
+Line 6: logic_expression : rel_expression
+
+1.30
+
+Line 6: expression : variable ASSIGNOP logic_expression
+
+x=1.30
+
+Line 6: expression_statement : expression SEMICOLON
+
+x=1.30;
+
+
+Line 6: statement : expression_statement
+
+x=1.30;
+
+
+Line 6: statements : statements statement
+
+float x;
+x=1.30;
+
+
+Line 6: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 6: statements : statements statement
+
+float x;
+x=1.30;
+println(x);
+
+
+Line 6: factor : CONST_INT
+
+1
+
+Line 6: unary_expression : factor
+
+1
+
+Line 6: term : unary_expression
+
+1
+
+Line 6: simple_expression : term
+
+1
+
+Line 6: rel_expression : simple_expression
+
+1
+
+Line 6: logic_expression : rel_expression
+
+1
+
+Line 6: expression : logic expression
+
+1
+
+Line 6: statement : RETURN expression SEMICOLON
+
+return 1;
+
+
+Line 6: statements : statements statement
+
+float x;
+x=1.30;
+println(x);
+return 1;
+
+
+Line 6: compound_statement : LCURL statements RCURL
+
+{
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+
+
+
+
+ScopeTable # 1.3
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+
+
+Line 6: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+
+
+Line 6: unit : func_definition
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+
+
+Line 6: program : program unit
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+
+
+Line 7: type_specifier : INT
+
+int 
+
+Line 7: type_specifier : FLOAT
+
+float 
+
+Line 7: declaration_list : ID
+
+x
+
+Line 7: var_declaration : type_specifier declaration_list SEMICOLON
+
+float x;
+
+
+Line 7: statement : var_declaration
+
+float x;
+
+
+Line 7: statements : statement
+
+float x;
+
+
+Line 7: variable : ID
+
+x
+
+Line 7: factor : CONST_FLOAT
+
+0.10
+
+Line 7: unary_expression : factor
+
+0.10
+
+Line 7: term : unary_expression
+
+0.10
+
+Line 7: simple_expression : term
+
+0.10
+
+Line 7: rel_expression : simple_expression
+
+0.10
+
+Line 7: logic_expression : rel_expression
+
+0.10
+
+Line 7: expression : variable ASSIGNOP logic_expression
+
+x=0.10
+
+Line 7: expression_statement : expression SEMICOLON
+
+x=0.10;
+
+
+Line 7: statement : expression_statement
+
+x=0.10;
+
+
+Line 7: statements : statements statement
+
+float x;
+x=0.10;
+
+
+Line 7: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 7: statements : statements statement
+
+float x;
+x=0.10;
+println(x);
+
+
+Line 7: factor : CONST_INT
+
+0
+
+Line 7: unary_expression : factor
+
+0
+
+Line 7: term : unary_expression
+
+0
+
+Line 7: simple_expression : term
+
+0
+
+Line 7: rel_expression : simple_expression
+
+0
+
+Line 7: logic_expression : rel_expression
+
+0
+
+Line 7: expression : logic expression
+
+0
+
+Line 7: statement : RETURN expression SEMICOLON
+
+return 0;
+
+
+Line 7: statements : statements statement
+
+float x;
+x=0.10;
+println(x);
+return 0;
+
+
+Line 7: compound_statement : LCURL statements RCURL
+
+{
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+
+
+
+
+ScopeTable # 1.4
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+
+
+Line 7: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int zero1(){
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+
+
+Line 7: unit : func_definition
+
+int zero1(){
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+
+
+Line 7: program : program unit
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+int zero1(){
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+
+
+Line 8: type_specifier : INT
+
+int 
+
+Line 8: type_specifier : FLOAT
+
+float 
+
+Line 8: declaration_list : ID
+
+x
+
+Line 8: var_declaration : type_specifier declaration_list SEMICOLON
+
+float x;
+
+
+Line 8: statement : var_declaration
+
+float x;
+
+
+Line 8: statements : statement
+
+float x;
+
+
+Line 8: variable : ID
+
+x
+
+Line 8: factor : CONST_FLOAT
+
+0.20
+
+Line 8: unary_expression : factor
+
+0.20
+
+Line 8: term : unary_expression
+
+0.20
+
+Line 8: simple_expression : term
+
+0.20
+
+Line 8: rel_expression : simple_expression
+
+0.20
+
+Line 8: logic_expression : rel_expression
+
+0.20
+
+Line 8: expression : variable ASSIGNOP logic_expression
+
+x=0.20
+
+Line 8: expression_statement : expression SEMICOLON
+
+x=0.20;
+
+
+Line 8: statement : expression_statement
+
+x=0.20;
+
+
+Line 8: statements : statements statement
+
+float x;
+x=0.20;
+
+
+Line 8: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 8: statements : statements statement
+
+float x;
+x=0.20;
+println(x);
+
+
+Line 8: factor : CONST_INT
+
+0
+
+Line 8: unary_expression : factor
+
+0
+
+Line 8: term : unary_expression
+
+0
+
+Line 8: simple_expression : term
+
+0
+
+Line 8: rel_expression : simple_expression
+
+0
+
+Line 8: logic_expression : rel_expression
+
+0
+
+Line 8: expression : logic expression
+
+0
+
+Line 8: statement : RETURN expression SEMICOLON
+
+return 0;
+
+
+Line 8: statements : statements statement
+
+float x;
+x=0.20;
+println(x);
+return 0;
+
+
+Line 8: compound_statement : LCURL statements RCURL
+
+{
+  float x;
+  x=0.20;
+  println(x);
+  return 0;
+}
+
+
+
+
+
+ScopeTable # 1.5
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+ 18 --> < zero2 , ID > 
+
+
+Line 8: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int zero2(){
+  float x;
+  x=0.20;
+  println(x);
+  return 0;
+}
+
+
+
+Line 8: unit : func_definition
+
+int zero2(){
+  float x;
+  x=0.20;
+  println(x);
+  return 0;
+}
+
+
+
+Line 8: program : program unit
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+int zero1(){
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+int zero2(){
+  float x;
+  x=0.20;
+  println(x);
+  return 0;
+}
+
+
+
+Line 9: type_specifier : INT
+
+int 
+
+Line 9: type_specifier : FLOAT
+
+float 
+
+Line 9: declaration_list : ID
+
+x
+
+Line 9: var_declaration : type_specifier declaration_list SEMICOLON
+
+float x;
+
+
+Line 9: statement : var_declaration
+
+float x;
+
+
+Line 9: statements : statement
+
+float x;
+
+
+Line 9: variable : ID
+
+x
+
+Line 9: factor : CONST_FLOAT
+
+0.30
+
+Line 9: unary_expression : factor
+
+0.30
+
+Line 9: term : unary_expression
+
+0.30
+
+Line 9: simple_expression : term
+
+0.30
+
+Line 9: rel_expression : simple_expression
+
+0.30
+
+Line 9: logic_expression : rel_expression
+
+0.30
+
+Line 9: expression : variable ASSIGNOP logic_expression
+
+x=0.30
+
+Line 9: expression_statement : expression SEMICOLON
+
+x=0.30;
+
+
+Line 9: statement : expression_statement
+
+x=0.30;
+
+
+Line 9: statements : statements statement
+
+float x;
+x=0.30;
+
+
+Line 9: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 9: statements : statements statement
+
+float x;
+x=0.30;
+println(x);
+
+
+Line 9: factor : CONST_INT
+
+0
+
+Line 9: unary_expression : factor
+
+0
+
+Line 9: term : unary_expression
+
+0
+
+Line 9: simple_expression : term
+
+0
+
+Line 9: rel_expression : simple_expression
+
+0
+
+Line 9: logic_expression : rel_expression
+
+0
+
+Line 9: expression : logic expression
+
+0
+
+Line 9: statement : RETURN expression SEMICOLON
+
+return 0;
+
+
+Line 9: statements : statements statement
+
+float x;
+x=0.30;
+println(x);
+return 0;
+
+
+Line 9: compound_statement : LCURL statements RCURL
+
+{
+  float x;
+  x=0.30;
+  println(x);
+  return 0;
+}
+
+
+
+
+
+ScopeTable # 1.6
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+ 18 --> < zero2 , ID > 
+ 19 --> < zero3 , ID > 
+
+
+Line 9: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int zero3(){
+  float x;
+  x=0.30;
+  println(x);
+  return 0;
+}
+
+
+
+Line 9: unit : func_definition
+
+int zero3(){
+  float x;
+  x=0.30;
+  println(x);
+  return 0;
+}
+
+
+
+Line 9: program : program unit
+
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+int zero1(){
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+int zero2(){
+  float x;
+  x=0.20;
+  println(x);
+  return 0;
+}
+
+int zero3(){
+  float x;
+  x=0.30;
+  println(x);
+  return 0;
+}
+
+
+
+Line 11: type_specifier : VOID
+
+void 
+
+Line 13: type_specifier : INT
+
+int 
+
+Line 13: declaration_list : ID
+
+del
+
+Line 13: var_declaration : type_specifier declaration_list SEMICOLON
+
+int del;
+
+
+Line 13: statement : var_declaration
+
+int del;
+
+
+Line 13: statements : statement
+
+int del;
+
+
+Line 14: variable : ID
+
+del
+
+Line 14: factor : CONST_INT
+
+5
+
+Line 14: unary_expression : factor
+
+5
+
+Line 14: term : unary_expression
+
+5
+
+Line 14: simple_expression : term
+
+5
+
+Line 14: rel_expression : simple_expression
+
+5
+
+Line 14: logic_expression : rel_expression
+
+5
+
+Line 14: expression : variable ASSIGNOP logic_expression
+
+del=5
+
+Line 14: expression_statement : expression SEMICOLON
+
+del=5;
+
+
+Line 14: statement : expression_statement
+
+del=5;
+
+
+Line 14: statements : statements statement
+
+int del;
+del=5;
+
+
+Line 15: argument_list :
+
+
+
+Line 15: factor : ID LPAREN argument_list RPAREN
+
+one1()
+
+Line 15: unary_expression : factor
+
+one1()
+
+Line 15: term : unary_expression
+
+one1()
+
+Line 15: simple_expression : term
+
+one1()
+
+Line 15: rel_expression : simple_expression
+
+one1()
+
+Line 15: argument_list :
+
+
+
+Line 15: factor : ID LPAREN argument_list RPAREN
+
+zero1()
+
+Line 15: unary_expression : factor
+
+zero1()
+
+Line 15: term : unary_expression
+
+zero1()
+
+Line 15: simple_expression : term
+
+zero1()
+
+Line 15: rel_expression : simple_expression
+
+zero1()
+
+Line 15: argument_list :
+
+
+
+Line 15: factor : ID LPAREN argument_list RPAREN
+
+one2()
+
+Line 15: unary_expression : factor
+
+one2()
+
+Line 15: term : unary_expression
+
+one2()
+
+Line 15: simple_expression : term
+
+one2()
+
+Line 15: rel_expression : simple_expression
+
+one2()
+
+Line 15: logic_expression : rel_expression LOGICOP rel_expression
+
+zero1()||one2()
+
+Line 15: expression : logic expression
+
+zero1()||one2()
+
+Line 15: factor : LPAREN expression RPAREN
+
+(zero1()||one2())
+
+Line 15: unary_expression : factor
+
+(zero1()||one2())
+
+Line 15: term : unary_expression
+
+(zero1()||one2())
+
+Line 15: simple_expression : term
+
+(zero1()||one2())
+
+Line 15: rel_expression : simple_expression
+
+(zero1()||one2())
+
+Line 15: logic_expression : rel_expression LOGICOP rel_expression
+
+one1()&&(zero1()||one2())
+
+Line 15: expression : logic expression
+
+one1()&&(zero1()||one2())
+
+Line 15: expression_statement : SEMICOLON
+
+;
+
+
+Line 15: statement : expression_statement
+
+;
+
+
+Line 17: statement : IF LPAREN expression RPAREN statement
+
+if (one1()&&(zero1()||one2()));
+
+
+Line 17: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+
+
+Line 17: argument_list :
+
+
+
+Line 17: factor : ID LPAREN argument_list RPAREN
+
+one1()
+
+Line 17: unary_expression : factor
+
+one1()
+
+Line 17: term : unary_expression
+
+one1()
+
+Line 17: simple_expression : term
+
+one1()
+
+Line 17: rel_expression : simple_expression
+
+one1()
+
+Line 17: argument_list :
+
+
+
+Line 17: factor : ID LPAREN argument_list RPAREN
+
+one2()
+
+Line 17: unary_expression : factor
+
+one2()
+
+Line 17: term : unary_expression
+
+one2()
+
+Line 17: simple_expression : term
+
+one2()
+
+Line 17: rel_expression : simple_expression
+
+one2()
+
+Line 17: logic_expression : rel_expression LOGICOP rel_expression
+
+one1()||one2()
+
+Line 17: expression : logic expression
+
+one1()||one2()
+
+Line 17: expression_statement : SEMICOLON
+
+;
+
+
+Line 17: statement : expression_statement
+
+;
+
+
+Line 18: statement : IF LPAREN expression RPAREN statement
+
+if (one1()||one2());
+
+
+Line 18: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+if (one1()||one2());
+
+
+Line 18: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(del);
+
+
+Line 18: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+if (one1()||one2());
+println(del);
+
+
+Line 19: argument_list :
+
+
+
+Line 19: factor : ID LPAREN argument_list RPAREN
+
+zero1()
+
+Line 19: unary_expression : factor
+
+zero1()
+
+Line 19: term : unary_expression
+
+zero1()
+
+Line 19: simple_expression : term
+
+zero1()
+
+Line 19: rel_expression : simple_expression
+
+zero1()
+
+Line 19: argument_list :
+
+
+
+Line 19: factor : ID LPAREN argument_list RPAREN
+
+zero2()
+
+Line 19: unary_expression : factor
+
+zero2()
+
+Line 19: term : unary_expression
+
+zero2()
+
+Line 19: simple_expression : term
+
+zero2()
+
+Line 19: rel_expression : simple_expression
+
+zero2()
+
+Line 19: logic_expression : rel_expression LOGICOP rel_expression
+
+zero1()||zero2()
+
+Line 19: expression : logic expression
+
+zero1()||zero2()
+
+Line 19: expression_statement : SEMICOLON
+
+;
+
+
+Line 19: statement : expression_statement
+
+;
+
+
+Line 20: statement : IF LPAREN expression RPAREN statement
+
+if (zero1()||zero2());
+
+
+Line 20: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+if (one1()||one2());
+println(del);
+if (zero1()||zero2());
+
+
+Line 20: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(del);
+
+
+Line 20: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+if (one1()||one2());
+println(del);
+if (zero1()||zero2());
+println(del);
+
+
+Line 21: argument_list :
+
+
+
+Line 21: factor : ID LPAREN argument_list RPAREN
+
+zero1()
+
+Line 21: unary_expression : factor
+
+zero1()
+
+Line 21: term : unary_expression
+
+zero1()
+
+Line 21: simple_expression : term
+
+zero1()
+
+Line 21: rel_expression : simple_expression
+
+zero1()
+
+Line 21: argument_list :
+
+
+
+Line 21: factor : ID LPAREN argument_list RPAREN
+
+one1()
+
+Line 21: unary_expression : factor
+
+one1()
+
+Line 21: term : unary_expression
+
+one1()
+
+Line 21: simple_expression : term
+
+one1()
+
+Line 21: rel_expression : simple_expression
+
+one1()
+
+Line 21: logic_expression : rel_expression LOGICOP rel_expression
+
+zero1()||one1()
+
+Line 21: expression : logic expression
+
+zero1()||one1()
+
+Line 21: expression_statement : SEMICOLON
+
+;
+
+
+Line 21: statement : expression_statement
+
+;
+
+
+Line 22: statement : IF LPAREN expression RPAREN statement
+
+if (zero1()||one1());
+
+
+Line 22: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+if (one1()||one2());
+println(del);
+if (zero1()||zero2());
+println(del);
+if (zero1()||one1());
+
+
+Line 22: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(del);
+
+
+Line 22: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+if (one1()||one2());
+println(del);
+if (zero1()||zero2());
+println(del);
+if (zero1()||one1());
+println(del);
+
+
+Line 26: compound_statement : LCURL statements RCURL
+
+{
+  int del;
+  del=5;
+  if (one1()&&(zero1()||one2()));
+  if (one1()||one2());
+  println(del);
+  if (zero1()||zero2());
+  println(del);
+  if (zero1()||one1());
+  println(del);
+}
+
+
+
+
+
+ScopeTable # 1.7
+ 9 --> < del , ID > 
 
 
 
 ScopeTable # 1
  1 --> < main , ID > 
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+ 18 --> < zero2 , ID > 
+ 19 --> < zero3 , ID > 
 
 
-Line 11: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 26: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
-int main(){
-  int i;
-  float f;
-  i=10/7;
-  println(i);
-  f=10/7.00;
-  println(f);
-  f=10.00/7;
-  println(f);
-  f=10.00/7.00;
-  println(f);
+void main(){
+  int del;
+  del=5;
+  if (one1()&&(zero1()||one2()));
+  if (one1()||one2());
+  println(del);
+  if (zero1()||zero2());
+  println(del);
+  if (zero1()||one1());
+  println(del);
 }
 
 
 
-Line 11: unit : func_definition
+Line 26: unit : func_definition
 
-int main(){
-  int i;
-  float f;
-  i=10/7;
-  println(i);
-  f=10/7.00;
-  println(f);
-  f=10.00/7;
-  println(f);
-  f=10.00/7.00;
-  println(f);
+void main(){
+  int del;
+  del=5;
+  if (one1()&&(zero1()||one2()));
+  if (one1()||one2());
+  println(del);
+  if (zero1()||zero2());
+  println(del);
+  if (zero1()||one1());
+  println(del);
 }
 
 
 
-Line 11: program : unit
+Line 26: program : program unit
 
-int main(){
-  int i;
-  float f;
-  i=10/7;
-  println(i);
-  f=10/7.00;
-  println(f);
-  f=10.00/7;
-  println(f);
-  f=10.00/7.00;
-  println(f);
+int one1(){
+  float x;
+  x=1.10;
+  println(x);
+  return 1;
+}
+
+int one2(){
+  float x;
+  x=1.20;
+  println(x);
+  return 1;
+}
+
+int one3(){
+  float x;
+  x=1.30;
+  println(x);
+  return 1;
+}
+
+int zero1(){
+  float x;
+  x=0.10;
+  println(x);
+  return 0;
+}
+
+int zero2(){
+  float x;
+  x=0.20;
+  println(x);
+  return 0;
+}
+
+int zero3(){
+  float x;
+  x=0.30;
+  println(x);
+  return 0;
+}
+
+void main(){
+  int del;
+  del=5;
+  if (one1()&&(zero1()||one2()));
+  if (one1()||one2());
+  println(del);
+  if (zero1()||zero2());
+  println(del);
+  if (zero1()||one1());
+  println(del);
 }
 
 
 
-Line 11: start : program
+Line 26: start : program
 
 
 
 ScopeTable # 1
  1 --> < main , ID > 
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+ 18 --> < zero2 , ID > 
+ 19 --> < zero3 , ID > 
 
 
 
-Total lines: 11
+Total lines: 26
 Total errors: 0
 

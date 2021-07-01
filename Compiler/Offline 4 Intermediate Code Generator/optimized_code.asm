@@ -197,7 +197,6 @@ one1 PROC
 	MOV CX , 110
 	MOV -2[BP] , CX
 	;Line 4: CX = assigned value
-	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_float
 	;Line 4: integar = 1
@@ -219,7 +218,6 @@ one2 PROC
 	MOV CX , 120
 	MOV -2[BP] , CX
 	;Line 5: CX = assigned value
-	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_float
 	;Line 5: integar = 1
@@ -241,7 +239,6 @@ one3 PROC
 	MOV CX , 130
 	MOV -2[BP] , CX
 	;Line 6: CX = assigned value
-	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_float
 	;Line 6: integar = 1
@@ -263,7 +260,6 @@ zero1 PROC
 	MOV CX , 10
 	MOV -2[BP] , CX
 	;Line 7: CX = assigned value
-	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_float
 	;Line 7: integar = 0
@@ -285,7 +281,6 @@ zero2 PROC
 	MOV CX , 20
 	MOV -2[BP] , CX
 	;Line 8: CX = assigned value
-	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_float
 	;Line 8: integar = 0
@@ -307,7 +302,6 @@ zero3 PROC
 	MOV CX , 30
 	MOV -2[BP] , CX
 	;Line 9: CX = assigned value
-	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_float
 	;Line 9: integar = 0

@@ -8,3 +8,6 @@
 **reminder** :
 - put parenthasis data memory variable declaration `var_name DW 1 DUP (0000H)`
 - Push arguments before calling function, this is implemented in arguments rule
+- end of line sequence should be LF in library .asm file , like println_int.asm
+# Optimization
+- Removed redundant assignment like `x=x;`

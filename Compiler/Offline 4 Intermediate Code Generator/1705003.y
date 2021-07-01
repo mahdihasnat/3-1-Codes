@@ -7,6 +7,7 @@ using namespace std;
 #include "SymbolTable.h"
 
 #include "ParserFunctions.h"
+#include "PeepholeOptimizer.h"
 
 #include "Info.h"
 #include "ReutrnType.h"
@@ -140,8 +141,14 @@ start :  program
 			
 			// codestream<<(*code);
 			code->write(codestream);
+			codestream.close();
+			
+			codestream.open("optimized_code.asm" , ios::trunc);
 
+			optimize(code);
 
+			code -> write(codestream);
+			codestream.close();
 		}
 
 		delete $$;

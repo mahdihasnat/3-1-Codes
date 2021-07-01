@@ -1,11 +1,26 @@
-// float variable printing 
-// int cross float divison
-int main()
+//  short circuit and 
+// short circuit or
+
+int one1(){float x ; x= 1.1;println(x);return 1;}
+int one2(){float x ; x= 1.2;println(x);return 1;}
+int one3(){float x ; x= 1.3;println(x);return 1;}
+int zero1(){float x ; x= 0.1;println(x);return 0;}
+int zero2(){float x ; x= 0.2;println(x);return 0;}
+int zero3(){float x ; x= 0.3;println(x);return 0;}
+
+void main()
 {
-	int i;
-	float f;
-	i= 10/7; println(i); // 1
-	f = 10/7.0;println(f); // 1.42
-	f = 10.0/7;println(f); // 1.42
-	f = 10.0/7.0;println(f); // 1.42
-}
+	int del;
+	del = 5;
+	if(one1() && ( zero1() || one2() )) ; // 1.1 0.1 1.2
+	println(del);// 5
+	if(one1() || one2());// 1.10
+	println(del);// 5
+	if(zero1() || zero2()) ; // 0.1 0.2
+	println(del);// 5
+	if(zero1() || one1()) ; // 0.1 1.2
+	println(del);// 5
+
+	
+
+}	
