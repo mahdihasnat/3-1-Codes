@@ -318,7 +318,7 @@ main PROC
 ;>>
 	PUSH BP
 	MOV BP , SP
-	;Line 26: DATA SEGMENT INITIALIZATION
+	;Line 38: DATA SEGMENT INITIALIZATION
 	MOV AX, @DATA
 	MOV DS, AX
 	SUB SP , 2
@@ -327,14 +327,14 @@ main PROC
 	MOV -2[BP] , CX
 	;Line 14: CX = assigned value
 	CALL one1
-	JCXZ after_and_1
+	JCXZ if_end2
 	CALL zero1
 	CMP CX , 0
-	JNZ after_or_0
+	JNZ after_and_1
 	CALL one2
 	after_or_0:
 	after_and_1:
-	JCXZ if_false2
+	JCXZ if_end2
 	;>>
 		MOV CX , 1
 		JMP if_end2
@@ -343,12 +343,15 @@ main PROC
 	;>>
 		;<<
 	if_end2:
+	MOV CX , -2[BP]
+	PUSH CX
+	CALL println_int
 	CALL one1
 	CMP CX , 0
 	JNZ after_or_3
 	CALL one2
 	after_or_3:
-	JCXZ if_false4
+	JCXZ if_end4
 	;>>
 		MOV CX , 1
 		JMP if_end4
@@ -365,7 +368,7 @@ main PROC
 	JNZ after_or_5
 	CALL zero2
 	after_or_5:
-	JCXZ if_false6
+	JCXZ if_end6
 	;>>
 		MOV CX , 1
 		JMP if_end6
@@ -380,9 +383,9 @@ main PROC
 	CALL zero1
 	CMP CX , 0
 	JNZ after_or_7
-	CALL one1
+	CALL one2
 	after_or_7:
-	JCXZ if_false8
+	JCXZ if_end8
 	;>>
 		MOV CX , 1
 		JMP if_end8
@@ -394,10 +397,108 @@ main PROC
 	MOV CX , -2[BP]
 	PUSH CX
 	CALL println_int
-	ADD SP , 2
+	SUB SP , 2
+	;Line 35: start of for loop
+	;Line 24: integar = 0
+	MOV CX , 0
+	MOV -4[BP] , CX
+	;Line 24: CX = assigned value
+	for_loop12:
+	;>>
+		;Line 24: Relational operator checking
+		MOV CX , -4[BP]
+		PUSH CX
+		;Line 24: integar = 5
+		MOV CX , 5
+		POP AX
+		CMP AX , CX
+		JL relop_is_ok9
+		MOV CX , 0
+		JMP relop_end9
+		relop_is_ok9:
+		MOV CX , 1
+		relop_end9:
+		JCXZ for_end12
+		;>>
+			;Line 35: start of for loop statement
+			MOV CX , -4[BP]
+			PUSH CX
+			CALL println_int
+			SUB SP , 2
+			;Line 34: start of for loop
+			MOV CX , -4[BP]
+			PUSH CX
+			;Line 29: integar = 1
+			MOV CX , 1
+			POP AX
+			ADD AX , CX
+			MOV CX , AX
+			MOV -6[BP] , CX
+			;Line 29: CX = assigned value
+			for_loop11:
+			;>>
+				;Line 29: Relational operator checking
+				MOV CX , -6[BP]
+				PUSH CX
+				MOV CX , -2[BP]
+				POP AX
+				CMP AX , CX
+				JL relop_is_ok10
+				MOV CX , 0
+				JMP relop_end10
+				relop_is_ok10:
+				MOV CX , 1
+				relop_end10:
+				JCXZ for_end11
+				;>>
+					;Line 34: start of for loop statement
+					SUB SP , 2
+					MOV CX , -4[BP]
+					PUSH CX
+					;>>
+						;Line 32: /
+						MOV CX , -6[BP]
+						PUSH CX
+						;Line 32: float number = 10.00
+						MOV CX , 1000
+						POP AX
+						IMUL FIXED_POINT_MULTIPLIER
+						IMUL FIXED_POINT_MULTIPLIER
+						IDIV CX
+						MOV CX , AX
+						;<<
+					POP AX
+					IMUL FIXED_POINT_MULTIPLIER
+					ADD AX , CX
+					MOV CX , AX
+					MOV -8[BP] , CX
+					;Line 32: CX = assigned value
+					PUSH CX
+					CALL println_float
+					ADD SP , 2
+					;<<
+				;Line 34: start of for loop step
+				MOV CX , -6[BP]
+				MOV AX , CX
+				ADD AX , 1
+				MOV -6[BP] , AX
+				JMP for_loop11
+				;<<
+			for_end11:
+			ADD SP , 2
+			;<<
+		;Line 35: start of for loop step
+		MOV CX , -4[BP]
+		MOV AX , CX
+		ADD AX , 1
+		MOV -4[BP] , AX
+		JMP for_loop12
+		;<<
+	for_end12:
+	ADD SP , 4
 	main_exit:
 	POP BP
-	;Line 26: EXIT 0
+	;Line 38: EXIT 0
 	MOV AH, 4CH
 	INT 21H
 	RET 0

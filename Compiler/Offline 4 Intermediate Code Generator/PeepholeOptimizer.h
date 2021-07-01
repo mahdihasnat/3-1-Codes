@@ -29,6 +29,10 @@ bool endsWith(string s,string t)
 {
 	return s.size() >= t.size() and s.substr(int(s.size() - t.size()) ) == t;
 }
+bool startsWith(string s,string t)
+{
+	return s.size()>=t.size() and s.substr(0,t.size()) == t;
+}
 
 void removeRedundantMove(Code * code)
 {
@@ -151,6 +155,105 @@ Code * getCodeSection(Code *code)
 	return nullptr;
 }
 
+string getFinalJump(string label , int cx)
+{
+	string ret = "";
+	Code * code  = labeledCode[label];
+	code = code -> getNext();
+	while(code)
+	{
+		// DBG(code -> getCode());
+		// NL;
+		vector < string > vs = string_split(code -> getCode() , ' ');
+		assert(vs.size()>=1);
+		if(code->getCode()[0] == ';')
+			;
+		else if(endsWith(code -> getCode() , ":"))
+		{
+			if(label + ":" == code -> getCode())
+				return ret = label;
+			label = code -> getCode();
+			label = label.substr(0 , label.size() - 1);
+			return ret = getFinalJump(label , cx);
+		}
+		else if(vs[0]== "JMP")
+		{
+			assert(vs.size() >= 2);
+			return ret = getFinalJump(vs[1] , cx);
+		}
+		else if(vs[0] == "JCXZ")
+		{
+			if(cx == 0)
+			{
+				assert(vs.size() >= 2);
+				return ret = getFinalJump(vs[1] , cx);
+			}
+			else return ret = label;
+		}
+		else if(vs[0] == "JNZ")
+		{
+			if(cx == 1)
+			{
+				assert(vs.size() >= 2);
+				return ret = getFinalJump(vs[1] , cx);
+			}
+			else return ret = label;
+		}
+		else if(vs[0] == "CMP")
+		{
+			assert(vs.size() >= 4);
+			if(vs[1] == "CX" and vs[3] == "0")
+			{
+				;
+			}
+			else 
+			{
+				return ret = label;
+			}
+		}
+		else return ret = label;
+		code = code -> getNext();
+	}
+	return ret = label;
+}
+
+void shortenJumpChain(Code * code)
+{
+	bool comparedCX = false;
+	while(code)
+	{
+		// DBG(code->getCode());
+		vector < string > vs = string_split(code -> getCode() , ' ');
+		assert(vs.size() >=1);
+		if(code -> getCode() [0] == ';')
+			;
+		else if(vs[0] == "JMP")
+		{
+			//code -> setCode("JMP "+getFinalJump(vs[1] , cx));
+			comparedCX = false;
+		}
+		else if(vs[0] == "JCXZ")
+		{
+			assert(vs.size() >= 2);
+			code -> setCode("JCXZ "+getFinalJump(vs[1] , 0));
+			
+		}
+		else if(vs[0] == "CMP")
+		{
+			assert(vs.size() >= 4);
+			comparedCX = vs[1] == "CX" and vs[3] == "0";
+		}
+		else if(vs[0] == "JNZ" and comparedCX)
+		{
+			assert(vs.size() >= 2);
+			code -> setCode("JNZ "+getFinalJump(vs[1] , 1));
+		}
+		else comparedCX = false;
+
+		code = code -> getNext();
+	}
+}
+
 void optimize(Code * fullCode )
 {
 	Code * codeSection = getCodeSection(fullCode);
@@ -162,6 +265,8 @@ void optimize(Code * fullCode )
 	for(string procName : procNames)
 	{
 		Code * procCode = labeledCode [procName];
+		if(procName != "println_int" and procName != "println_float")
+			shortenJumpChain(procCode);
 		procCode -> getLastRecursive();
 		fullCode = combine(fullCode , procCode);
 	}

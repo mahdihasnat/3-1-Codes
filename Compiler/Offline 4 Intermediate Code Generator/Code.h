@@ -37,6 +37,10 @@ public:
 	{
 		return code;
 	}
+	void setCode(string code)
+	{
+		this->code = code;
+	}
 	void removeSingleNext()
 	{
 		assert(next_code != nullptr);

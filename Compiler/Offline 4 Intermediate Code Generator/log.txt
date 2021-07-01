@@ -1409,16 +1409,29 @@ Line 15: statement : expression_statement
 ;
 
 
-Line 17: statement : IF LPAREN expression RPAREN statement
+Line 16: statement : IF LPAREN expression RPAREN statement
 
 if (one1()&&(zero1()||one2()));
 
 
-Line 17: statements : statements statement
+Line 16: statements : statements statement
 
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+
+
+Line 16: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(del);
+
+
+Line 16: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+println(del);
 
 
 Line 17: argument_list :
@@ -1497,6 +1510,7 @@ Line 18: statements : statements statement
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+println(del);
 if (one1()||one2());
 
 
@@ -1510,6 +1524,7 @@ Line 18: statements : statements statement
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+println(del);
 if (one1()||one2());
 println(del);
 
@@ -1590,6 +1605,7 @@ Line 20: statements : statements statement
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+println(del);
 if (one1()||one2());
 println(del);
 if (zero1()||zero2());
@@ -1605,6 +1621,7 @@ Line 20: statements : statements statement
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+println(del);
 if (one1()||one2());
 println(del);
 if (zero1()||zero2());
@@ -1641,31 +1658,31 @@ Line 21: argument_list :
 
 Line 21: factor : ID LPAREN argument_list RPAREN
 
-one1()
+one2()
 
 Line 21: unary_expression : factor
 
-one1()
+one2()
 
 Line 21: term : unary_expression
 
-one1()
+one2()
 
 Line 21: simple_expression : term
 
-one1()
+one2()
 
 Line 21: rel_expression : simple_expression
 
-one1()
+one2()
 
 Line 21: logic_expression : rel_expression LOGICOP rel_expression
 
-zero1()||one1()
+zero1()||one2()
 
 Line 21: expression : logic expression
 
-zero1()||one1()
+zero1()||one2()
 
 Line 21: expression_statement : SEMICOLON
 
@@ -1679,7 +1696,7 @@ Line 21: statement : expression_statement
 
 Line 22: statement : IF LPAREN expression RPAREN statement
 
-if (zero1()||one1());
+if (zero1()||one2());
 
 
 Line 22: statements : statements statement
@@ -1687,11 +1704,12 @@ Line 22: statements : statements statement
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+println(del);
 if (one1()||one2());
 println(del);
 if (zero1()||zero2());
 println(del);
-if (zero1()||one1());
+if (zero1()||one2());
 
 
 Line 22: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
@@ -1704,34 +1722,494 @@ Line 22: statements : statements statement
 int del;
 del=5;
 if (one1()&&(zero1()||one2()));
+println(del);
 if (one1()||one2());
 println(del);
 if (zero1()||zero2());
 println(del);
-if (zero1()||one1());
+if (zero1()||one2());
 println(del);
 
 
-Line 26: compound_statement : LCURL statements RCURL
+Line 23: type_specifier : INT
+
+int 
+
+Line 23: declaration_list : ID
+
+i
+
+Line 23: var_declaration : type_specifier declaration_list SEMICOLON
+
+int i;
+
+
+Line 23: statement : var_declaration
+
+int i;
+
+
+Line 23: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+println(del);
+if (one1()||one2());
+println(del);
+if (zero1()||zero2());
+println(del);
+if (zero1()||one2());
+println(del);
+int i;
+
+
+Line 24: variable : ID
+
+i
+
+Line 24: factor : CONST_INT
+
+0
+
+Line 24: unary_expression : factor
+
+0
+
+Line 24: term : unary_expression
+
+0
+
+Line 24: simple_expression : term
+
+0
+
+Line 24: rel_expression : simple_expression
+
+0
+
+Line 24: logic_expression : rel_expression
+
+0
+
+Line 24: expression : variable ASSIGNOP logic_expression
+
+i=0
+
+Line 24: expression_statement : expression SEMICOLON
+
+i=0;
+
+
+Line 24: variable : ID
+
+i
+
+Line 24: factor : variable
+
+i
+
+Line 24: unary_expression : factor
+
+i
+
+Line 24: term : unary_expression
+
+i
+
+Line 24: simple_expression : term
+
+i
+
+Line 24: factor : CONST_INT
+
+5
+
+Line 24: unary_expression : factor
+
+5
+
+Line 24: term : unary_expression
+
+5
+
+Line 24: simple_expression : term
+
+5
+
+Line 24: rel_expression : simple_expression RELOP simple_expression
+
+i<5
+
+Line 24: logic_expression : rel_expression
+
+i<5
+
+Line 24: expression : logic expression
+
+i<5
+
+Line 24: expression_statement : expression SEMICOLON
+
+i<5;
+
+
+Line 24: variable : ID
+
+i
+
+Line 24: factor : variable INCOP
+
+i++
+
+Line 24: unary_expression : factor
+
+i++
+
+Line 24: term : unary_expression
+
+i++
+
+Line 24: simple_expression : term
+
+i++
+
+Line 24: rel_expression : simple_expression
+
+i++
+
+Line 24: logic_expression : rel_expression
+
+i++
+
+Line 24: expression : logic expression
+
+i++
+
+Line 26: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(i);
+
+
+Line 26: statements : statement
+
+println(i);
+
+
+Line 27: type_specifier : INT
+
+int 
+
+Line 27: declaration_list : ID
+
+j
+
+Line 27: var_declaration : type_specifier declaration_list SEMICOLON
+
+int j;
+
+
+Line 27: statement : var_declaration
+
+int j;
+
+
+Line 27: statements : statements statement
+
+println(i);
+int j;
+
+
+Line 29: variable : ID
+
+j
+
+Line 29: variable : ID
+
+i
+
+Line 29: factor : variable
+
+i
+
+Line 29: unary_expression : factor
+
+i
+
+Line 29: term : unary_expression
+
+i
+
+Line 29: simple_expression : term
+
+i
+
+Line 29: factor : CONST_INT
+
+1
+
+Line 29: unary_expression : factor
+
+1
+
+Line 29: term : unary_expression
+
+1
+
+Line 29: simple_expression : simple_expression ADDOP term
+
+i+1
+
+Line 29: rel_expression : simple_expression
+
+i+1
+
+Line 29: logic_expression : rel_expression
+
+i+1
+
+Line 29: expression : variable ASSIGNOP logic_expression
+
+j=i+1
+
+Line 29: expression_statement : expression SEMICOLON
+
+j=i+1;
+
+
+Line 29: variable : ID
+
+j
+
+Line 29: factor : variable
+
+j
+
+Line 29: unary_expression : factor
+
+j
+
+Line 29: term : unary_expression
+
+j
+
+Line 29: simple_expression : term
+
+j
+
+Line 29: variable : ID
+
+del
+
+Line 29: factor : variable
+
+del
+
+Line 29: unary_expression : factor
+
+del
+
+Line 29: term : unary_expression
+
+del
+
+Line 29: simple_expression : term
+
+del
+
+Line 29: rel_expression : simple_expression RELOP simple_expression
+
+j<del
+
+Line 29: logic_expression : rel_expression
+
+j<del
+
+Line 29: expression : logic expression
+
+j<del
+
+Line 29: expression_statement : expression SEMICOLON
+
+j<del;
+
+
+Line 29: variable : ID
+
+j
+
+Line 29: factor : variable INCOP
+
+j++
+
+Line 29: unary_expression : factor
+
+j++
+
+Line 29: term : unary_expression
+
+j++
+
+Line 29: simple_expression : term
+
+j++
+
+Line 29: rel_expression : simple_expression
+
+j++
+
+Line 29: logic_expression : rel_expression
+
+j++
+
+Line 29: expression : logic expression
+
+j++
+
+Line 31: type_specifier : FLOAT
+
+float 
+
+Line 31: declaration_list : ID
+
+x
+
+Line 31: var_declaration : type_specifier declaration_list SEMICOLON
+
+float x;
+
+
+Line 31: statement : var_declaration
+
+float x;
+
+
+Line 31: statements : statement
+
+float x;
+
+
+Line 32: variable : ID
+
+x
+
+Line 32: variable : ID
+
+i
+
+Line 32: factor : variable
+
+i
+
+Line 32: unary_expression : factor
+
+i
+
+Line 32: term : unary_expression
+
+i
+
+Line 32: simple_expression : term
+
+i
+
+Line 32: variable : ID
+
+j
+
+Line 32: factor : variable
+
+j
+
+Line 32: unary_expression : factor
+
+j
+
+Line 32: term : unary_expression
+
+j
+
+Line 32: factor : CONST_FLOAT
+
+10.00
+
+Line 32: unary_expression : factor
+
+10.00
+
+Line 32: term : term MULOP unary_expression
+
+j/10.00
+
+Line 32: simple_expression : simple_expression ADDOP term
+
+i+j/10.00
+
+Line 32: rel_expression : simple_expression
+
+i+j/10.00
+
+Line 32: logic_expression : rel_expression
+
+i+j/10.00
+
+Line 32: expression : variable ASSIGNOP logic_expression
+
+x=i+j/10.00
+
+Line 32: expression_statement : expression SEMICOLON
+
+x=i+j/10.00;
+
+
+Line 32: statement : expression_statement
+
+x=i+j/10.00;
+
+
+Line 32: statements : statements statement
+
+float x;
+x=i+j/10.00;
+
+
+Line 33: statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(x);
+
+
+Line 33: statements : statements statement
+
+float x;
+x=i+j/10.00;
+println(x);
+
+
+Line 34: compound_statement : LCURL statements RCURL
 
 {
-  int del;
-  del=5;
-  if (one1()&&(zero1()||one2()));
-  if (one1()||one2());
-  println(del);
-  if (zero1()||zero2());
-  println(del);
-  if (zero1()||one1());
-  println(del);
+  float x;
+  x=i+j/10.00;
+  println(x);
 }
 
 
 
 
 
+ScopeTable # 1.7.1.1
+ 0 --> < x , ID > 
+
+
+
+ScopeTable # 1.7.1
+ 16 --> < j , ID > 
+
+
+
 ScopeTable # 1.7
  9 --> < del , ID > 
+ 15 --> < i , ID > 
 
 
 
@@ -1745,39 +2223,228 @@ ScopeTable # 1
  19 --> < zero3 , ID > 
 
 
-Line 26: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 34: statement : compound_statement
+
+{
+  float x;
+  x=i+j/10.00;
+  println(x);
+}
+
+
+
+Line 34: statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement
+
+for(j=i+1;j<del;j++){
+  float x;
+  x=i+j/10.00;
+  println(x);
+}
+
+
+
+Line 34: statements : statements statement
+
+println(i);
+int j;
+for(j=i+1;j<del;j++){
+  float x;
+  x=i+j/10.00;
+  println(x);
+}
+
+
+
+Line 35: compound_statement : LCURL statements RCURL
+
+{
+  println(i);
+  int j;
+  for(j=i+1;  j<del;  j++){
+    float x;
+    x=i+j/10.00;
+    println(x);
+  }
+}
+
+
+
+
+
+ScopeTable # 1.7.1
+ 16 --> < j , ID > 
+
+
+
+ScopeTable # 1.7
+ 9 --> < del , ID > 
+ 15 --> < i , ID > 
+
+
+
+ScopeTable # 1
+ 1 --> < main , ID > 
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+ 18 --> < zero2 , ID > 
+ 19 --> < zero3 , ID > 
+
+
+Line 35: statement : compound_statement
+
+{
+  println(i);
+  int j;
+  for(j=i+1;  j<del;  j++){
+    float x;
+    x=i+j/10.00;
+    println(x);
+  }
+}
+
+
+
+Line 35: statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement
+
+for(i=0;i<5;i++){
+  println(i);
+  int j;
+  for(j=i+1;  j<del;  j++){
+    float x;
+    x=i+j/10.00;
+    println(x);
+  }
+}
+
+
+
+Line 35: statements : statements statement
+
+int del;
+del=5;
+if (one1()&&(zero1()||one2()));
+println(del);
+if (one1()||one2());
+println(del);
+if (zero1()||zero2());
+println(del);
+if (zero1()||one2());
+println(del);
+int i;
+for(i=0;i<5;i++){
+  println(i);
+  int j;
+  for(j=i+1;  j<del;  j++){
+    float x;
+    x=i+j/10.00;
+    println(x);
+  }
+}
+
+
+
+Line 38: compound_statement : LCURL statements RCURL
+
+{
+  int del;
+  del=5;
+  if (one1()&&(zero1()||one2()));
+  println(del);
+  if (one1()||one2());
+  println(del);
+  if (zero1()||zero2());
+  println(del);
+  if (zero1()||one2());
+  println(del);
+  int i;
+  for(i=0;  i<5;  i++){
+    println(i);
+    int j;
+    for(j=i+1;    j<del;    j++){
+      float x;
+      x=i+j/10.00;
+      println(x);
+    }
+  }
+}
+
+
+
+
+
+ScopeTable # 1.7
+ 9 --> < del , ID > 
+ 15 --> < i , ID > 
+
+
+
+ScopeTable # 1
+ 1 --> < main , ID > 
+ 11 --> < one1 , ID > 
+ 12 --> < one2 , ID > 
+ 13 --> < one3 , ID > 
+ 17 --> < zero1 , ID > 
+ 18 --> < zero2 , ID > 
+ 19 --> < zero3 , ID > 
+
+
+Line 38: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 void main(){
   int del;
   del=5;
   if (one1()&&(zero1()||one2()));
+  println(del);
   if (one1()||one2());
   println(del);
   if (zero1()||zero2());
   println(del);
-  if (zero1()||one1());
+  if (zero1()||one2());
   println(del);
+  int i;
+  for(i=0;  i<5;  i++){
+    println(i);
+    int j;
+    for(j=i+1;    j<del;    j++){
+      float x;
+      x=i+j/10.00;
+      println(x);
+    }
+  }
 }
 
 
 
-Line 26: unit : func_definition
+Line 38: unit : func_definition
 
 void main(){
   int del;
   del=5;
   if (one1()&&(zero1()||one2()));
+  println(del);
   if (one1()||one2());
   println(del);
   if (zero1()||zero2());
   println(del);
-  if (zero1()||one1());
+  if (zero1()||one2());
   println(del);
+  int i;
+  for(i=0;  i<5;  i++){
+    println(i);
+    int j;
+    for(j=i+1;    j<del;    j++){
+      float x;
+      x=i+j/10.00;
+      println(x);
+    }
+  }
 }
 
 
 
-Line 26: program : program unit
+Line 38: program : program unit
 
 int one1(){
   float x;
@@ -1825,17 +2492,28 @@ void main(){
   int del;
   del=5;
   if (one1()&&(zero1()||one2()));
+  println(del);
   if (one1()||one2());
   println(del);
   if (zero1()||zero2());
   println(del);
-  if (zero1()||one1());
+  if (zero1()||one2());
   println(del);
+  int i;
+  for(i=0;  i<5;  i++){
+    println(i);
+    int j;
+    for(j=i+1;    j<del;    j++){
+      float x;
+      x=i+j/10.00;
+      println(x);
+    }
+  }
 }
 
 
 
-Line 26: start : program
+Line 38: start : program
 
 
 
@@ -1850,6 +2528,6 @@ ScopeTable # 1
 
 
 
-Total lines: 26
+Total lines: 38
 Total errors: 0
 

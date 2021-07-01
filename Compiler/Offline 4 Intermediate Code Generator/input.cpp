@@ -18,9 +18,21 @@ void main()
 	println(del);// 5
 	if(zero1() || zero2()) ; // 0.1 0.2
 	println(del);// 5
-	if(zero1() || one1()) ; // 0.1 1.2
+	if(zero1() || one2()) ; // 0.1 1.2
 	println(del);// 5
+	int i;
+	for(i=0;i<5;i++)
+	{
+		println(i);
+		int j;
 
+		for(j=i+1;j<del;j++)
+		{
+			float x;
+			x=i+j/10.0;
+			println(x);
+		}
+	}
 	
 
 }	
