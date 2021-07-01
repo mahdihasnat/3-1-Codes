@@ -230,27 +230,6 @@ one2 PROC
 	RET 0
 	;<<
 one2 ENDP
-one3 PROC
-;>>
-	PUSH BP
-	MOV BP , SP
-	SUB SP , 2
-	;Line 6: float number = 1.30
-	MOV CX , 130
-	MOV -2[BP] , CX
-	;Line 6: CX = assigned value
-	PUSH CX
-	CALL println_float
-	;Line 6: integar = 1
-	MOV CX , 1
-	SUB SP , -2
-	JMP one3_exit
-	ADD SP , 2
-	one3_exit:
-	POP BP
-	RET 0
-	;<<
-one3 ENDP
 zero1 PROC
 ;>>
 	PUSH BP
@@ -293,27 +272,6 @@ zero2 PROC
 	RET 0
 	;<<
 zero2 ENDP
-zero3 PROC
-;>>
-	PUSH BP
-	MOV BP , SP
-	SUB SP , 2
-	;Line 9: float number = 0.30
-	MOV CX , 30
-	MOV -2[BP] , CX
-	;Line 9: CX = assigned value
-	PUSH CX
-	CALL println_float
-	;Line 9: integar = 0
-	MOV CX , 0
-	SUB SP , -2
-	JMP zero3_exit
-	ADD SP , 2
-	zero3_exit:
-	POP BP
-	RET 0
-	;<<
-zero3 ENDP
 main PROC
 ;>>
 	PUSH BP

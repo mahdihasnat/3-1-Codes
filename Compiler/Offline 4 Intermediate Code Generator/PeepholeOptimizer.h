@@ -1,6 +1,8 @@
 #include "Code.h"
 map<string,Code * > labeledCode;
 
+set<string> calledLabel;
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -254,6 +256,22 @@ void shortenJumpChain(Code * code)
 	}
 }
 
+void addCalledLabel(Code * code)
+{
+	while(code)
+	{
+		vector < string > vs = string_split(code -> getCode() , ' ');
+		assert(vs.size() >=1);
+		if(code -> getCode() [0] == ';')
+			;
+		else if(vs[0][0] == 'J')
+			calledLabel.insert(vs[1]);
+		else if(vs[0] == "CALL")
+			calledLabel.insert(vs[1]);
+		code = code -> getNext();
+	}
+}
+
 void optimize(Code * fullCode )
 {
 	Code * codeSection = getCodeSection(fullCode);
@@ -265,11 +283,23 @@ void optimize(Code * fullCode )
 	for(string procName : procNames)
 	{
 		Code * procCode = labeledCode [procName];
-		if(procName != "println_int" and procName != "println_float")
+		if(procName != "println_int" and procName != "println_float"){
 			shortenJumpChain(procCode);
-		procCode -> getLastRecursive();
-		fullCode = combine(fullCode , procCode);
+			addCalledLabel(procCode);
+		}
 	}
+	calledLabel.insert("main");
+	for(string procName : procNames)
+	{
+		
+		if(calledLabel.find(procName) != calledLabel.end())
+		{
+			Code * procCode = labeledCode [procName];
+			procCode->getLastRecursive();
+			fullCode = combine(fullCode , procCode);
+		}
+	}
+	
 	fullCode = combine(fullCode , "END main");
 		
 }

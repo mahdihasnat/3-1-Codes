@@ -11,3 +11,5 @@
 - end of line sequence should be LF in library .asm file , like println_int.asm
 # Optimization
 - Removed redundant assignment like `x=x;`
+- Shortened Jump chain like `1 && ( 0 || 1)`
+- Removed uncalled procedure
