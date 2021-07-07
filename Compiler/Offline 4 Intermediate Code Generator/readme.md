@@ -14,3 +14,7 @@
 - Shortened Jump chain like `1 && ( 0 || 1)`
 - Removed uncalled procedure
 - Removed Unreachable code like `return 0; println(x);`
+
+# Suggestion
+I know u'r searching for treasure
+Go use `MakeFile`
