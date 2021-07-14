@@ -1,0 +1,171 @@
+\section{Optimal Compression}
+
+\begin{frame}{Example}
+    \begin{columns}
+    \column{0.3\linewidth}
+    
+    \begin{center}
+        
+        \begin{tikzpicture}[
+        level 1/.style={sibling distance=25mm},
+        level 2/.style={sibling distance=13mm},
+        level 3/.style={sibling distance=13mm},
+    ]
+        \begin{scope}[nodes = {minimum size = 10mm}]
+        
+        \node[internal](CD){}
+        child 
+        {
+            node[internal](CR){}
+            child
+            {
+                node[leaf](C){C}
+            }
+            child
+            {
+                node[internal ](AR){}
+                child
+                {
+                    node[leaf](A){A}
+                }
+                child
+                {
+                    node[leaf](R){R}
+                }
+            }
+        }
+        child
+        {
+            node[internal](BD){}
+            child
+            {
+                node[leaf](B){B}
+            }
+            child
+            {
+                node[leaf](D){D}
+            }
+        };
+        \AddZeroEdge{CD}{CR}
+        \AddZeroEdge{CR}{C}
+        \AddZeroEdge{AR}{A}
+        \AddZeroEdge{BD}{B}
+        
+        \AddOneEdge{CD}{BD}
+        \AddOneEdge{BD}{D}
+        \AddOneEdge{AR}{R}
+        \AddOneEdge{CR}{AR}
+        
+        \end{scope}
+        \end{tikzpicture}
+        
+    \end{center}
+    
+    
+    \column{0.7\linewidth}
+    
+    \begin{center}
+        Text = "AAABRACADABRAAA"
+        \begin{table}[]
+            \begin{tabular}{r|c|c}
+            \hline
+                Character & Encoding & Frequency\\
+            \hline
+                 A & 010 & 9\\
+                 B & 10 & 2\\
+                 C & 00 & 1\\
+                 D & 11 & 1\\
+                 R & 011 & 2\\
+                 \hline
+            \end{tabular}
+        \end{table}
+        Total bits = 9\times3+2\times2+\\1\times2+1\times2+2\times3 = 41 \text{ bits}
+    \end{center}
+    
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Example}
+    \begin{columns}
+    \column{0.3\linewidth}
+    
+    \begin{center}
+        
+        \begin{tikzpicture}[
+        level 1/.style={sibling distance=25mm},
+        level 2/.style={sibling distance=13mm},
+        level 3/.style={sibling distance=13mm},
+    ]
+        \begin{scope}[nodes = {minimum size = 10mm}]
+        
+        \node[internal](CD){}
+        child 
+        {
+            node[internal](CR){}
+            child
+            {
+                node[leaf](C){A}
+            }
+            child
+            {
+                node[internal ](AR){}
+                child
+                {
+                    node[leaf](A){C}
+                }
+                child
+                {
+                    node[leaf](R){D}
+                }
+            }
+        }
+        child
+        {
+            node[internal](BD){}
+            child
+            {
+                node[leaf](B){B}
+            }
+            child
+            {
+                node[leaf](D){R}
+            }
+        };
+        \AddZeroEdge{CD}{CR}
+        \AddZeroEdge{CR}{C}
+        \AddZeroEdge{AR}{A}
+        \AddZeroEdge{BD}{B}
+        
+        \AddOneEdge{CD}{BD}
+        \AddOneEdge{BD}{D}
+        \AddOneEdge{AR}{R}
+        \AddOneEdge{CR}{AR}
+        
+        \end{scope}
+        \end{tikzpicture}
+        
+    \end{center}
+    
+    
+    \column{0.7\linewidth}
+    
+    \begin{center}
+        Text = "AAABRACADABRAAA"
+        \begin{table}[]
+            \begin{tabular}{r|c|c}
+            \hline
+                Character & Encoding & Frequency\\
+            \hline
+                 A & 00 & 9\\
+                 B & 11 & 2\\
+                 C & 010 & 1\\
+                 D & 011 & 1\\
+                 R & 11 & 2\\
+                 \hline
+            \end{tabular}
+        \end{table}
+        Total bits = 9\times2+2\times2+\\1\times3+1\times3+2\times2 = 32 \text{ bits}
+    \end{center}
+    
+    \end{columns}
+\end{frame}

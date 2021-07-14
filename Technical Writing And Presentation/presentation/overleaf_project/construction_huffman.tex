@@ -1,0 +1,353 @@
+\section{Construction of Huffman trie}
+
+\newcommand{\AddConstructionTitle}[0]
+{
+    \frametitle{Construction of Huffman trie}
+    \framesubtitle{AAABRACADABRAAA}
+}
+
+\begin{frame}
+    \AddConstructionTitle
+    \begin{center}
+        
+    \begin{tikzpicture}
+
+    \node[leaf](A){9};
+    \node[leaf , right = 1cm of A](B){2};
+    \node[leaf , right = 1cm of B](R){2};
+    \node[leaf , right = 1cm of R](C){1};
+    \node[leaf , right = 1cm of C](D){1};
+    
+    \LabelTree
+    
+    \SurroundWithRectandle{A.south west}{D.north east}
+    
+    \pause
+    
+    \node[faded_internal , above left = 1cm and 0.35cm of D](CD){1+1};
+    \AddFadedZeroEdge{CD}{C}
+    \AddFadedOneEdge{CD}{D}
+    
+    \end{tikzpicture}
+    
+    \end{center}
+
+\end{frame}
+
+\begin{frame}
+    \AddConstructionTitle
+    \begin{center}
+        
+    \begin{tikzpicture}
+    
+    \node[leaf](A){9};
+    \node[leaf , right = 1cm of A](B){2};
+    \node[leaf , right = 1cm of B](R){2};
+    \node[internal , right = 1cm of R](CD){2}
+        child 
+        {
+            node[leaf  ](C){1}
+        }
+        child
+        {
+            node[leaf ](D){1}
+        };
+    
+    \LabelTree
+    
+    \SurroundWithRectandle{A.south west}{CD.north east}
+    \AddZeroEdge{CD}{C}
+    \AddOneEdge{CD}{D}
+    
+    \pause
+    
+    \node[faded_internal , above left = 1cm and 0.35cm of R](BR){2+2};
+    \AddFadedZeroEdge{BR}{B}
+    \AddFadedOneEdge{BR}{R}
+    
+    
+    \end{tikzpicture}
+    
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \AddConstructionTitle
+    \begin{center}
+        
+    \begin{tikzpicture}
+    
+    \node[leaf](A){9};
+    \node[internal , right = 1cm of A](BR){4}
+    child
+    {
+        node[leaf](B){2} 
+    }
+    child
+    { 
+        node[leaf](R){2} 
+    };
+    
+    \AddOneEdge{BR}{R}
+    \AddZeroEdge{BR}{B}
+    
+    \node[internal , right = 2cm of BR](CD){2}
+    child 
+    {
+        node[leaf  ](C){1}
+    }
+    child
+    {
+        node[leaf ](D){1}
+    };
+    
+    \AddZeroEdge{CD}{C}
+    \AddOneEdge{CD}{D}
+    
+    \SurroundWithRectandle{A.south west}{CD.north east}
+    \LabelTree
+    
+    \pause
+    \node[faded_internal , above left = 1cm and 0.6cm of CD](BD){4+2};
+    \AddFadedZeroEdge{BD}{BR}
+    \AddFadedOneEdge{BD}{CD}
+    
+    \end{tikzpicture}
+    
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \AddConstructionTitle
+    \begin{center}
+        
+    \begin{Huffman}
+    
+    \node[leaf](A){9};
+    \node[internal , right = 2.5cm of A ](BD){6}
+    child
+    {
+        node[internal ](BR){4}
+        child
+        {
+            node[leaf](B){2} 
+        }
+        child
+        { 
+            node[leaf](R){2} 
+        }
+    }
+    child
+    {
+        node[internal ](CD){2}
+        child 
+        {
+            node[leaf  ](C){1}
+        }
+        child
+        {
+            node[leaf ](D){1}
+        }
+    }
+    ;
+    
+    
+    \AddOneEdge{BR}{R}
+    \AddZeroEdge{BR}{B}
+    
+    \AddZeroEdge{CD}{C}
+    \AddOneEdge{CD}{D}
+    
+    \AddZeroEdge{BD}{BR}
+    \AddOneEdge{BD}{CD}
+    
+    \SurroundWithRectandle{A.south west}{BD.north east}
+    \LabelTree
+    
+    \pause
+    
+    \node[faded_internal , above left = 1cm and 1cm of BD](AD){9+6};
+    \AddFadedZeroEdge{AD}{A}
+    \AddFadedOneEdge{AD}{BD}
+    
+    \end{Huffman}
+    
+    \end{center}
+\end{frame}
+\begin{frame}
+    \AddConstructionTitle
+    \begin{columns}
+    \column{0.4\linewidth}
+    \begin{center}
+        
+    \begin{tikzpicture}[
+        level distance = 1.5cm,
+        level 1/.style={sibling distance=25mm},
+        level 2/.style={sibling distance=2cm},
+        level 3/.style={sibling distance=1cm},
+    ]
+    
+    \node[internal](AD){15}
+    child 
+    {
+        node[leaf](A){9}
+    }
+    child 
+    {
+        node[internal ](BD){6}
+        child
+        {
+            node[internal ](BR){4}
+            child
+            {
+                node[leaf](B){2} 
+            }
+            child
+            { 
+                node[leaf](R){2} 
+            }
+        }
+        child
+        {
+            node[internal ](CD){2}
+            child 
+            {
+                node[leaf  ](C){1}
+            }
+            child
+            {
+                node[leaf ](D){1}
+            }
+        }
+    };
+    
+    
+    \AddOneEdge{BR}{R}
+    \AddZeroEdge{BR}{B}
+    
+    \AddZeroEdge{CD}{C}
+    \AddOneEdge{CD}{D}
+    
+    \AddZeroEdge{BD}{BR}
+    \AddOneEdge{BD}{CD}
+    
+    \AddZeroEdge{AD}{A}
+    \AddOneEdge{AD}{BD}
+    
+    \LabelTree
+    
+    \end{tikzpicture}
+    
+    \end{center}
+    
+    \column{0.6\linewidth}
+    
+    \begin{center}
+        \begin{table}[]
+            \begin{tabular}{r|c|c}
+            \hline
+                Character & Encoding & Frequency\\
+            \hline
+                 A & 0 & 9\\
+                 B & 100 & 2\\
+                 C & 110 & 1\\
+                 D & 111 & 1\\
+                 R & 101 & 2\\
+                 \hline
+            \end{tabular}
+        \end{table}
+        \smallskip
+        Total bits = 9\times1+2\times3+\\1\times3+1\times3+2\times3 = 27 \text{ bits}
+    \end{center}
+    
+    \end{columns}
+    
+\end{frame}
+
+% \begin{frame}
+
+%     \AddConstructionTitle
+    
+%     \begin{columns}
+%     \column{0.4\linewidth}
+%     \begin{center}
+        
+%     \begin{tikzpicture}[
+%         level distance = 12mm,
+%         level 1/.style={sibling distance=15mm},
+%         level 2/.style={sibling distance=15mm},
+%         level 3/.style={sibling distance=15mm},
+%         level 4/.style={sibling distance=15mm},
+%     ]
+    
+%     \node[internal](AD){15}
+%     child 
+%     {
+%         node[leaf](A){9}
+%     }
+%     child 
+%     {
+%         node[internal](BD){6}
+%         child
+%         {
+%             node[leaf](B){2}
+%         }
+%         child
+%         {
+%             node[internal](RD){4}
+%             child 
+%             {
+%                 node[leaf](R){2}
+%             }
+%             child
+%             {
+%                 node[internal](CD){2}
+%                 child 
+%                 {
+%                     node[leaf](C){1}
+%                 }
+%                 child
+%                 {
+%                     node[leaf](D){1}
+%                 }
+%             }
+%         }
+%     };
+    
+%     \AddZeroEdge{AD}{A}
+%     \AddZeroEdge{BD}{B}
+%     \AddZeroEdge{RD}{R}
+%     \AddZeroEdge{CD}{C}
+    
+%     \AddOneEdge{AD}{BD}
+%     \AddOneEdge{BD}{RD}
+%     \AddOneEdge{RD}{CD}
+%     \AddOneEdge{CD}{D}
+    
+%     \LabelTree
+    
+%     \end{tikzpicture}
+    
+%     \end{center}
+    
+%     \column{0.6\linewidth}
+    
+%     \begin{center}
+%         \begin{table}[]
+%             \begin{tabular}{r|c|c}
+%             \hline
+%                 Character & Encoding & Frequency\\
+%             \hline
+%                  A & 0 & 9\\
+%                  B & 10 & 2\\
+%                  C & 1110 & 1\\
+%                  D & 1111 & 1\\
+%                  R & 110 & 2\\
+%                  \hline
+%             \end{tabular}
+%         \end{table}
+%         \smallskip
+%         Total bits = 9\times1+2\times2+\\1\times4+1\times4+2\times3 = 27 \text{ bits}
+%     \end{center}
+%     \end{columns}    
+% \end{frame}

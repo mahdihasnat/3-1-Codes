@@ -1,0 +1,72 @@
+
+\section{Decoding Scheme for Variable Length Code}
+
+% Correct decoding
+\begin{frame}{Example}
+    \begin{exampleblock}{Correct Decoding}
+    
+    \begin{center}
+        
+    %Text: "\JText{J}\AText{A}\VText{V}\AText{A}"\\
+    
+    \end{center}
+    \begin{columns}
+        \column{0.4\linewidth}
+            \begin{table}[]
+            \centering
+            \begin{tabular}{cc}
+                 Character & Code \\
+                 \AText{A} & \AText{0}\\
+                 \JText{J} & \JText{11}\\
+                 \VText{V} & \VText{10}
+            \end{tabular}
+            \caption{Encoding}
+            \end{table}
+            
+        \column{0.6\linewidth}
+            
+             Encoded Bits: ``\only<1>{11}\only<2->{\JText{11}\vert}\only<1-2>{0}\only<3->{\AText{0}\vert}\only<1-3>{10}\only<4->{\VText{10}\vert}\only<1-4>{0}\only<5->{\AText{0}}"\\
+             Decoded Text: ``\only<2->{\JText{J}}\only<3->{\AText{A}}\only<4->{\VText{V}}\only<5->{\AText{A}}"\\
+             
+    \end{columns}
+    \end{exampleblock}
+
+\end{frame}
+
+%% Ambiguous decoding
+\begin{frame}{Example}
+    \begin{exampleblock}{Ambiguous Decoding}
+    
+    \begin{center}
+        
+    %Text: "\JText{J}\AText{A}\VText{V}\AText{A}"\\
+    
+    \end{center}
+    \begin{columns}
+        \column{0.4\linewidth}
+            \begin{table}[]
+            \centering
+            \begin{tabular}{cc}
+                 Character & Code \\
+                 \AText{A} & \AText{0}\\
+                 \JText{J} & \JText{1}\\
+                 \VText{V} & \VText{01}
+            \end{tabular}
+            \caption{Encoding}
+            \end{table}
+            
+        \column{0.6\linewidth}
+            \begin{tabular}{rl}
+            
+            Encoded Bits:   &  ``10010"\\
+            Decoded Text:   & ``\only<1-1>{1}\only<2-2>{\JText{1}\vert}\only<3->{\JText{J}}\only<1-3>{0}\only<4-4>{\AText{0}\vert}\only<5->{\AText{A}}\only<1-5>{01}\only<6-6>{\VText{01}\vert}\only<7->{\VText{V}}\only<1-7>{0}\only<8-8>{\AText{0}}\only<9->{\AText{A}}"\\
+                            &
+            ``\only<1-1>{1}\only<2-2>{\JText{1}\vert}\only<3->{\JText{J}}\only<1-3>{0}\only<4-4>{\AText{0}\vert}\only<5->{\AText{A}}\only<1-5>{0}\only<6-6>{\AText{0}\vert}\only<7->{\AText{A}}\only<1-9>{1}\only<10-10>{\JText{1}\vert}\only<11->{\JText{J}}\only<1-11>{0}\only<12-12>{\AText{0}}\only<13->{\AText{A}}"\\
+            \end{tabular}
+            \newline
+            \medskip
+            \only<14->{``0" is \alert{prefix} of ``01"}
+    \end{columns}
+    \end{exampleblock}
+    
+\end{frame}

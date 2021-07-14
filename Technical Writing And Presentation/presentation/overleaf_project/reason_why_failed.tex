@@ -1,0 +1,51 @@
+\section{Reason Why Variable Encoding scheme failed}
+\begin{frame}{What Went Wrong?}
+\framesubtitle{Is our encoding right?}
+
+    \begin{columns}
+    \column{.5\textwidth}
+    
+    \begin{block}{\centering Encoded bits}
+        \centering
+        10
+    \end{block}
+    % \\[1cm]
+    \only<1->{
+    \begin{block}{\centering Decoded Text - 1}
+        \centering
+        \only<1->{BA}
+    \end{block}
+    }
+    \only<1->{
+    \begin{block}{\centering Decoded Text - 2}
+        \centering
+        \only<1->{R}
+    \end{block}
+    }
+   \column{.5\textwidth}
+\only<1->{
+\begin{table}[]
+\begin{tabular}{cc}
+\rowcolor[HTML]{009901} 
+Character & Encoding \\
+\rowcolor[HTML]{FE0000} 
+A         & 0        \\
+\rowcolor[HTML]{F8A102} 
+B         & 1        \\
+\rowcolor[HTML]{FFCC67} 
+R         & 10       \\
+\rowcolor[HTML]{FCFF2F} 
+C         & 11       \\
+\rowcolor[HTML]{F8FF00} 
+D         & 100     
+\end{tabular}
+% \caption{Our variable length encoding}
+\end{table}
+}
+    \end{columns}
+    
+\begin{alertblock}{}
+   \centering \Large{1 is a prefix of 10}
+\end{alertblock}
+   
+\end{frame}

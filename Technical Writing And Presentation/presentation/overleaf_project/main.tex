@@ -1,0 +1,53 @@
+\documentclass[14pt,xcolor=table]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{import}
+\import{./}{preamble.tex}
+
+\begin{document}
+
+\frame{\titlepage}
+\import{./}{robin_story.tex}
+\import{./}{fixed_length_coding_scheme.tex}
+\import{./}{variable_length_encoding_scheme.tex}
+
+\import{./}{reason_why_failed.tex}
+% Decoding scheme
+% \import{./}{decoding_scheme.tex}
+
+% property of correct var lenngth encoding
+\import{./}{property_of_encoding.tex}
+
+% encoding as trie
+\import{./}{encoding_as_trie.tex}
+
+% optimal compression
+\import{./}{optimal_compression.tex}
+
+% construction of huffman coding
+\import{./}{construction_huffman.tex}
+
+\begin{frame}{Results}
+
+\begin{block}{\centering Final Results}
+\centering 
+    Huffman encoding crushes others!
+\end{block}
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+        ASCII  & Mod. F. L. & Trie (Rand.) & Huffman Trie \\\hline
+         120 & 45 & 41 & 27 \\ \hline 
+    \end{tabular}
+    \caption{Bits needed in different encoding}
+    % \label{tab:my_label}
+\end{table}    
+\end{frame}
+\begin{frame}
+\begin{center}
+    \Huge{Thank You}
+\end{center}
+
+\end{frame} 
+
+\end{document}

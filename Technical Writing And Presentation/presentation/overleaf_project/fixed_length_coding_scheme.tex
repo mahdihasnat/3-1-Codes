@@ -1,0 +1,188 @@
+\section{Fixed Length Code}
+\begin{frame}{How Data is Stored}
+\framesubtitle{Standard Encoding - ASCII}
+    \begin{block}{\centering}
+        \centering
+        ASCII
+        % \large{ASCII}
+    \end{block}
+    \begin{columns}
+    \column{.7\textwidth}
+\begin{table}[]
+\begin{tabular}{c|c}
+Character     & Encoding    \pause\\ \hline
+A             & 0100 0001     \pause\\ 
+B             & 0100 0010     \pause\\
+C             & 0100 0011     \pause\\
+D             & 0100 0100     \pause\\
+\multicolumn{2}{c}{So on...}
+\end{tabular}
+\end{table}
+    \pause 
+    \column{.2\textwidth}
+    \begin{exampleblock}{\centering}
+    \centering
+        \large{\alert{Fixed length code}}
+    \end{exampleblock}
+    \end{columns}
+\end{frame}
+\begin{frame}{How Encoding Works}
+\framesubtitle{ASCII}
+    \pause
+    \begin{block}{\centering Main Text}
+        \centering
+         \only<1-1>{J}\only<2->{\JText{J}}\only<1-3>{A}\only<4->{\AText{A}}\only<1-5>{V}\only<6->{\VText{V}}\only<1-7>{A}\only<8->{\AText{A}}
+         
+    \end{block}
+    \pause
+    \begin{block}{\centering Encoded Bits}
+        \centering
+        \only<3->{\JText{0100 1001}}
+        \only<5->{\AText{0100 0001}}
+        \only<7->{\VText{0101 0110}}
+        \only<9->{\AText{0100 0001}}
+    \end{block}
+\end{frame}
+\begin{frame}{How Decoding Works}
+\framesubtitle{ASCII}
+    \begin{block}{\centering Encoded Bits}
+        \centering
+         \only<1-1>{0100 1001}\only<2->{\JText{0100 1001}\vert}\only<1-3>{0100 0001}\only<4->{\AText{0100 0001}\vert}\only<1-5>{0101 0110}\only<6->{\VText{0101 0110}\vert}\only<1-7>{0100 0001}\only<8->{\AText{0100 0001}}
+         
+    \end{block}
+    \pause
+    \begin{block}{\centering Decoded Text}
+        \centering
+        \only<3->{\JText{J}}
+        \only<5->{\AText{A}}
+        \only<7->{\VText{V}}
+        \only<9->{\AText{A}}
+    \end{block}
+\end{frame}
+% \begin{frame}{How Decoding Fails}
+% \framesubtitle{ASCII}
+%     \begin{block}{\centering Encoded Bits}
+%         \centering
+%          \only<1-1>{0100 1001}\only<2->{\JText{0100 1001}\vert}\only<1-3>{ 0100 01}\only<4->{\AText{0100 01}\vert}
+%         %  \only<1-5>{0101 0110}\only<6->{\VText{0101 0110}\vert}\only<1-7>{0100 0001}\only<8->{\AText{0100 0001}}
+         
+%     \end{block}
+%     \pause
+%     \begin{block}{\centering Decoded Text}
+%         \centering
+%         \only<3->{\JText{J}}
+%         \only<5->{\AText{[error]}}
+%         % \only<7->{\VText{V}}
+%         % \only<9->{\AText{A}}
+%     \end{block}
+% \end{frame}
+\begin{frame}{Our Example String}
+\framesubtitle{AAABRACADABRAAA}
+    \begin{block}{}
+        % \begin{center}
+        \centering
+            \Large{AAABRACADABRAAA}
+        % \end{center}
+    \end{block}
+    \begin{center}
+         \begin{columns}
+    \column{.7\textwidth}
+\begin{table}[]
+\begin{tabular}{ccc}
+\rowcolor[HTML]{009901} 
+Character                  & Frequency                 & Encoding \\
+\rowcolor[HTML]{FE0000} 
+A                          & 9                         & 01000001 \\
+\rowcolor[HTML]{F8A102} 
+B                          & 2                         & 01000010 \\
+\rowcolor[HTML]{F8FF00} 
+C                          & 1                         & 01000011 \\
+\rowcolor[HTML]{FCFF2F} 
+D                          & 1                         & 01000100 \\
+\rowcolor[HTML]{FFCC67} 
+R                          & 2                         & 01010010 \\
+\multicolumn{2}{c}{\cellcolor[HTML]{FFFFFF}Total = 15} &         
+\end{tabular}
+\end{table}
+    \pause 
+    \column{.3\textwidth}
+    \begin{exampleblock}{\centering Bits Needed}
+    \centering $$15 \times 8 = 120$$
+    \end{exampleblock}
+    \end{columns}\\
+        
+    \end{center}
+\end{frame}
+
+\begin{frame}{\centering Can we do better?}
+    \begin{center}
+        % Can we do better ?\\[1cm] \pause
+        \begin{block}{\centering Observation - 1}
+        \centering
+        Why always taking 8 bit? \\[1cm]
+        \end{block}\\[1cm]\pause
+        \begin{exampleblock}{\centering New Encoding Scheme}
+        \centering unique character = 5\\\pause
+        $ceil(log_2(5)) = 3$\\ bits is enough to represent them uniquely.
+        \end{exampleblock}
+        
+    \end{center}
+\end{frame}
+\begin{frame}{Our Own Encoding}
+\framesubtitle{Our first ever encoding table}
+    \begin{center}
+         \begin{columns}
+    \column{.7\textwidth}
+    
+\begin{table}[]
+\begin{tabular}{ccc}
+\rowcolor[HTML]{009901} 
+Character                  & Frequency                 & Encoding \pause\\ 
+\rowcolor[HTML]{FE0000} 
+A                          & 9                         & 100      \pause\\
+\rowcolor[HTML]{F8A102} 
+B                          & 2                         & 011      \pause\\
+\rowcolor[HTML]{F8FF00} 
+C                          & 1                         & 010      \pause\\
+\rowcolor[HTML]{FCFF2F} 
+D                          & 1                         & 001      \pause\\
+\rowcolor[HTML]{FFCC67} 
+R                          & 2                         & 000      \pause\\
+\multicolumn{2}{c}{\cellcolor[HTML]{FFFFFF}Total = 15} &         
+\end{tabular}
+\end{table}
+    \pause 
+    \column{.3\textwidth}
+    \begin{exampleblock}{\centering bits needed}
+       \centering $15  \times 3 = 45$
+    \end{exampleblock}
+    \end{columns}
+    \end{center}
+\end{frame}
+\begin{frame}{Our own encoding}
+\framesubtitle{Finding the hidden cost}
+    \begin{itemize}
+        \item Do 45 bits are enough ? \pause
+        \item Don't we have to save the table ?\pause
+        % \item tables bit count goes here \pause
+        \item Bits needed for the encoding table can be safely ignored.
+    \end{itemize}
+\end{frame}
+\begin{frame}{Takeaway - 1}
+
+\begin{block}{\centering Takeaway - 1}
+
+\centering 
+    Intelligent encoding requires less bits.
+\end{block}
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        ASCII  & Mod. F. L. \\\hline
+         120 & 45 \\ \hline 
+    \end{tabular}
+    \caption{Bits needed in different encoding}
+    % \label{tab:my_label}
+\end{table}    
+\end{frame}

@@ -1,0 +1,91 @@
+
+\usepackage{graphicx}
+\usepackage[colorlinks]{hyperref}
+\usepackage{ragged2e}
+\usepackage[table, xcdraw]{xcolor}
+
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+
+% library for tikz
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc, shapes, backgrounds}
+
+\tikzset{
+  leaf/.style = {fill = orange!90!blue  , circle,draw = black},
+  internal/.style = {fill = yellow  ,circle,draw = black},
+  faded_internal/.style = {fill = yellow!40 , circle , draw = black }
+}
+
+\newenvironment{Huffman}
+{
+\begin{tikzpicture}[
+        level distance = 1.5cm,
+        level 1/.style={sibling distance=4cm},
+        level 2/.style={sibling distance=2cm},
+        level 3/.style={sibling distance=1cm},
+    ]
+}
+{\end{tikzpicture}}
+
+\newcommand{\LabelTree}
+{
+    \begin{scope}[nodes = {draw = none}]
+    \begin{scope}[nodes = {below = 15pt}]
+      \node at (A) {A};
+      \node at (B) {B};
+      \node at (C) {C};
+      \node at (D) {D};
+      \node at (R) {R};
+    \end{scope}
+    \end{scope}
+}
+
+\newcommand{\SurroundWithRectandle}[2]
+{
+    \draw[densely dashed, rounded corners, thin]
+      ($(#1) + (-8pt,-8pt)$) rectangle ($(#2) + (8pt,8pt)$) ;
+}
+\newcommand{\AddZeroEdge}[2]
+{
+    \draw[->] (#1) -- node[left,center]{0} (#2);
+}
+\newcommand{\AddFadedZeroEdge}[2]
+{
+    \draw[->,dashed] (#1) -- node[left]{0} (#2);
+}
+\newcommand{\AddOneEdge}[2]
+{
+    \draw[->] (#1) -- node[right]{1} (#2);
+}
+
+\newcommand{\AddFadedOneEdge}[2]
+{
+    \draw[->,dashed ] (#1) -- node[right]{1} (#2);
+}
+
+% end library for trie
+
+% Text
+\newcommand{\JText}[1]{\textcolor{violet}{#1}}
+\newcommand{\AText}[1]{\textcolor{red}{#1}}
+\newcommand{\VText}[1]{\textcolor{blue}{#1}}
+
+\title[Huffman Coding \& Data Compactation]{\Large\textbf{ HUFFMAN Coding} And Data Compactation}
+\author[Roy , Siyam]{Kowshic Roy (S201705001) \\Mahdi Hasnat Siyam (S201705003)}
+\institute[CSE, BUET]
+{
+  Department of Computer Science and Engineering\\
+  Bangladesh University of Engineering and Technology\\[.1cm]\scalebox{2}\insertlogo
+}
+\date{\today}
+\logo{\includegraphics[scale=.02]{./attachments/buet.png}}
+
+% table of contents
+\AtBeginSection[]
+{
+    \begin{frame}{Table of Contents}
+    \tableofcontents[currentsection]
+    \end{frame}
+}

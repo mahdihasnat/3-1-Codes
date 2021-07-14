@@ -1,0 +1,159 @@
+\section{Encoding as Trie}
+
+\begin{frame}{Representation of encoding as Trie}
+    \begin{columns}
+    \column{0.5\linewidth}
+    
+    \begin{center}
+        \begin{tabular}{|c|c|}
+        \hline
+             Character & Code \\
+            \hline
+             A & 0\\
+             J & 11\\
+             V & 10\\
+             \hline
+        \end{tabular}
+    \end{center}    
+    
+    \column{0.5\linewidth}
+    \pause
+    
+    \begin{center}
+        \begin{tikzpicture}
+        
+        \node[internal , minimum size = 9mm](AJ){}
+        child
+        {
+            node[leaf](A){A}
+        }
+        child
+        {
+            node[internal , minimum size = 9mm](VJ){}
+            child
+            {
+                node[leaf](V){V}
+            }
+            child
+            {
+                node[leaf](J){J}
+            }
+        };
+        \AddZeroEdge{AJ}{A}
+        \AddZeroEdge{VJ}{V}
+        \AddOneEdge{AJ}{VJ}
+        \AddOneEdge{VJ}{J}
+        \end{tikzpicture}
+        
+    \end{center}
+    
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Decoding from trie}
+    \begin{columns}
+    \column{0.5\linewidth}
+    \begin{center}
+        \begin{tikzpicture}
+        
+        \node[internal , minimum size = 9mm](AJ){}
+        child
+        {
+            node[leaf](A){A}
+        }
+        child
+        {
+            node[internal , minimum size = 9mm](VJ){}
+            child
+            {
+                node[leaf](V){V}
+            }
+            child
+            {
+                node[leaf](J){J}
+            }
+        };
+        \AddZeroEdge{AJ}{A}
+        \AddZeroEdge{VJ}{V}
+        \AddOneEdge{AJ}{VJ}
+        \AddOneEdge{VJ}{J}
+        \newcommand{\AddArrowFromLeft}[2]
+        {
+            \node[
+                draw,
+                single arrow,
+                left =1mm of #1,
+                minimum height = 5mm,
+                minimum width = 10mm
+            ] {#2};
+        }
+        \newcommand{\AddArrowFromRight}[2]
+        {
+            \node[
+                draw,
+                single arrow,
+                right =1mm of #1,
+                minimum height = 5mm,
+                minimum width = 10mm,
+                shape border rotate=180,
+            ] {#2};
+        }
+    \only<1-1>
+    {
+        \AddArrowFromLeft{AJ}{Current Node}
+    }
+    \only<2-2>
+    {
+        \AddArrowFromRight{VJ}{Current Node}
+    }
+    \only<3-3>
+    {
+        \AddArrowFromRight{J}{Found J}
+    }
+    \only<4-4>
+    {
+        \AddArrowFromLeft{AJ}{Current Node}
+    }
+    \only<5-5>
+    {
+        \AddArrowFromLeft{A}{Found A}
+    }
+    \only<6-6>
+    {
+        \AddArrowFromLeft{AJ}{Current Node}
+    }
+    \only<7-7>
+    {
+        \AddArrowFromRight{VJ}{Current Node}
+    }
+    \only<8-8>
+    {
+        \AddArrowFromLeft{V}{Found V}
+    }
+    \only<9-9>
+    {
+        \AddArrowFromLeft{AJ}{Current Node}
+    }
+    \only<10-10>
+    {
+        \AddArrowFromLeft{A}{Found A}
+    }
+    
+        \end{tikzpicture}
+    \end{center}
+    \column{0.5\linewidth}
+    
+    \newcommand{\Indicator}[2]{\only<#1-#2>{\vert}}
+    
+    \begin{exampleblock}{}
+        Encoded Bits : ``\Indicator{1}{1}1\Indicator{2}{2}1\Indicator{3}{4}0\Indicator{5}{6}1\Indicator{7}{7}0\Indicator{8}{9}0\Indicator{10}{10}"
+        \\
+        Decoded Text : ``\only<4->{J}\only<6->{A}\only<9->{V}\only<10->{A}"
+    \end{exampleblock}
+    
+    \end{columns}
+    \only<11->
+    {
+        Complexity of decoding  = O(length of the encoded bits)
+    }
+\end{frame}

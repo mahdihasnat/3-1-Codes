@@ -1,0 +1,51 @@
+
+\section{Properties of correct variable length encoding}
+
+%Prefix rule
+\begin{frame}{Prefix Properties}
+    \begin{itemize}
+        \item No whole code word is prefix of any other code word
+    \end{itemize}
+    \begin{columns}
+    \column {0.5\linewidth}
+    \pause
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|c|c|}
+        \hline
+             Character & Code \\
+        \hline
+             \AText{A} & \AText{0}\\
+        \hline
+             \JText{J} & \JText{11}\\
+        \hline
+             \VText{V} & \VText{10}\\
+        \hline
+        \end{tabular}\\
+        \smallskip
+        This encoding \textcolor{green}{satisfy} prefix property.
+    \end{table}
+    \column{0.5\linewidth}
+    \pause
+    \begin{center}
+        
+    \begin{table}[]
+        \begin{tabular}{|c|c|}
+        \hline
+             Character & Code \\
+        \hline
+             \AText{A} & \AText{0}\\
+        \hline
+             \JText{J} & \JText{1}\\
+        \hline
+             \VText{V} & \VText{01}\\
+        \hline
+        \end{tabular}\\
+        \smallskip
+        ``0" is prefix of ``01"\\
+        This encoding \textcolor{red}{does not satisfy} prefix property.
+    \end{table}
+    
+    \end{center}
+    \end{columns}
+\end{frame}
