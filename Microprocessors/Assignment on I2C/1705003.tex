@@ -74,6 +74,18 @@ After slave write data , then master sends NACK signal to sda line.
 	\item Slower transfer rate then SPI.
 \end{itemize}
 
-\section{References}
+\section{Solution to data overrun problem}
+Master and slave may be works in different frequency.
+In SCL line master always generates clock pulse.
+So if clock frequency of slave devices is higher than SCL clock than slave can read bit before another bit comes.
+Problem arises when salve clock freuqncy is less than SCL ckock.
+Because of higher clock frequency in SCL line new data may arrive before slave read and process data from SDA line.
+This phenomena is called data overrun.
+
+
+To solve data overrun issues I2C uses clock stretching method. 
+Since SDA and SCL are connected to Vcc with pull up registor, devices cannot force voltage to high lavel. 
+So slave can hold down the clock if it didnot complete process.
+So naster needs to read back SCL line  after releasing control, to check if it went to high state or not. 
 
 \end{document}
