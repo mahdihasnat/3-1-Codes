@@ -64,6 +64,7 @@ After slave write data , then master sends NACK signal to sda line.
 	 \item Faster than UART
 \end{itemize}
 
+\pagebreak
 \section{Disadvantages of TWI/I2C}
 
 \begin{itemize}
@@ -85,7 +86,7 @@ This phenomena is called data overrun.
 
 To solve data overrun issues I2C uses clock stretching method. 
 Since SDA and SCL are connected to Vcc with pull up registor, devices cannot force voltage to high lavel. 
-So slave can hold down the clock if it didnot complete process.
+So slave can hold down the clock if it didnot complete reading.
 So naster needs to read back SCL line  after releasing control, to check if it went to high state or not. 
 
 \end{document}
